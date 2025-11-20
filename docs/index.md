@@ -1,36 +1,35 @@
 # Documentación del Proyecto
 
-Bienvenido a la documentación técnica del proyecto.
+Bienvenido a la documentación técnica del proyecto. Aquí encontrarás orientación sobre la arquitectura, la API y el esquema de la base de datos.
 
-## Secciones
+## Contenido
 
-- **Arquitectura**: Diagramas y decisiones de diseño
-- **API**: Documentación de endpoints
-- **Database**: Esquemas y modelos
-<!-- - **Guías**: Manuales de desarrollo y uso -->
+- **Arquitectura**: [Diagramas y decisiones de diseño](./arquitectura/overview.md)
+- **API**: [Documentación de endpoints](./api/endpoints.md)
+- **Base de datos**: [Esquemas y modelos](./database/esquema.md)
 
-# Fuentes de datos
+## Fuentes de datos
 
-- *Consolidación de liquidación de regalías por campo:* Información de liquidación definitiva de regalías por campo de hidrocarburos desde el año 2010 hasta la fecha.
+### Consolidación de liquidación de regalías por campo
 
-    - Autor(es): Agencia Nacional de Hidrocarburos
+Información de liquidación definitiva de regalías por campo de hidrocarburos desde el año 2010 hasta la fecha.
 
-    - Datos abiertos: https://www.datos.gov.co/Minas-y-Energ-a/Consolidaci-n-de-liquidaci-n-de-regal-as-por-campo/j7js-yk74/about_data
+- **Autor(es):** Agencia Nacional de Hidrocarburos
+- **Ficha (datos abiertos):** [Consolidación de liquidación de regalías por campo (Socrata)](https://www.datos.gov.co/Minas-y-Energ-a/Consolidaci-n-de-liquidaci-n-de-regal-as-por-campo/j7js-yk74/about_data)
+- **API (Socrata):** [Socrata API — j7js-yk74](https://dev.socrata.com/foundry/www.datos.gov.co/j7js-yk74)
 
-    - Api: https://dev.socrata.com/foundry/www.datos.gov.co/j7js-yk74
+### Declaración de producción de gas
 
-- *Declaración de producción de gas:* Ministerio de Minas y Energía se permite publicar la declaración de producción realizada por los productores, productores comercializadores de gas natural y comercializadores de gas natural importado.
+Publicación de la declaración de producción realizada por productores y comercializadores de gas natural.
 
-    - Autor(es): Ministerio de Minas y Energía
+- **Autor(es):** Ministerio de Minas y Energía
+- **Formato de datos:** Soportes magnéticos por periodo (mes-año), generalmente en XLSX
+- **Enlace:** [Gas natural — Ministerio de Minas y Energía](https://www.minenergia.gov.co/es/misional/hidrocarburos/funcionamiento-del-sector/gas-natural/)
 
-    - Datos: Soportes magneticos por periodos mes-año en formato xlsx
+### Proyección de demanda del gas natural
 
-    - link: https://www.minenergia.gov.co/es/misional/hidrocarburos/funcionamiento-del-sector/gas-natural/
+Metodología basada en relaciones con variables macroeconómicas y desagregación regional; incluye escenarios alto, medio y bajo.
 
-- *Proyección de demanda del gas natural:* La metodología de proyección está basada en la determinación de relaciones de la demanda de cada uno de estos combustibles con variables macroeconómicas nacionales.  Posteriormente, se realiza una desagregación a escala regional y nodal que sigue las tendencias históricas registradas y para cada combustible se genera una banda de proyección que incluye tres escenarios (alto, medio y bajo).
-
-    - Autor(es): UPME
-
-    - Datos: Anexos por proyecciones anuales en formato xlsx
-
-    - link: https://www1.upme.gov.co/DemandayEficiencia/Paginas/Proyecciones-de-demanda.aspx/
+- **Autor(es):** UPME
+- **Formato de datos:** Anexos por proyecciones anuales (XLSX)
+- **Enlace:** [Proyecciones de demanda — UPME](https://www1.upme.gov.co/DemandayEficiencia/Paginas/Proyecciones-de-demanda.aspx)

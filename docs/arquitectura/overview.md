@@ -5,9 +5,9 @@ Arquitectura Detallada
 
 #### Workflows Implementados
 
-**check-updates.yml** (Liviano - Ejecución Semanal/Mensual)
+**check-updates.yml** (Ejecución Semanal/Mensual)
 
-*   **Trigger:** Cron programado + activación manual
+*   **Trigger:** Cron programado / activación manual
     
 *   **Función:** Verifica cambios en fuentes usando Requests + BeautifulSoup
     
@@ -57,17 +57,15 @@ Arquitectura Detallada
 *   Configuración directa en repository settings
 
 **2\. Custom Email Service**
-
-*   Servicio SMTP gratuito (SendGrid, Mailjet free tier)
     
-*   Notificaciones para stakeholders no técnicos
+*   Notificaciones para stakeholders no técnicos (SMTP gratuito)
     
 
 ### 3\. Procesamiento de Datos (ETL)
 
 #### Tecnologías Clave
 
-*   **Python 3.9+**: Lenguaje principal
+*   **Python 3.12+**: Lenguaje principal
     
 *   **Playwright**: Extracción robusta en sitios complejos
     
@@ -93,7 +91,7 @@ Arquitectura Detallada
 
 #### Esquema de Base de Datos
 
-DEFINIR
+POR DEFINIR
 
 #### Optimizaciones para Dashboard
 
@@ -124,99 +122,5 @@ DEFINIR
 *   **Variables de Entorno**: Configuración segura de endpoints
     
 *   **CDN Global**: Distribución optimizada de assets
-    
 
-Plan de Implementación por Hitos
---------------------------------
-
-### Hito 1: Infraestructura Base
-
-*   Configuración de repositorio y GitHub Actions
-    
-*   Esquema de base de datos en Supabase
-    
-*   Sistema de logging básico
-    
-
-### Hito 2: Detección de Cambios
-
-*   Scrapers livianos para las 3 fuentes
-    
-*   Lógica de comparación y trigger
-    
-*   Configuración de alertas básicas
-    
-
-### Hito 3: ETL Completo
-
-*   Contenedor Playwright + dependencias
-    
-*   Pipelines de transformación por fuente
-    
-*   Mecanismos de carga y UPSERT
-    
-
-### Hito 4: Dashboard
-
-*   Aplicación Angular base
-    
-*   Visualizaciones principales
-    
-*   Despliegue en Vercel/Netlify
-    
-
-### Hito 5: Monitorización Avanzada
-
-*   Dashboards de métricas ETL
-    
-*   Alertas proactivas
-    
-*   Documentación operativa
-    
-
-Estimación de Costos
---------------------
-
-### Capa Gratuita Disponible
-
-*   **GitHub Actions**: ~2,000 minutos/mes (suficiente para uso estimado)
-    
-*   **Supabase**: 500MB base de datos + 1GB storage (adecuado para inicio)
-    
-*   **Vercel/Netlify**: Despliegue frontend gratuito
-    
-*   **Slack**: Webhooks gratuitos para alertas
-    
-
-### Puntos de Escalación Futura
-
-*   Supabase Pro: >500MB de datos o >50k filas/mes
-    
-*   GitHub Actions: >2,000 minutos/mes de procesamiento
-    
-*   Monitorización: Migración a DataDog si requiere analytics avanzados
-    
-
-Runbook Operativo
------------------
-
-### Procedimientos Comunes
-
-1.  **Ejecución Manual ETL**: Trigger via GitHub UI
-    
-2.  **Debug de Fallos**: Revisión de logs en GitHub Actions + tabla etl\_logs
-    
-3.  **Recuperación de Errores**: Re-ejecución con limpieza opcional de datos corruptos
-    
-4.  **Actualización de Scrapers**: Modificación de selectores ante cambios en fuentes
-    
-
-### Métricas de Salud
-
-*   Tiempo de ejecución promedio por fuente
-    
-*   Tasa de éxito de extracción (>95% objetivo)
-    
-*   Latencia datos fuente → dashboard (<24 horas)
-    
-*   Disponibilidad del dashboard (>99.5%)
+[![Diagrama de arquitectura](../assets/diagrams/arquitectura.svg)](../assets/diagrams/arquitectura.svg)

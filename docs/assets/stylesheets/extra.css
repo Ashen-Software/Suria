@@ -1,0 +1,251 @@
+/* Extra CSS overrides para mejorar contraste en modo oscuro
+   Referencia: se aplica cuando MkDocs Material añade
+   el atributo `data-md-color-scheme="dark"` al elemento <html>.
+*/
+
+html[data-md-color-scheme="slate"],
+html[class*="md-color-scheme--dark"],
+body[class*="md-color-scheme--dark"],
+body[data-md-color-scheme="dark"],
+html[data-md-color-scheme="dark"] {
+  /* Variables principales */
+  --md-default-background: #0b1220;
+  --md-default-foreground: #e6eef8;
+  --md-surface: #07121a;
+  --md-elevated-surface: #071829;
+  --md-code-bg: #071829;
+  --md-primary-fg: #4dd0e1;
+  --md-accent-fg: #4dd0e1;
+  --md-secondary-fg: #9be7ff;
+
+  /* Backwards-compatible explicit color fallbacks */
+  background-color: #0b1220 !important;
+  color: #e6eef8 !important;
+}
+
+body[data-md-color-scheme="dark"] .md-main,
+body[data-md-color-scheme="dark"] .md-content,
+body[data-md-color-scheme="dark"] .md-typeset,
+body[data-md-color-scheme="dark"] .md-doc,
+body[data-md-color-scheme="dark"] .md-container {
+  background-color: var(--md-default-background, #0b1220) !important;
+  color: var(--md-default-foreground, #e6eef8) !important;
+}
+
+body[data-md-color-scheme="dark"] .md-nav,
+body[data-md-color-scheme="dark"] .md-header {
+  background-color: var(--md-surface, #07101a) !important;
+  color: var(--md-default-foreground, #e6eef8) !important;
+}
+
+body[data-md-color-scheme="dark"] a,
+body[data-md-color-scheme="dark"] .md-nav__link {
+  color: var(--md-primary-fg, #4dd0e1) !important;
+}
+
+body[data-md-color-scheme="dark"] .md-card,
+body[data-md-color-scheme="dark"] .md-typeset blockquote {
+  background-color: var(--md-elevated-surface, #07121a) !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+body[data-md-color-scheme="dark"] pre,
+body[data-md-color-scheme="dark"] code {
+  background: var(--md-code-bg, #071829) !important;
+  color: var(--md-default-foreground, #e6eef8) !important;
+}
+
+/* Asegurar que los contenedores con fondo claro no rompan el contraste */
+body[data-md-color-scheme="dark"] .md-typeset [style*="background"],
+body[data-md-color-scheme="dark"] [style*="background"] {
+  background: transparent !important;
+}
+
+
+html[data-md-color-scheme="dark"] .md-content,
+html[data-md-color-scheme="dark"] .md-typeset,
+html[data-md-color-scheme="dark"] .md-main {
+  background: transparent !important;
+  color: #e6eef8 !important;
+}
+
+html[data-md-color-scheme="dark"] .md-nav {
+  background-color: #07101a !important;
+}
+
+html[data-md-color-scheme="dark"] a,
+html[data-md-color-scheme="dark"] .md-nav__link {
+  color: #4dd0e1 !important; /* teal claro */
+}
+
+html[data-md-color-scheme="dark"] .md-card,
+html[data-md-color-scheme="dark"] .md-typeset blockquote {
+  background-color: #07121a !important;
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+html[data-md-color-scheme="dark"] pre,
+html[data-md-color-scheme="dark"] code {
+  background: #071829 !important;
+  color: #e6eef8 !important;
+  border-radius: 4px;
+}
+
+html[data-md-color-scheme="dark"] table {
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+html[data-md-color-scheme="dark"] .md-button {
+  background-color: rgba(77, 208, 225, 0.08) !important;
+  color: #4dd0e1 !important;
+}
+
+html[data-md-color-scheme="dark"] [style*="background"] {
+  filter: none !important;
+}
+
+/* Ajustes responsivos: asegurar que img SVG escalen bien */
+html[data-md-color-scheme="dark"] img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+html[data-md-color-scheme="dark"] .md-toc__link:hover {
+  color: #9be7ff !important;
+}
+
+/* Ajustes específicos para elementos que no cambiaban: encabezados y navegaciones */
+body[data-md-color-scheme="dark"] h1,
+body[data-md-color-scheme="dark"] h2,
+body[data-md-color-scheme="dark"] h3,
+body[data-md-color-scheme="dark"] h4,
+body[data-md-color-scheme="dark"] h5,
+body[data-md-color-scheme="dark"] h6 {
+  color: #d9f1ff !important; /* Tono claro para títulos */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.35) !important;
+}
+
+body[data-md-color-scheme="dark"] .md-nav__title,
+body[data-md-color-scheme="dark"] label.md-nav__title {
+  color: var(--md-default-foreground, #e6eef8) !important;
+  background: transparent !important;
+}
+body[data-md-color-scheme="dark"] .md-nav__title .md-nav__icon,
+body[data-md-color-scheme="dark"] label.md-nav__title .md-nav__icon {
+  color: var(--md-primary-fg, #4dd0e1) !important;
+}
+
+/* Barra de pestañas principal */
+body[data-md-color-scheme="dark"] .md-tabs__list {
+  background-color: var(--md-surface, #07101a) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+}
+body[data-md-color-scheme="dark"] .md-tabs__tab {
+  color: var(--md-default-foreground, #e6eef8) !important;
+}
+body[data-md-color-scheme="dark"] .md-tabs__tab--active,
+body[data-md-color-scheme="dark"] .md-tabs__tab[aria-selected="true"] {
+  color: var(--md-primary-fg, #4dd0e1) !important;
+  border-bottom-color: var(--md-primary-fg, #4dd0e1) !important;
+}
+
+/* Forzar contraste en enlaces activos de navegación y tabs */
+body[data-md-color-scheme="dark"] .md-nav__link--active,
+body[data-md-color-scheme="dark"] .md-nav__link[aria-current="page"] {
+  color: var(--md-primary-fg, #4dd0e1) !important;
+}
+
+/* TOC / secondary nav: forzar fondo oscuro, eliminar gradientes claros */
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary {
+  background: var(--md-surface, #07101a) !important;
+  color: var(--md-default-foreground, #e6eef8) !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+}
+
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary .md-nav__title,
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary label.md-nav__title {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--md-default-foreground, #e6eef8) !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+/* Lista de TOC y elementos anidados */
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary .md-nav__list {
+  background: transparent !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary .md-nav__item {
+  border: none !important;
+}
+
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary .md-nav__link,
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary .md-nav__link .md-ellipsis {
+  color: var(--md-primary-fg, #4dd0e1) !important;
+  background: transparent !important;
+}
+
+/* Hover / focus states for links inside TOC */
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary .md-nav__link:hover,
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary .md-nav__link:focus {
+  background-color: rgba(77,208,225,0.04) !important;
+  color: var(--md-primary-fg, #4dd0e1) !important;
+}
+
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary nav.md-nav {
+  background: transparent !important;
+  padding-left: 0.25rem !important;
+}
+
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary [style*="background"],
+body[data-md-color-scheme="dark"] nav.md-nav.md-nav--secondary [style*="box-shadow"] {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body[data-md-color-scheme="dark"] .md-nav__list,
+body[data-md-color-scheme="dark"] .md-nav__item,
+body[data-md-color-scheme="dark"] .md-nav__link,
+body[data-md-color-scheme="dark"] .md-nav__title,
+body[data-md-color-scheme="dark"] .md-ellipsis {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  color: var(--md-primary-fg, #4dd0e1) !important;
+}
+
+body[data-md-color-scheme="dark"] .md-nav__link::before,
+body[data-md-color-scheme="dark"] .md-nav__link::after,
+body[data-md-color-scheme="dark"] .md-nav__title::before,
+body[data-md-color-scheme="dark"] .md-nav__title::after {
+  content: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body[data-md-color-scheme="dark"] .md-nav__link:focus,
+body[data-md-color-scheme="dark"] .md-nav__link:active,
+body[data-md-color-scheme="dark"] label.md-nav__link:focus,
+body[data-md-color-scheme="dark"] label.md-nav__link:active,
+body[data-md-color-scheme="dark"] .md-nav__title:focus {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--md-primary-fg, #4dd0e1) !important;
+}
+
+body[data-md-color-scheme="dark"] .md-nav__link--active,
+body[data-md-color-scheme="dark"] .md-nav__link[aria-current="page"] {
+  background: transparent !important;
+  color: var(--md-primary-fg, #4dd0e1) !important;
+}
+
+/* Inputs toggle: asegurar que su label no muestre fondo */
+body[data-md-color-scheme="dark"] input.md-nav__toggle + label.md-nav__link,
+body[data-md-color-scheme="dark"] label.md-nav__link[for] {
+  background: transparent !important;
+}

@@ -1,6 +1,6 @@
 site_name: Reto - Gas natural
 site_description: Documentación técnica del proyecto
-site_url: https://Juanqu261.github.io/nombre-repo/
+site_url: https://Juanqu261.github.io/Datos2025/
 
 theme:
   name: material
@@ -28,7 +28,7 @@ nav:
   - Inicio: index.md
   - Arquitectura:
     - Overview: arquitectura/overview.md
-    - Diagramas: arquitectura/diagrama.md
+    - Diagrama: assets/diagrams/arquitectura.svg
   - API:
     - Endpoints: api/endpoints.md
   - Base de Datos:
@@ -44,3 +44,5 @@ markdown_extensions:
   - pymdownx.tabbed
   - toc:
       permalink: true
+extra_css:
+  - assets/stylesheets/extra.css
