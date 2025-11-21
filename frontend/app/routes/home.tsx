@@ -1,13 +1,16 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { useTodos } from "../hooks/useTodos";
+import { TodosList } from "../components/TodosList";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Supabase Todos Test" },
+    { name: "description", content: "Testing Supabase connection" },
   ];
 }
 
 export default function Home() {
-  return <Welcome />;
+  const { todos, loading, error } = useTodos();
+
+  return <TodosList todos={todos} loading={loading} error={error} />;
 }
