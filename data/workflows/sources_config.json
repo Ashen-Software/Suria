@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "schedule": { "cron": "* * * * *", "note": "Dev: check each minute" },
+  "sources": [
+    {
+      "id": "api_gas",
+      "name": "API Gas Co",
+      "active": true,
+      "type": "api",
+      "config": {
+        "base_url": "https://httpbin.org/json",
+        "params": {},
+        "headers": { "Accept": "application/json" }
+      },
+      "check": { "method": "api_field", "url": "https://httpbin.org/json", "field": "slideshow" },
+      "storage": { "local_raw_path": "/app/data/raw/api_gas", "file_format": "json" },
+      "force_change": true
+    },
+    {
+      "id": "scrape_example",
+      "name": "Scrape Example",
+      "active": true,
+      "type": "scrape",
+      "config": { "url": "https://example.com" },
+      "check": { "method": "scrape_text", "selector": "h1" },
+      "storage": { "local_raw_path": "/app/data/raw/scrape_example", "file_format": "html" }
+    }
+  ]
+}
