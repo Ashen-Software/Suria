@@ -1,28 +1,34 @@
 
 import { useState, useEffect } from 'react'
-import { supabase } from '../utils/supabase'
+import supabase from './utils/supabase'
 
-async function Page() {
-  const [todos, setTodos] = useState([])
+function Page() {
+  const [productos, setProductos] = useState<any[]>([])
 
   useEffect(() => {
-    function getTodos() {
-      const { data: todos } = await supabase.from('todos').select()
+    async function getProductos() {
+      const { data: productosData, error } = await supabase.from('productos').select()
+      if (error) {
+        console.error('Supabase error fetching productos:', error)
+        return
+      }
 
-      if (todos.length > 1) {
-        setTodos(todos)
+      if (Array.isArray(productosData) && productosData.length > 0) {
+        setProductos(productosData)
       }
     }
 
-    getTodos()
+    getProductos()
   }, [])
-
   return (
-    <div>
-      {todos.map((todo) => (
-        <li key={todo}>{todo}</li>
-      ))}
+    <div className="p-4">
+      <ul className="list bg-base-100 rounded-box shadow-md">
+        {productos.map((producto, index) => (
+          <li key={index} className="list-row">{typeof producto === 'object' ? JSON.stringify(producto) : String(producto)}</li>
+        ))}
+      </ul>
     </div>
   )
 }
+
 export default Page
