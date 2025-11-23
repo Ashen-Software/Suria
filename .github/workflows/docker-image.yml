@@ -2,27 +2,33 @@ name: Build & Push Docker Images to Docker Hub
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - 'frontend/**'
       - 'data/**'
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      data: ${{ steps.filter.outputs.data }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          frontend:
+            - 'frontend/**'
+          data:
+            - 'data/**'
 
   build-frontend:
-    if: contains(github.event.head_commit.message, '[skip front]') == false
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
-    # Solo corre si hubo cambios en frontend/
     steps:
-      - name: Check changed files
-        id: changes
-        uses: trilom/file-changes-action@v1.2.4
-        
-      - name: Skip job if no frontend changes
-        if: steps.changes.outputs.files !~ 'frontend/'
-        run: echo "No frontend changes → skipping job" && exit 0
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -46,17 +52,10 @@ jobs:
             juanqu/suria-frontend:${{ github.sha }}
 
   build-data:
+    needs: changes
+    if: ${{ needs.changes.outputs.data == 'true' }}
     runs-on: ubuntu-latest
-    # Solo corre si hubo cambios en data/
     steps:
-      - name: Check changed files
-        id: changes
-        uses: trilom/file-changes-action@v1.2.4
-        
-      - name: Skip job if no data changes
-        if: steps.changes.outputs.files !~ 'data/'
-        run: echo "No data changes → skipping job" && exit 0
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -70,7 +69,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./data
-          file: ./dat/aDockerfile
+          file: ./data/Dockerfile
           push: true
           tags: |
             juanqu/suria-data-etl:latest
