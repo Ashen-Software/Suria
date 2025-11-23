@@ -49,7 +49,7 @@ jobs:
             VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}
           tags: |
             juanqu/suria-frontend:latest
-            juanqu/suria-frontend:${{ github.sha }}
+            juanqu/suria-frontend:v${{ github.run_number }}
 
   build-data:
     needs: changes
@@ -73,4 +73,4 @@ jobs:
           push: true
           tags: |
             juanqu/suria-data-etl:latest
-            juanqu/suria-data-etl:${{ github.sha }}
+            juanqu/suria-data-etl:v${{ github.run_number }}
