@@ -2,8 +2,7 @@ name: Build & Push Docker Images to Docker Hub
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - 'frontend/**'
       - 'data/**'
@@ -14,16 +13,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Get changed files
         id: changes
         uses: tj-actions/changed-files@v45
 
-      - name: Skip if frontend folder not modified
-        if: steps.changes.outputs.modified_files !contains('frontend/')
-        run: echo "No frontend changes → skipping job" && exit 0
+      - name: Detect frontend changes
+        id: detect_frontend
+        run: |
+          echo "FILES_CHANGED=${{ steps.changes.outputs.all_modified_files }}" 
+          if echo "${{ steps.changes.outputs.all_modified_files }}" | grep -q "^frontend/"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Stop job if frontend did not change
+        if: steps.detect_frontend.outputs.changed == 'false'
+        run: echo "No frontend changes → skipping job" && exit 0
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -44,20 +53,31 @@ jobs:
             juanqu/suria-frontend:latest
             juanqu/suria-frontend:${{ github.sha }}
 
+
   build-data:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Get changed files
         id: changes
         uses: tj-actions/changed-files@v45
 
-      - name: Skip if data folder not modified
-        if: steps.changes.outputs.modified_files !contains('data/')
-        run: echo "No data changes → skipping job" && exit 0
+      - name: Detect data folder changes
+        id: detect_data
+        run: |
+          echo "FILES_CHANGED=${{ steps.changes.outputs.all_modified_files }}" 
+          if echo "${{ steps.changes.outputs.all_modified_files }}" | grep -q "^data/"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Stop job if data did not change
+        if: steps.detect_data.outputs.changed == 'false'
+        run: echo "No data changes → skipping job" && exit 0
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
