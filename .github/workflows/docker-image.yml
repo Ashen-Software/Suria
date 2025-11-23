@@ -68,7 +68,7 @@ jobs:
       - name: Build & Push Data ETL Image
         uses: docker/build-push-action@v6
         with:
-          context: ./data
+          context: .
           file: ./data/Dockerfile
           push: true
           tags: |
