@@ -6,18 +6,29 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 from logs_config.logger import app_logger as logger
 from services.config_manager import ConfigManager
+import settings
 
 
-ENV = os.getenv("ENVIRONMENT", "local")
+ENV = settings.ENVIRONMENT
 
 
 def get_sources():
     """
-    Usa ConfigManager en prod, cache local en dev.
+    Usa ConfigManager en prod o si se fuerza remoto, cache local en dev.
     """
-    if ENV == "prod":
-        cfg = ConfigManager().get_config()
-        return cfg.get("sources", [])
+
+    use_remote = settings.USE_REMOTE_CONFIG
+    # print(os.getenv("USE_REMOTE_CONFIG")) # Debug line removed
+    
+    if ENV == "prod" or use_remote:
+        try:
+            cfg = ConfigManager().get_config()
+            return cfg.get("sources", [])
+        except Exception as e:
+            logger.error("remote_config_error", error=str(e))
+            # Si estamos forzando remoto en dev y falla, volver al local
+            if not use_remote: 
+                return []
 
     # Local: lee archivo local sin Supabase
     local_path = Path(__file__).resolve().parent.parent / "workflows" / "sources_config.json"
@@ -41,7 +52,6 @@ def run_check_updates(source):
     logger.info("check_updates_started", source_id=src_id, source_name=src_name)
 
     try:
-        # Importar aquí para evitar import cycles al cargar el paquete
         from workflows.check_updates.run import check_updates_task
         from workflows.full_etl.run import full_etl_task
 
@@ -60,7 +70,7 @@ def run_check_updates(source):
             logger.info("no_changes", source_id=src_id)
 
     except Exception as e:
-        # Capturar cualquier excepción durante la ejecución del job para
+        # Capturar cualquier excepcion durante la ejecución del job para
         # evitar que una excepción no manejada afecte al scheduler.
         logger.error("run_check_updates_failed", source_id=src_id, error=str(e), exc_info=True)
 
@@ -169,6 +179,6 @@ def reload_jobs_if_changed(scheduler: BackgroundScheduler):
     active_count = len(current_active_ids)
     
     if active_count == 0 and len(current_sources) > 0:
-        logger.warning("all_sources_inactive", message="Todas las fuentes están apagadas -> el proceso se considera detenido")
+        logger.warning("all_sources_inactive", message="Todas las fuentes están apagadas: el proceso se considera detenido")
     
     logger.info("config_reloaded", active_jobs=active_count)

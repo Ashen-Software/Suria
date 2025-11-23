@@ -8,13 +8,19 @@ from logging.handlers import TimedRotatingFileHandler
 import structlog
 from structlog.processors import CallsiteParameter, CallsiteParameterAdder
 from structlog.typing import EventDict
+import settings
 
-# Variables de entorno
-LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
-LOG_ENVIRONMENT = os.getenv("ENVIRONMENT", "dev")
-SERVICE_NAME = os.getenv("SERVICE_NAME", "etl_service")
+# Variables de entorno desde settings
+LOG_LEVEL = settings.LOG_LEVEL
+LOG_ENVIRONMENT = settings.ENVIRONMENT
+SERVICE_NAME = settings.SERVICE_NAME
 
-LOG_DIR = Path(os.getenv("LOG_DIR", str(Path(__file__).parent / "logs")))
+# LOG_DIR: Si viene en env lo usamos, sino default relativo a este archivo
+if settings.LOG_DIR_ENV:
+    LOG_DIR = Path(settings.LOG_DIR_ENV)
+else:
+    LOG_DIR = Path(__file__).parent / "logs"
+
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 _working_directory = len(os.getcwd()) + 1

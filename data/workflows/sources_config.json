@@ -4,7 +4,7 @@
     {
       "id": "api_gas",
       "name": "API Gas Colombia",
-      "active": false,
+      "active": true,
       "type": "api",
       "schedule": { "cron": "* * * * *", "note": "Dev: check each minute" },
       "config": {
@@ -12,7 +12,6 @@
         "params": {},
         "headers": { "Accept": "application/json" }
       },
-      "check": { "method": "api_field", "url": "https://httpbin.org/json", "field": "slideshow" },
       "storage": { "local_raw_path": "/app/data/raw/api_gas", "file_format": "json" },
       "force_change": false
     },
@@ -23,7 +22,6 @@
       "type": "scrape",
       "schedule": { "cron": "*/2 * * * *", "note": "Every 2 minutes" },
       "config": { "url": "https://example.com" },
-      "check": { "method": "scrape_text", "selector": "h1" },
       "storage": { "local_raw_path": "/app/data/raw/scrape_example", "file_format": "html" },
       "force_change": false
     }

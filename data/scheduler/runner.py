@@ -1,14 +1,15 @@
 import time
-import os
 import logging
+import settings
+
 from logs_config.logger import app_logger as logger
 from scheduler.jobs import register_jobs, reload_jobs_if_changed
 from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor
 
-ENV = os.getenv("ENVIRONMENT", "local")
-CONFIG_RELOAD_INTERVAL = int(os.getenv("CONFIG_RELOAD_INTERVAL", "120"))  # default 2 minutos
+ENV = settings.ENVIRONMENT
+CONFIG_RELOAD_INTERVAL = settings.CONFIG_RELOAD_INTERVAL
 
 
 def start_scheduler():
