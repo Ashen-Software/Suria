@@ -22,11 +22,11 @@ WORKDIR /home/suria/app
 RUN chown -R suria:suria /home/suria/app
 
 # Instalar dependencias Python como root, luego cambiar a usuario no-root
-COPY data/requirements.txt /tmp/requirements.txt
+COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 # Copiar el código de la carpeta `data/`
-COPY data/ /home/suria/app/
+COPY . /home/suria/app/
 
 # Ajustar permisos y cambiar al usuario
 RUN chown -R suria:suria /home/suria/app
