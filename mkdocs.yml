@@ -36,6 +36,7 @@ nav:
     - Endpoints: api/endpoints.md
   - Base de Datos:
     - Esquema: database/esquema.md
+    - Relaciones: assets/diagrams/db-schema.png
   # - Guías:
   #   - Desarrollo: guias/desarrollo.md
   #   - Uso: guias/uso.md
