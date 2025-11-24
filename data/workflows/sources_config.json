@@ -12,23 +12,30 @@
         "params": {},
         "headers": { "Accept": "application/json" }
       },
-      "storage": { "local_raw_path": "/app/data/raw/api_gas", "file_format": "json" },
+      "storage": { 
+        "bucket": "raw-data"
+      },
       "force_change": false
     },
     {
       "id": "scrape_example",
       "name": "Scrape Example",
       "active": false,
-      "type": "scrape",
+      "type": "web",
       "schedule": { "cron": "*/2 * * * *", "note": "Every 2 minutes" },
       "config": { "url": "https://example.com" },
-      "storage": { "local_raw_path": "/app/data/raw/scrape_example", "file_format": "html" },
+      "storage": { 
+        "bucket": "raw-data"
+      },
       "force_change": false
     },
     {
       "id": "banco_central",
       "type": "complex_scraper",
-      "config": { "script_name": "banco_central_bot" }
+      "config": { "script_name": "banco_central_bot" },
+      "storage": { 
+        "bucket": "raw-data"
+      }
     }
   ]
 }

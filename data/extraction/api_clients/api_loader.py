@@ -1,23 +1,40 @@
 import requests
 import os
+from datetime import datetime
+from services.backend_client import BackendClient
 from logs_config.logger import app_logger as logger
 
 def run_api_loader(source_config: dict):
     """
-    Hace GET a base_url con headers y params del config y guarda en local_raw_path.
+    Hace GET a base_url con headers y params del config y guarda en Supabase Storage.
     """
     url = source_config.get("config", {}).get("base_url")
     params = source_config.get("config", {}).get("params", {})
     headers = source_config.get("config", {}).get("headers", {})
-    raw_path = source_config.get("storage", {}).get("local_raw_path", "/app/data/raw/")
+    
+    # Configuracion de Storage
+    storage_config = source_config.get("storage", {})
+    bucket_name = storage_config.get("bucket", "raw-data")
+    
+    # Generar path historico por defecto: api/{id}/YYYY-MM-DD_HHMMSS.json
+    now = datetime.now()
+    timestamp_path = now.strftime("%Y-%m-%d_%H%M%S")
+    default_path = f"api/{source_config.get('id')}/{timestamp_path}.json"
+    
+    remote_path = storage_config.get("path", default_path)
 
     try:
         r = requests.get(url, params=params, headers=headers, timeout=60)
         r.raise_for_status()
-        os.makedirs(raw_path, exist_ok=True)
-        file_name = os.path.join(raw_path, "data_" + source_config.get("id") + ".json")
-        with open(file_name, "wb") as f:
-            f.write(r.content)
-        logger.info(f"[api_loader] Guardado raw -> {file_name}")
+        
+        # Subir a Supabase Storage
+        client = BackendClient()
+        client.upload_file(
+            bucket_name=bucket_name,
+            file_path=remote_path,
+            file_content=r.content,
+            content_type="application/json"
+        )
+        
     except Exception as e:
         logger.exception(f"[api_loader] Error descargando {url}: {e}")

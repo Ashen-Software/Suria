@@ -7,6 +7,6 @@ class BaseExtractor(ABC):
     def extract(self, source_config: Dict[str, Any]):
         """
         Ejecuta la lógica de extracción para la fuente dada.
-        Debe descargar los datos y guardarlos en la ruta configurada (RAW).
+        Debe descargar los datos y guardarlos en Supabase Storage (RAW).
         """
         pass

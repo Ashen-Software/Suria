@@ -1,7 +1,9 @@
 from typing import Dict, Any
 import requests
 import os
+from datetime import datetime
 from .base import BaseExtractor
+from services.backend_client import BackendClient
 from logs_config.logger import app_logger as logger
 
 class WebScraperExtractor(BaseExtractor):
@@ -9,7 +11,17 @@ class WebScraperExtractor(BaseExtractor):
         src_id = source_config.get("id")
         config = source_config.get("config", {})
         url = config.get("url")
-        raw_path = source_config.get("storage", {}).get("local_raw_path", "/app/data/raw/")
+        
+        # Configuracion de Storage
+        storage_config = source_config.get("storage", {})
+        bucket_name = storage_config.get("bucket", "raw-data")
+        
+        # Generar path historico por defecto: web/{id}/YYYY-MM-DD_HHMMSS.html
+        now = datetime.now()
+        timestamp_path = now.strftime("%Y-%m-%d_%H%M%S")
+        default_path = f"web/{src_id}/{timestamp_path}.html"
+        
+        remote_path = storage_config.get("path", default_path)
         
         if not url:
             logger.error(f"[WebScraperExtractor] Falta URL en config de {src_id}")
@@ -20,13 +32,14 @@ class WebScraperExtractor(BaseExtractor):
             response = requests.get(url, timeout=30)
             response.raise_for_status()
             
-            os.makedirs(raw_path, exist_ok=True)
-            file_name = os.path.join(raw_path, f"data_{src_id}.html")
-            
-            with open(file_name, "w", encoding="utf-8") as f:
-                f.write(response.text)
-                
-            logger.info(f"[WebScraperExtractor] HTML guardado en {file_name}")
+            # Subir a Supabase Storage
+            client = BackendClient()
+            client.upload_file(
+                bucket_name=bucket_name,
+                file_path=remote_path,
+                file_content=response.content,
+                content_type="text/html"
+            )
             
         except Exception as e:
             logger.error(f"[WebScraperExtractor] Error extrayendo {src_id}: {e}")

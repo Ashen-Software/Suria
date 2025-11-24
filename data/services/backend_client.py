@@ -69,3 +69,27 @@ class BackendClient:
             
         except Exception as e:
             logger.error(f"Error insertando historial para {source_id}: {e}")
+
+    def upload_file(self, bucket_name: str, file_path: str, file_content: bytes, content_type: str = "application/octet-stream"):
+        """
+        Sube un archivo a un bucket de Supabase Storage.
+        :param bucket_name: Nombre del bucket (ej: 'raw-data')
+        :param file_path: Ruta dentro del bucket (ej: 'fuente_1/2023/10/file.json')
+        :param file_content: Contenido del archivo en bytes
+        :param content_type: Tipo MIME del archivo
+        """
+        if not self.client:
+            logger.info(f"[MOCK] Subiendo archivo a bucket '{bucket_name}': {file_path}")
+            return
+
+        try:
+            # upsert='true' permite sobrescribir si ya existe
+            self.client.storage.from_(bucket_name).upload(
+                path=file_path,
+                file=file_content,
+                file_options={"content-type": content_type, "upsert": "true"}
+            )
+            logger.info(f"Archivo subido a Supabase Storage: {bucket_name}/{file_path}")
+        except Exception as e:
+            logger.error(f"Error subiendo archivo a Storage {bucket_name}/{file_path}: {e}")
+            raise
