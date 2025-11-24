@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://Juanqu261.github.io/Datos2025/arquitectura/overview/">
+        <link rel="canonical" href="https://Juanqu261.github.io/Datos2025/guias/api_configuracion/">
       
       
-        <link rel="prev" href="../..">
+        <link rel="prev" href="../storage_configuracion/">
       
       
-        <link rel="next" href="../../assets/diagrams/arquitectura.svg">
+        <link rel="next" href="../scripts_personalizados/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Overview - Reto - Gas natural</title>
+        <title>APIs - Reto - Gas natural</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#arquitectura-detallada" class="md-skip">
+        <a href="#configuracion-de-apis" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Overview
+              APIs
             
           </span>
         </div>
@@ -232,13 +232,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../arquitectura/overview/" class="md-tabs__link">
           
   
   
@@ -294,11 +292,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../guias/configuracion_fuentes/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../configuracion_fuentes/" class="md-tabs__link">
           
   
   
@@ -374,31 +374,28 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -416,7 +413,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -431,35 +428,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Overview
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../arquitectura/overview/" class="md-nav__link">
         
   
   
@@ -475,225 +447,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#arquitectura-detallada" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Arquitectura Detallada
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Arquitectura Detallada">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-orquestacion-y-ejecucion-github-actions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Orquestación y Ejecución (GitHub Actions)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="1. Orquestación y Ejecución (GitHub Actions)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#workflows-implementados" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Workflows Implementados
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-sistema-de-logs-y-monitorizacion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Sistema de Logs y Monitorización
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="2. Sistema de Logs y Monitorización">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#estrategia-de-logs-multi-nivel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Estrategia de Logs Multi-nivel
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sistema-de-alertas-multi-canal" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sistema de Alertas Multi-canal
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-procesamiento-de-datos-etl" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Procesamiento de Datos (ETL)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="3. Procesamiento de Datos (ETL)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#tecnologias-clave" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tecnologías Clave
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#estrategia-de-procesamiento" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Estrategia de Procesamiento
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-almacenamiento-y-backend-supabase" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Almacenamiento y Backend (Supabase)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4. Almacenamiento y Backend (Supabase)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#esquema-de-base-de-datos" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Esquema de Base de Datos
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#optimizaciones-para-dashboard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Optimizaciones para Dashboard
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-frontend-y-despliegue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Frontend y Despliegue
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="5. Frontend y Despliegue">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#stack-tecnologico" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Stack Tecnológico
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#estrategia-de-despliegue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Estrategia de Despliegue
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -734,7 +487,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../implementacion/" class="md-nav__link">
+      <a href="../../arquitectura/implementacion/" class="md-nav__link">
         
   
   
@@ -762,7 +515,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../directorios/" class="md-nav__link">
+      <a href="../../arquitectura/directorios/" class="md-nav__link">
         
   
   
@@ -1028,28 +781,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -1067,7 +823,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1085,7 +841,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guias/configuracion_fuentes/" class="md-nav__link">
+      <a href="../configuracion_fuentes/" class="md-nav__link">
         
   
   
@@ -1113,7 +869,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guias/storage_configuracion/" class="md-nav__link">
+      <a href="../storage_configuracion/" class="md-nav__link">
         
   
   
@@ -1138,10 +894,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../guias/api_configuracion/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    APIs
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1157,6 +940,109 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables-de-entorno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variables de Entorno
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tipos-de-autenticacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipos de Autenticación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deteccion-eficiente-de-cambios-apis-socrata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detección Eficiente de Cambios (APIs Socrata)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Detección Eficiente de Cambios (APIs Socrata)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parametros-especiales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parámetros especiales
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flujo-optimizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flujo optimizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-de-configuracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo de Configuración
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-avanzada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuración Avanzada
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1169,7 +1055,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../guias/scripts_personalizados/" class="md-nav__link">
+      <a href="../scripts_personalizados/" class="md-nav__link">
         
   
   
@@ -1214,6 +1100,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -1222,34 +1110,66 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#arquitectura-detallada" class="md-nav__link">
+  <a href="#variables-de-entorno" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Arquitectura Detallada
+        Variables de Entorno
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Arquitectura Detallada">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-orquestacion-y-ejecucion-github-actions" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tipos-de-autenticacion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Orquestación y Ejecución (GitHub Actions)
+        Tipos de Autenticación
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. Orquestación y Ejecución (GitHub Actions)">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deteccion-eficiente-de-cambios-apis-socrata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detección Eficiente de Cambios (APIs Socrata)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Detección Eficiente de Cambios (APIs Socrata)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#workflows-implementados" class="md-nav__link">
+  <a href="#parametros-especiales" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Workflows Implementados
+        Parámetros especiales
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flujo-optimizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flujo optimizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-de-configuracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo de Configuración
       
     </span>
   </a>
@@ -1260,165 +1180,15 @@
     </nav>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#2-sistema-de-logs-y-monitorizacion" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#configuracion-avanzada" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Sistema de Logs y Monitorización
+        Configuración Avanzada
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="2. Sistema de Logs y Monitorización">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#estrategia-de-logs-multi-nivel" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Estrategia de Logs Multi-nivel
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sistema-de-alertas-multi-canal" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sistema de Alertas Multi-canal
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-procesamiento-de-datos-etl" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Procesamiento de Datos (ETL)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="3. Procesamiento de Datos (ETL)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#tecnologias-clave" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tecnologías Clave
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#estrategia-de-procesamiento" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Estrategia de Procesamiento
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-almacenamiento-y-backend-supabase" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Almacenamiento y Backend (Supabase)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4. Almacenamiento y Backend (Supabase)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#esquema-de-base-de-datos" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Esquema de Base de Datos
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#optimizaciones-para-dashboard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Optimizaciones para Dashboard
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-frontend-y-despliegue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Frontend y Despliegue
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="5. Frontend y Despliegue">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#stack-tecnologico" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Stack Tecnológico
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#estrategia-de-despliegue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Estrategia de Despliegue
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1439,159 +1209,155 @@
 
 
 
-  <h1>Overview</h1>
-
-<h2 id="arquitectura-detallada">Arquitectura Detallada<a class="headerlink" href="#arquitectura-detallada" title="Permanent link">&para;</a></h2>
-<h3 id="1-orquestacion-y-ejecucion-github-actions">1. Orquestación y Ejecución (GitHub Actions)<a class="headerlink" href="#1-orquestacion-y-ejecucion-github-actions" title="Permanent link">&para;</a></h3>
-<h4 id="workflows-implementados">Workflows Implementados<a class="headerlink" href="#workflows-implementados" title="Permanent link">&para;</a></h4>
-<p><strong>check-updates.yml</strong> (Ejecución Semanal/Mensual)</p>
-<ul>
-<li>
-<p><strong>Trigger:</strong> Cron programado / activación manual</p>
-</li>
-<li>
-<p><strong>Función:</strong> Verifica cambios en fuentes usando Requests + BeautifulSoup</p>
-</li>
-<li>
-<p><strong>Salida:</strong> Dispara ETL completo solo si detecta cambios</p>
-</li>
-<li>
-<p><strong>Costo:</strong> Mínimo (ejecución rápida sin contenedores)</p>
-</li>
-</ul>
-<p><strong>full-etl.yml</strong> (Completo - Solo cuando hay cambios)</p>
-<ul>
-<li>
-<p><strong>Trigger:</strong> Desde check-updates o manual</p>
-</li>
-<li>
-<p><strong>Contenedor:</strong> Playwright + Python para extracción robusta</p>
-</li>
-<li>
-<p><strong>Proceso:</strong> Extracción → Transformación → Carga</p>
-</li>
-<li>
-<p><strong>Costo:</strong> Solo cuando es necesario (2-3 meses)</p>
-</li>
-</ul>
-<h3 id="2-sistema-de-logs-y-monitorizacion">2. Sistema de Logs y Monitorización<a class="headerlink" href="#2-sistema-de-logs-y-monitorizacion" title="Permanent link">&para;</a></h3>
-<h4 id="estrategia-de-logs-multi-nivel">Estrategia de Logs Multi-nivel<a class="headerlink" href="#estrategia-de-logs-multi-nivel" title="Permanent link">&para;</a></h4>
-<p><strong>Nivel 1: Logs Estructurados en GitHub Actions</strong></p>
-<ul>
-<li>
-<p>Logs nativos de ejecución de workflows</p>
-</li>
-<li>
-<p>Captura de stdout/stderr de todos los scripts</p>
-</li>
-<li>
-<p>Retención automática según política de GitHub</p>
-</li>
-</ul>
-<p><strong>Nivel 2: Métricas de Performance</strong></p>
-<ul>
-<li>
-<p>Tiempos de ejecución por fuente</p>
-</li>
-<li>
-<p>Volumen de datos procesados</p>
-</li>
-<li>
-<p>Tasa de éxito/error por componente</p>
-</li>
-</ul>
-<h4 id="sistema-de-alertas-multi-canal">Sistema de Alertas Multi-canal<a class="headerlink" href="#sistema-de-alertas-multi-canal" title="Permanent link">&para;</a></h4>
-<p><strong>1. GitHub Native Integrations</strong></p>
-<ul>
-<li>
-<p>Notificaciones email nativas sobre fallos de workflows</p>
-</li>
-<li>
-<p>Configuración directa en repository settings</p>
-</li>
-</ul>
-<p><strong>2. Custom Email Service</strong></p>
-<ul>
-<li>Notificaciones para stakeholders no técnicos (SMTP gratuito)</li>
-</ul>
-<h3 id="3-procesamiento-de-datos-etl">3. Procesamiento de Datos (ETL)<a class="headerlink" href="#3-procesamiento-de-datos-etl" title="Permanent link">&para;</a></h3>
-<h4 id="tecnologias-clave">Tecnologías Clave<a class="headerlink" href="#tecnologias-clave" title="Permanent link">&para;</a></h4>
-<ul>
-<li>
-<p><strong>Python 3.12+</strong>: Lenguaje principal</p>
-</li>
-<li>
-<p><strong>Playwright</strong>: Extracción robusta en sitios complejos</p>
-</li>
-<li>
-<p><strong>Pandas</strong>: Transformación y limpieza de datos</p>
-</li>
-<li>
-<p><strong>BeautifulSoup</strong>: Scraping liviano para detección</p>
-</li>
-<li>
-<p><strong>Supabase Python Client</strong>: Carga eficiente</p>
-</li>
-</ul>
-<h4 id="estrategia-de-procesamiento">Estrategia de Procesamiento<a class="headerlink" href="#estrategia-de-procesamiento" title="Permanent link">&para;</a></h4>
+<h1 id="configuracion-de-apis">Configuración de APIs<a class="headerlink" href="#configuracion-de-apis" title="Permanent link">&para;</a></h1>
+<p>El sistema soporta múltiples métodos de autenticación y optimizaciones para consultas a APIs.</p>
+<h2 id="variables-de-entorno">Variables de Entorno<a class="headerlink" href="#variables-de-entorno" title="Permanent link">&para;</a></h2>
+<p>Cualquier valor en <code>params</code> o <code>headers</code> que comience con <code>$</code> es tratado como una variable de entorno. Esto permite mantener las credenciales seguras sin exponerlas en el código.</p>
+<p><strong>Sintaxis:</strong>
+<div class="highlight"><pre><span></span><code><span class="s2">&quot;$VARIABLE_NAME&quot;</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="err">se</span><span class="w"> </span><span class="err">resuelve</span><span class="w"> </span><span class="err">como</span><span class="w"> </span><span class="err">os.ge</span><span class="kc">ten</span><span class="err">v(</span><span class="s2">&quot;VARIABLE_NAME&quot;</span><span class="err">)</span>
+</code></pre></div></p>
+<p><strong>Ejemplo:</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;api_regalias&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;api&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;base_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://www.datos.gov.co/api/v3/views/j7js-yk74/query.json&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;app_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$DATOS_GOV_TOKEN&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;headers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;Accept&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;application/json&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>En el archivo <code>.env</code>:
+<div class="highlight"><pre><span></span><code>DATOS_GOV_TOKEN=tu_token_aqui
+</code></pre></div></p>
+<h2 id="tipos-de-autenticacion">Tipos de Autenticación<a class="headerlink" href="#tipos-de-autenticacion" title="Permanent link">&para;</a></h2>
+<p>El parámetro <code>auth_type</code> en <code>config</code> especifica el método de autenticación. La credencial se define mediante <code>auth_key_env</code> (nombre de la variable de entorno).</p>
+<table>
+<thead>
+<tr>
+<th>auth_type</th>
+<th>Descripción</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bearer</code></td>
+<td>Agrega header <code>Authorization: Bearer {token}</code></td>
+<td>OAuth 2.0, APIs modernas</td>
+</tr>
+<tr>
+<td><code>api_key</code></td>
+<td>Agrega header <code>X-API-Key: {token}</code></td>
+<td>APIs que usan API Keys</td>
+</tr>
+<tr>
+<td><code>custom_header</code></td>
+<td>Permite especificar el nombre del header</td>
+<td>Cualquier header personalizado</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ejemplo con Bearer Token:</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;api_ejemplo&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;api&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;base_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://api.ejemplo.com/data&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;auth_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bearer&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;auth_key_env&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;API_EJEMPLO_TOKEN&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;headers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;Accept&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;application/json&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p>En <code>.env</code>:
+<div class="highlight"><pre><span></span><code>API_EJEMPLO_TOKEN=sk_live_xxxxx
+</code></pre></div></p>
+<h2 id="deteccion-eficiente-de-cambios-apis-socrata">Detección Eficiente de Cambios (APIs Socrata)<a class="headerlink" href="#deteccion-eficiente-de-cambios-apis-socrata" title="Permanent link">&para;</a></h2>
+<p>Para APIs que retornan grandes volúmenes de datos (ej. 200K+ registros), es ineficiente descargar todo para detectar cambios. Socrata y plataformas similares exponen un endpoint de <strong>metadata</strong> mucho más ligero.</p>
+<h3 id="parametros-especiales">Parámetros especiales<a class="headerlink" href="#parametros-especiales" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Descripción</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>check_endpoint</code></td>
+<td>Endpoint de metadata (sin datos)</td>
+<td><code>https://datos.gov.co/api/views/{id}.json</code></td>
+</tr>
+<tr>
+<td><code>check_field</code></td>
+<td>Campo en la metadata que indica cambios</td>
+<td><code>rowsUpdatedAt</code>, <code>lastUpdateTime</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="flujo-optimizado">Flujo optimizado<a class="headerlink" href="#flujo-optimizado" title="Permanent link">&para;</a></h3>
 <ol>
-<li>
-<p><strong>Extracción Resiliente</strong>: Reintentos automáticos con backoff</p>
-</li>
-<li>
-<p><strong>Validación en Tiempo Real</strong>: Schemas, rangos, consistencia</p>
-</li>
-<li>
-<p><strong>Procesamiento Incremental</strong>: Solo datos nuevos/cambiados</p>
-</li>
-<li>
-<p><strong>Idempotencia</strong>: UPSERTs para evitar duplicados</p>
-</li>
+<li><strong>Check</strong> → Consulta solo metadata (~5KB)</li>
+<li>Compara el campo <code>check_field</code> con la ejecución anterior</li>
+<li><strong>Si cambió</strong> → Ejecuta Full ETL y descarga los datos</li>
+<li><strong>Si no cambió</strong> → Omite la descarga (ahorro de ancho de banda)</li>
 </ol>
-<h3 id="4-almacenamiento-y-backend-supabase">4. Almacenamiento y Backend (Supabase)<a class="headerlink" href="#4-almacenamiento-y-backend-supabase" title="Permanent link">&para;</a></h3>
-<h4 id="esquema-de-base-de-datos">Esquema de Base de Datos<a class="headerlink" href="#esquema-de-base-de-datos" title="Permanent link">&para;</a></h4>
-<p>POR DEFINIR</p>
-<h4 id="optimizaciones-para-dashboard">Optimizaciones para Dashboard<a class="headerlink" href="#optimizaciones-para-dashboard" title="Permanent link">&para;</a></h4>
-<ul>
-<li>
-<p>Vistas materializadas para consultas frecuentes</p>
-</li>
-<li>
-<p>Índices en campos de filtro común (fecha, entidad, territorio)</p>
-</li>
-<li>
-<p>Políticas RLS para seguridad de datos</p>
-</li>
-</ul>
-<h3 id="5-frontend-y-despliegue">5. Frontend y Despliegue<a class="headerlink" href="#5-frontend-y-despliegue" title="Permanent link">&para;</a></h3>
-<h4 id="stack-tecnologico">Stack Tecnológico<a class="headerlink" href="#stack-tecnologico" title="Permanent link">&para;</a></h4>
-<ul>
-<li>
-<p><strong>Angular 16+</strong>: Framework principal</p>
-</li>
-<li>
-<p><strong>Tailwind CSS</strong>: Estilización y responsive design</p>
-</li>
-<li>
-<p><strong>Supabase JS Client</strong>: Conexión directa a datos</p>
-</li>
-<li>
-<p><strong>Chart.js/NGX-Charts</strong>: Visualizaciones de datos</p>
-</li>
-</ul>
-<h4 id="estrategia-de-despliegue">Estrategia de Despliegue<a class="headerlink" href="#estrategia-de-despliegue" title="Permanent link">&para;</a></h4>
-<ul>
-<li>
-<p><strong>Vercel/Netlify</strong>: Despliegue continuo desde main branch</p>
-</li>
-<li>
-<p><strong>Variables de Entorno</strong>: Configuración segura de endpoints</p>
-</li>
-<li>
-<p><strong>CDN Global</strong>: Distribución optimizada de assets</p>
-</li>
-</ul>
-<p><a href="../../assets/diagrams/arquitectura.svg"><img alt="Diagrama de arquitectura" src="../../assets/diagrams/arquitectura.svg" /></a></p>
+<h3 id="ejemplo-de-configuracion">Ejemplo de Configuración<a class="headerlink" href="#ejemplo-de-configuracion" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;api_regalias&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;api&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;base_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://www.datos.gov.co/api/v3/views/j7js-yk74/query.json&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;check_endpoint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://www.datos.gov.co/api/views/j7js-yk74.json&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;check_field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;rowsUpdatedAt&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;app_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;$DATOS_GOV_TOKEN&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;headers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;Accept&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;application/json&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="configuracion-avanzada">Configuración Avanzada<a class="headerlink" href="#configuracion-avanzada" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Descripción</th>
+<th>Valor por defecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>timeout</code></td>
+<td>Tiempo máximo de respuesta en segundos</td>
+<td><code>60</code></td>
+</tr>
+<tr>
+<td><code>max_retries</code></td>
+<td>Número de reintentos ante fallos</td>
+<td><code>3</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ejemplo:</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;base_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://api.ejemplo.com/data&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;timeout&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;max_retries&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;auth_type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bearer&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;auth_key_env&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;API_TOKEN&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></p>
 
 
 

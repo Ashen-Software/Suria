@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://ashen-software.github.io/Datos2025/</loc>
-         <lastmod>2025-11-21</lastmod>
+         <loc>https://Juanqu261.github.io/Datos2025/</loc>
+         <lastmod>2025-11-24</lastmod>
     </url>
     <url>
-         <loc>https://ashen-software.github.io/Datos2025/api/endpoints/</loc>
-         <lastmod>2025-11-21</lastmod>
+         <loc>https://Juanqu261.github.io/Datos2025/api/endpoints/</loc>
+         <lastmod>2025-11-24</lastmod>
     </url>
     <url>
-         <loc>https://ashen-software.github.io/Datos2025/arquitectura/implementacion/</loc>
-         <lastmod>2025-11-21</lastmod>
+         <loc>https://Juanqu261.github.io/Datos2025/arquitectura/directorios/</loc>
+         <lastmod>2025-11-24</lastmod>
     </url>
     <url>
-         <loc>https://ashen-software.github.io/Datos2025/arquitectura/overview/</loc>
-         <lastmod>2025-11-21</lastmod>
+         <loc>https://Juanqu261.github.io/Datos2025/arquitectura/implementacion/</loc>
+         <lastmod>2025-11-24</lastmod>
     </url>
     <url>
-         <loc>https://ashen-software.github.io/Datos2025/database/esquema/</loc>
-         <lastmod>2025-11-21</lastmod>
+         <loc>https://Juanqu261.github.io/Datos2025/arquitectura/overview/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://Juanqu261.github.io/Datos2025/database/esquema/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://Juanqu261.github.io/Datos2025/guias/api_configuracion/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://Juanqu261.github.io/Datos2025/guias/configuracion_fuentes/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://Juanqu261.github.io/Datos2025/guias/scripts_personalizados/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://Juanqu261.github.io/Datos2025/guias/storage_configuracion/</loc>
+         <lastmod>2025-11-24</lastmod>
     </url>
 </urlset>

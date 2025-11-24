@@ -10,11 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://ashen-software.github.io/Datos2025/database/esquema/">
+        <link rel="canonical" href="https://Juanqu261.github.io/Datos2025/database/esquema/">
       
       
         <link rel="prev" href="../../api/endpoints/">
       
+      
+        <link rel="next" href="../../assets/diagrams/db-schema.png">
       
       
         
@@ -78,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#esquema" class="md-skip">
+        <a href="#esquema-de-base-de-datos" class="md-skip">
           Skip to content
         </a>
       
@@ -288,6 +290,26 @@
   
 
       
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guias/configuracion_fuentes/" class="md-tabs__link">
+          
+  
+  
+  Guías
+
+        </a>
+      </li>
+    
+  
+
+      
     </ul>
   </div>
 </nav>
@@ -437,6 +459,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../assets/diagrams/arquitectura.svg" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrama
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../arquitectura/implementacion/" class="md-nav__link">
         
   
@@ -465,14 +515,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../../assets/diagrams/arquitectura.svg" class="md-nav__link">
+      <a href="../../arquitectura/directorios/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Diagrama
+    Directorios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/diagrams/pipeline_despliegue.svg" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Despliegue
   
 
     
@@ -655,6 +733,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esquema
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -672,6 +768,298 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-relacional-simplificado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagrama Relacional Simplificado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tablas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tablas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-etl_sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. etl_sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-source_check_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. source_check_history
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tipos-enumerados-enums" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipos Enumerados (ENUMs)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migracion-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migracion script
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/diagrams/db-schema.png" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Relaciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guías
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guías
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/configuracion_fuentes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuración de Fuentes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/storage_configuracion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/api_configuracion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    APIs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/scripts_personalizados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripts Personalizados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -704,6 +1092,86 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#diagrama-relacional-simplificado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagrama Relacional Simplificado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tablas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tablas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-etl_sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. etl_sources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-source_check_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. source_check_history
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tipos-enumerados-enums" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipos Enumerados (ENUMs)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migracion-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migracion script
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -719,7 +1187,119 @@
 
 
 
-<h1 id="esquema">Esquema<a class="headerlink" href="#esquema" title="Permanent link">&para;</a></h1>
+<h1 id="esquema-de-base-de-datos">Esquema de Base de Datos<a class="headerlink" href="#esquema-de-base-de-datos" title="Permanent link">&para;</a></h1>
+<p>Este documento detalla la estructura de la base de datos en Supabase (PostgreSQL) utilizada para orquestar el ETL.</p>
+<h2 id="diagrama-relacional-simplificado">Diagrama Relacional Simplificado<a class="headerlink" href="#diagrama-relacional-simplificado" title="Permanent link">&para;</a></h2>
+<p><code>etl_sources (1) &lt;---&gt; (N) source_check_history</code></p>
+<h2 id="tablas">Tablas<a class="headerlink" href="#tablas" title="Permanent link">&para;</a></h2>
+<h3 id="1-etl_sources">1. <code>etl_sources</code><a class="headerlink" href="#1-etl_sources" title="Permanent link">&para;</a></h3>
+<p>Almacena la configuración maestra de cada fuente de datos. Es la fuente de verdad para el Scheduler.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><strong>PK</strong>. Identificador único (ej: <code>min_minas_gas</code>, <code>precios_bolsa</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>name</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Nombre legible para humanos.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>active</code></td>
+<td style="text-align: left;"><code>boolean</code></td>
+<td style="text-align: left;">Interruptor general. Si es <code>false</code>, el scheduler ignora esta fuente.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>type</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Define el checker a usar: <code>api</code>, <code>scrape</code>, <code>complex_scraper</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>schedule_cron</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Expresión CRON para la frecuencia de chequeo (ej: <code>0 8 * * *</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>config</code></td>
+<td style="text-align: left;"><code>jsonb</code></td>
+<td style="text-align: left;">Parámetros específicos del checker (URL, headers, selectores CSS).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>storage_config</code></td>
+<td style="text-align: left;"><code>jsonb</code></td>
+<td style="text-align: left;">Configuración de dónde guardar los datos RAW (rutas, buckets).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>created_at</code></td>
+<td style="text-align: left;"><code>timestamptz</code></td>
+<td style="text-align: left;">Fecha de creación.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>updated_at</code></td>
+<td style="text-align: left;"><code>timestamptz</code></td>
+<td style="text-align: left;">Fecha de última modificación de la config.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-source_check_history">2. <code>source_check_history</code><a class="headerlink" href="#2-source_check_history" title="Permanent link">&para;</a></h3>
+<p>Bitácora inmutable de cada ejecución del proceso <code>check-updates</code>. Permite auditar la salud de las fuentes y detectar cuándo hubo cambios reales.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>bigint</code></td>
+<td style="text-align: left;"><strong>PK</strong>. Autoincremental.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>source_id</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><strong>FK</strong>. Referencia a <code>etl_sources.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>status</code></td>
+<td style="text-align: left;"><code>enum</code></td>
+<td style="text-align: left;">Estado del chequeo: <code>no_change</code>, <code>changed</code>, <code>failed</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>checksum</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Hash MD5 del contenido detectado (para comparar cambios).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>metadata</code></td>
+<td style="text-align: left;"><code>jsonb</code></td>
+<td style="text-align: left;">Datos variables de la ejecución (URL consultada, notas de error, método usado).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>created_at</code></td>
+<td style="text-align: left;"><code>timestamptz</code></td>
+<td style="text-align: left;">Fecha y hora exacta de la ejecución.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tipos-enumerados-enums">Tipos Enumerados (ENUMs)<a class="headerlink" href="#tipos-enumerados-enums" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>source_update_method</code></strong>: <code>'api'</code>, <code>'scraping'</code>, <code>'html'</code>, <code>'archivo'</code>, <code>'complex_scraper'</code></li>
+<li><strong><code>source_check_status</code></strong>: <code>'no_change'</code>, <code>'changed'</code>, <code>'failed'</code></li>
+</ul>
+<h2 id="migracion-script">Migracion script<a class="headerlink" href="#migracion-script" title="Permanent link">&para;</a></h2>
+<p>El script .sql para crear la base de datos se encuentra en: <a href="https://github.com/Ashen-Software/Suria/blob/data/docs/database/init_db.sql">script migración</a>.</p>
 
 
 
