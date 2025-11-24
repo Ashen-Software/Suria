@@ -40,3 +40,6 @@ Bitácora inmutable de cada ejecución del proceso `check-updates`. Permite audi
 *   **`source_update_method`**: `'api'`, `'scraping'`, `'html'`, `'archivo'`, `'complex_scraper'`
 *   **`source_check_status`**: `'no_change'`, `'changed'`, `'failed'`
 
+## Migracion script
+
+El script .sql para crear la base de datos se encuentra en: [script migración](https://github.com/Ashen-Software/Suria/blob/data/docs/database/init_db.sql).
