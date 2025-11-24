@@ -24,6 +24,11 @@
       "config": { "url": "https://example.com" },
       "storage": { "local_raw_path": "/app/data/raw/scrape_example", "file_format": "html" },
       "force_change": false
+    },
+    {
+      "id": "banco_central",
+      "type": "complex_scraper",
+      "config": { "script_name": "banco_central_bot" }
     }
   ]
 }
