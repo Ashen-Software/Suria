@@ -1,4 +1,4 @@
-# Datos2025
+# Suria
 Toda la documentación detallada, guías de uso y referencias técnicas se encuentran publicadas en GitHub Pages, generada con MkDocs.
 
 Accede a la documentación completa aquí: [Ver la documentación completa](https://ashen-software.github.io/Suria/)
