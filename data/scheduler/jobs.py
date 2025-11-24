@@ -55,14 +55,17 @@ def run_check_updates(source):
         from workflows.check_updates.run import check_updates_task
         from workflows.full_etl.run import full_etl_task
 
-        # check_updates_task espera el config completo, creamos uno con solo esta fuente
-        temp_config = {"sources": [source]}
-        changed_sources = check_updates_task(temp_config)
+        # check_updates_task retorna un booleano indicando si hubo cambios
+        has_changes = check_updates_task(source)
 
-        if changed_sources:
-            logger.info("changes_detected", source_id=src_id, changed_count=len(changed_sources))
+        if has_changes:
+            logger.info("changes_detected", source_id=src_id)
             logger.info("full_etl_started", source_id=src_id)
-
+            
+            # full_etl_task espera una lista de IDs cambiados y el config
+            changed_sources = [src_id]
+            temp_config = {"sources": [source]}
+            
             full_etl_task(changed_sources, temp_config)
 
             logger.info("full_etl_completed", source_id=src_id)
