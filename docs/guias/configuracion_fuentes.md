@@ -1,76 +1,34 @@
-# Guía de Configuración de Fuentes y Storage
+# Guía de Configuración de Fuentes
 
-Esta guía detalla cómo configurar el almacenamiento en Supabase y la vinculación de scripts personalizados para las fuentes de datos en el sistema ETL.
+Esta guía proporciona una introducción a cómo configurar diferentes tipos de fuentes de datos en el sistema ETL.
 
-## 1. Supabase Storage
+## Tipos de Fuentes Soportadas
 
-El sistema utiliza Supabase Storage para almacenar la data cruda (RAW) extraída de las diferentes fuentes.
+| Tipo | Descripción | Complejidad | Ejemplo |
+|------|-------------|-------------|---------|
+| `api` | Consume datos directamente de una API REST | Baja | API de datos públicos, Socrata |
+| `web` | Descarga HTML de un sitio web | Baja | Web scraping básico |
+| `complex_scraper` | Lógica personalizada con Selenium/Playwright | Alta | Navegación interactiva, JS renderizado |
 
-### Creación del Bucket
-Para que el sistema funcione correctamente, se debe crear un bucket en el proyecto de Supabase con las siguientes características:
+## Guías Específicas
 
-*   **Nombre del Bucket:** `raw-data`
-*   **Acceso:** Privado (recomendado) o Público.
+Para detalles completos sobre cada tipo de configuración, consulta:
 
-### Estructura de Archivos
-El sistema organiza automáticamente los archivos descargados para mantener un historial ordenado cronológicamente. La estructura de carpetas generada por defecto es:
+- **[Configuración de Storage](storage_configuracion.md)** - Dónde se guardan los datos
+- **[Configuración de APIs](api_configuracion.md)** - Cómo consumir APIs REST
+- **[Scripts Personalizados](scripts_personalizados.md)** - Implementar lógica compleja
 
-```text
-{tipo_fuente}/{id_fuente}/{YYYY-MM-DD_HHMMSS}.{ext}
-```
-
-**Ejemplos:**
-*   `api/api_gas/2023-11-24_103000.json`
-*   `web/noticias_col/2023-11-24_154500.html`
-*   `complex/banco_central/2023-11-24_090000.bin`
-
-Esta estructura plana facilita la gestión de historiales cortos (ej. últimos 2-3 meses).
-
----
-
-## 2. Configuración en `sources_config.json`
-
-Cada fuente en `etl_sources` (o `sources_config.json`) tiene una sección `storage` para definir dónde se guardan los datos.
-
-### Configuración Básica
-Solo es necesario especificar el nombre del bucket. El sistema se encarga de generar la ruta y el nombre del archivo.
+## Estructura Básica de una Fuente
 
 ```json
 {
   "id": "mi_fuente",
+  "name": "Mi Fuente de Datos",
+  "active": true,
   "type": "api",
-  "storage": {
-    "bucket": "raw-data"
-  }
-}
-```
-
-### Parámetros Disponibles
-
-| Parámetro | Descripción | Valor por defecto |
-| :--- | :--- | :--- |
-| `bucket` | Nombre del bucket en Supabase. | `"raw-data"` |
-| `path` | (Opcional) Ruta completa del archivo. Si se define, **sobrescribe** la generación automática de historial. Útil si solo se desea mantener la última versión. | `None` (Automático) |
-
----
-
-## 3. Scripts Personalizados (`complex_scraper`)
-
-Para fuentes que requieren lógica de extracción compleja (Selenium, Playwright, pasos múltiples), se utiliza el tipo `complex_scraper`.
-
-### Vinculación del Script
-El sistema busca un script de Python en la carpeta `data/extraction/scrapers/`. Por defecto, busca un archivo con el mismo nombre que el `id` de la fuente.
-
-Para usar un nombre de archivo diferente, se utiliza el parámetro `script_name` dentro de `config`.
-
-**Ejemplo de Configuración:**
-
-```json
-{
-  "id": "banco_central_trm",
-  "type": "complex_scraper",
+  "schedule": { "cron": "0 9 * * *", "note": "Daily at 9 AM" },
   "config": {
-    "script_name": "bot_banco_central" 
+    // Configuración específica del tipo
   },
   "storage": {
     "bucket": "raw-data"
@@ -78,8 +36,134 @@ Para usar un nombre de archivo diferente, se utiliza el parámetro `script_name`
 }
 ```
 
-En este caso:
-1.  El sistema buscará el archivo `data/extraction/scrapers/bot_banco_central.py`.
-2.  Ejecutará la función `extract(config)` definida en ese archivo.
-3.  El script debe retornar el contenido del archivo (bytes o string).
-4.  El sistema guardará ese contenido en `raw-data/complex/banco_central_trm/YYYY-MM-DD_HHMMSS.bin`.
+### Parámetros Comunes
+
+| Parámetro | Descripción | Requerido |
+|-----------|-------------|-----------|
+| `id` | Identificador único de la fuente | Sí |
+| `name` | Nombre descriptivo | No |
+| `active` | Si debe ejecutarse | Sí |
+| `type` | Tipo de fuente: `api`, `web`, `complex_scraper` | Sí |
+| `schedule` | Cron de ejecución | Sí |
+| `config` | Configuración específica del tipo | Sí |
+| `storage` | Dónde guardar los datos | Sí |
+
+### Formatos de Schedule (cron)
+
+```json
+"schedule": { 
+  "cron": "0 9 * * *",
+  "note": "Daily at 9 AM"
+}
+```
+
+Ejemplos comunes:
+- `"* * * * *"` - Cada minuto
+- `"0 * * * *"` - Cada hora
+- `"0 9 * * *"` - Cada día a las 9 AM
+- `"0 0 * * 1"` - Cada lunes a medianoche
+- `"*/30 * * * *"` - Cada 30 minutos
+
+## Flujo de Ejecución
+
+### 1. Scheduler
+El APScheduler ejecuta según el cron definido.
+
+### 2. Check Updates (Detección de Cambios)
+- Resuelve variables de entorno
+- Consulta estado actual (metadata o datos)
+- Calcula hash SHA256
+- Compara con última ejecución
+
+### 3. Decisión
+- **Cambios detectados** → Ejecuta Full ETL
+- **Sin cambios** → Omite descarga
+
+### 4. Full ETL (Si hay cambios)
+- Resuelve variables de entorno
+- Descarga/procesa datos
+- Genera ruta con timestamp
+- Sube archivo a Supabase Storage
+
+### 5. Registro en Base de Datos
+- `etl_sources`: estado y última verificación
+- `source_check_history`: historial de cada ejecución
+
+## Mejores Prácticas
+
+- Mantén credenciales en `.env`, nunca en config
+- Usa `$VARIABLE` para referencias a variables de entorno
+- Aprovecha `check_endpoint` para APIs grandes (reduce transferencia)
+- Define schedules apropiados (no sobrecargar servicios)
+- Registra cambios en Git, no datos descargados
+- Nunca commitees `.env` con credenciales reales
+
+## Ejemplos Completos
+
+### Ejemplo 1: API Simple
+```json
+{
+  "id": "api_gas",
+  "name": "API Gas Colombia",
+  "active": true,
+  "type": "api",
+  "schedule": { "cron": "0 * * * *" },
+  "config": {
+    "base_url": "https://httpbin.org/json"
+  },
+  "storage": { "bucket": "raw-data" }
+}
+```
+
+### Ejemplo 2: API con Autenticación
+```json
+{
+  "id": "api_regalias",
+  "name": "Consolidación de regalias",
+  "active": true,
+  "type": "api",
+  "schedule": { "cron": "0 9 * * *" },
+  "config": {
+    "base_url": "https://www.datos.gov.co/api/v3/views/j7js-yk74/query.json",
+    "check_endpoint": "https://www.datos.gov.co/api/views/j7js-yk74.json",
+    "check_field": "rowsUpdatedAt",
+    "params": { "app_token": "$DATOS_GOV_TOKEN" },
+    "headers": { "Accept": "application/json" }
+  },
+  "storage": { "bucket": "raw-data" }
+}
+```
+
+### Ejemplo 3: Web Scraping
+```json
+{
+  "id": "scrape_example",
+  "name": "Scrape Example",
+  "active": true,
+  "type": "web",
+  "schedule": { "cron": "0 12 * * *" },
+  "config": { "url": "https://example.com" },
+  "storage": { "bucket": "raw-data" }
+}
+```
+
+### Ejemplo 4: Script Personalizado
+```json
+{
+  "id": "banco_central",
+  "name": "Banco Central Bot",
+  "active": true,
+  "type": "complex_scraper",
+  "schedule": { "cron": "0 9 * * *" },
+  "config": { "script_name": "bot_banco_central" },
+  "storage": { "bucket": "raw-data" }
+}
+```
+
+---
+
+## Archivos de Referencia
+
+- `data/workflows/sources_config.json` - Configuración de ejemplo
+- `data/extraction/scrapers/` - Ubicación de scripts personalizados
+- `docs/database/esquema.md` - Esquema de base de datos
