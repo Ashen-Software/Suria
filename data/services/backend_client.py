@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Dict, Optional, Any
 from supabase import create_client, Client
 from logs_config.logger import app_logger as logger
@@ -27,7 +26,7 @@ class BackendClient:
             return {}
         
         try:
-            # Obtenemos solo el registro más reciente
+            # Obtenemos solo el registro mas reciente
             response = self.client.table("source_check_history")\
                 .select("*")\
                 .eq("source_id", source_id)\
@@ -50,7 +49,6 @@ class BackendClient:
             logger.info(f"[MOCK] Insertando historial {source_id}: status={status}")
             return
 
-        # Construimos el metadata JSONB para no llenar la tabla de columnas dispersas
         metadata = {}
         if url: metadata["url"] = url
         if method: metadata["method"] = method
