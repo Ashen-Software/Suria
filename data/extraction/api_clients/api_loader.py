@@ -1,10 +1,10 @@
-from loguru import logger
 import requests
 import os
+from logs_config.logger import app_logger as logger
 
 def run_api_loader(source_config: dict):
     """
-    Ejemplo básico: hace GET a base_url con headers y params del config y guarda en local_raw_path.
+    Hace GET a base_url con headers y params del config y guarda en local_raw_path.
     """
     url = source_config.get("config", {}).get("base_url")
     params = source_config.get("config", {}).get("params", {})

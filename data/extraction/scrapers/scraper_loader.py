@@ -2,14 +2,15 @@ import importlib
 from typing import Dict, Any
 from logs_config.logger import app_logger as logger
 
-def run_scraper_loader(source_config: Dict[str, Any]) -> Dict[str, Any]:
+def run_scraper_loader(source_config: Dict[str, Any], action: str = "check") -> Any:
     """
-    Carga dinámicamente un módulo específico para la fuente y ejecuta su función 'check'.
+    Carga dinámicamente un módulo específico para la fuente y ejecuta la función indicada por 'action'.
     
     Convención:
     - El script debe estar en data/extraction/scrapers/
     - El nombre del archivo debe coincidir con el 'id' de la fuente (o definirse en config 'script_name').
-    - El script debe tener una función `check(config) -> str` que retorne el hash/estado actual.
+    - Si action='check', debe tener `check(config) -> str` (hash/estado).
+    - Si action='extract', debe tener `extract(config) -> Any` (descarga/proceso).
     """
     src_id = source_config.get("id")
     config = source_config.get("config", {})
@@ -20,16 +21,16 @@ def run_scraper_loader(source_config: Dict[str, Any]) -> Dict[str, Any]:
     try:
         # Importación dinámica: extraction.scrapers.<script_name>
         module_path = f"extraction.scrapers.{script_name}"
-        logger.info(f"[scraper_loader] Cargando módulo dinámico: {module_path}")
+        logger.info(f"[scraper_loader] Cargando módulo dinámico: {module_path} (Action: {action})")
         
         module = importlib.import_module(module_path)
         
-        if not hasattr(module, "check"):
-            raise AttributeError(f"El módulo {script_name} no tiene una función 'check(config)'")
+        if not hasattr(module, action):
+            raise AttributeError(f"El módulo {script_name} no tiene una función '{action}(config)'")
             
-        # Ejecutar la lógica personalizada
-        # Se espera que retorne el valor para hashear o el hash directo
-        result = module.check(source_config)
+        # Ejecutar la función correspondiente
+        func = getattr(module, action)
+        result = func(source_config)
         
         return result
         
@@ -37,5 +38,5 @@ def run_scraper_loader(source_config: Dict[str, Any]) -> Dict[str, Any]:
         logger.error(f"[scraper_loader] No se encontró el script para {src_id} (buscado: {script_name}.py)")
         raise
     except Exception as e:
-        logger.error(f"[scraper_loader] Error ejecutando script custom {script_name}: {e}")
+        logger.error(f"[scraper_loader] Error ejecutando script custom {script_name}.{action}: {e}")
         raise
