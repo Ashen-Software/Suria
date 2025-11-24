@@ -13,7 +13,7 @@
         "headers": { "Accept": "application/json" }
       },
       "storage": { 
-        "bucket": "raw-data"
+        "bucket": "test-raw-data"
       },
       "force_change": false
     },
@@ -25,16 +25,19 @@
       "schedule": { "cron": "*/2 * * * *", "note": "Every 2 minutes" },
       "config": { "url": "https://example.com" },
       "storage": { 
-        "bucket": "raw-data"
+        "bucket": "test-raw-data"
       },
       "force_change": false
     },
     {
       "id": "banco_central",
+      "name": "Banco Central Bot",
+      "active": false,
       "type": "complex_scraper",
+      "schedule": { "cron": "0 0 * * *", "note": "Daily at midnight" },
       "config": { "script_name": "banco_central_bot" },
       "storage": { 
-        "bucket": "raw-data"
+        "bucket": "test-raw-data"
       }
     }
   ]

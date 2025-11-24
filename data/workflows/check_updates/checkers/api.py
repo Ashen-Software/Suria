@@ -29,7 +29,7 @@ class ApiChecker(BaseChecker):
             
             # Obtener estado previo
             last_state = self.client.get_source_state(src_id)
-            last_hash = last_state.get("checksum") # Actualizado de last_hash a checksum
+            last_hash = last_state.get("checksum")
             
             if current_hash != last_hash:
                 logger.info(f"[ApiChecker] Cambio detectado en {src_id}. Hash anterior: {last_hash}, Nuevo: {current_hash}")
@@ -46,7 +46,7 @@ class ApiChecker(BaseChecker):
             
             logger.info(f"[ApiChecker] {src_id} sin cambios (Hash: {current_hash})")
             
-            # Actualizamos el "visto por última vez" aunque no haya cambios
+            # Actualizamos el "visto por ultima vez" aunque no haya cambios
             self.client.update_source_state(
                 source_id=src_id,
                 status="no_change",
