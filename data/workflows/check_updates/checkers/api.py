@@ -1,5 +1,5 @@
-from typing import Dict, Any
 import requests
+from typing import Dict, Any
 from .base import BaseChecker
 from common.env_resolver import resolve_dict_env_vars
 from common.hash_utils import calculate_hash_sha256
@@ -34,7 +34,7 @@ class ApiChecker(BaseChecker):
                 value_to_hash = str(metadata.get(check_field, ""))
                 logger.info(f"[ApiChecker] Campo '{check_field}' obtenido: {value_to_hash}")
             else:
-                # Fallback: consulta datos completos (lento para datasets grandes)
+                # Fallback: consulta datos completos
                 logger.info(f"[ApiChecker] Consultando datos completos de {url} para {src_id}")
                 response = requests.get(
                     url, 
