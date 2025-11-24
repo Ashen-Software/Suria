@@ -37,7 +37,7 @@ class ConfigManager:
             return []
 
         try:
-            logger.info("Consultando tabla 'etl_sources' en Supabase...")
+            # logger.info("Consultando tabla 'etl_sources' en Supabase...")
             response = self.client.table("etl_sources").select("*").execute()
             
             # Convertir filas de DB a estructura de objetos del Scheduler

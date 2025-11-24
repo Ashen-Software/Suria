@@ -10,7 +10,7 @@ from structlog.processors import CallsiteParameter, CallsiteParameterAdder
 from structlog.typing import EventDict
 import settings
 
-# Variables de entorno desde settings
+
 LOG_LEVEL = settings.LOG_LEVEL
 LOG_ENVIRONMENT = settings.ENVIRONMENT
 SERVICE_NAME = settings.SERVICE_NAME
