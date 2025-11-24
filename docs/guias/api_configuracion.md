@@ -100,6 +100,106 @@ Para APIs que retornan grandes volúmenes de datos (ej. 200K+ registros), es ine
 }
 ```
 
+## Paginación de Datos Extensos
+
+Para APIs que retornan muy grandes volúmenes de datos (ej. 500K+ registros), el sistema soporta descarga **paginada automática**. Cada página se guarda en un archivo separado para evitar timeouts y saturación de memoria.
+
+### Cuándo usar paginación
+
+- Dataset > 100K registros
+- API soporta parámetros de paginación
+- Necesitas descarga robusta y recuperable por páginas
+
+### Tipos de Paginación Soportados
+
+#### 1. **Page-based** (Socrata, muchas APIs modernas)
+Usa `pageNumber` y `pageSize`
+
+```json
+{
+  "pagination": {
+    "enabled": true,
+    "page_param": "pageNumber",
+    "size_param": "pageSize",
+    "page_size": 10000
+  }
+}
+```
+
+**URL generada:**
+```
+https://api.datos.gov.co/data?pageNumber=1&pageSize=10000&app_token=XXX
+https://api.datos.gov.co/data?pageNumber=2&pageSize=10000&app_token=XXX
+...
+```
+
+#### 2. **Offset-based** (APIs antiguas, SOAP)
+Usa `$offset` y `$limit`
+
+```json
+{
+  "pagination": {
+    "enabled": true,
+    "offset_param": "$offset",
+    "limit_param": "$limit",
+    "page_size": 50000
+  }
+}
+```
+
+### Estructura de Almacenamiento
+
+Cuando se habilita paginación, los datos se guardan así:
+
+```
+raw-data/api/api_regalias/2025-11-24_183107/
+├── page_0001.json  (10K registros)
+├── page_0002.json  (10K registros)
+├── page_0003.json  (10K registros)
+└── ...
+```
+
+### Ejemplo Completo: Socrata
+
+```json
+{
+  "id": "api_regalias",
+  "name": "Consolidación de regalias por campo",
+  "type": "api",
+  "active": true,
+  "schedule": { "cron": "0 * * * *", "note": "Every hour" },
+  "config": {
+    "base_url": "https://www.datos.gov.co/api/v3/views/j7js-yk74/query.json",
+    "check_endpoint": "https://www.datos.gov.co/api/views/j7js-yk74.json",
+    "check_field": "rowsUpdatedAt",
+    "params": { "app_token": "$DATOS_GOV_TOKEN" },
+    "headers": { "Accept": "application/json" },
+    "timeout": 120,
+    "pagination": {
+      "enabled": true,
+      "page_param": "pageNumber",
+      "size_param": "pageSize",
+      "page_size": 10000
+    }
+  },
+  "storage": { "bucket": "raw-data" }
+}
+```
+
+### Monitoreo de Paginación
+
+Los logs mostrarán el progreso:
+
+```
+[api_loader] Descargando página 1 (pageNumber=1, pageSize=10000)
+[api_loader] Página 1 guardada: api/api_regalias/2025-11-24_183107/page_0001.json
+[api_loader] Descargando página 2 (pageNumber=2, pageSize=10000)
+[api_loader] Página 2 guardada: api/api_regalias/2025-11-24_183107/page_0002.json
+...
+[api_loader] Última página detectada (solo 5432 filas < 10000)
+[api_loader] Paginación completada: 15 páginas, 145432 filas totales
+```
+
 ## Configuración Avanzada
 
 | Parámetro | Descripción | Valor por defecto |

@@ -121,7 +121,6 @@ def _load_paginated_data(url: str, params: dict, headers: dict, bucket_name: str
                          source_id: str, pagination_config: dict, timeout: int):
     """
     Carga datos con paginación (ej: Socrata).
-    Guarda cada página en archivo separado (sin archivo combinado).
     
     Soporta dos estilos de paginación:
     1. Offset-based: offset_param, limit_param (ej: $offset, $limit)
