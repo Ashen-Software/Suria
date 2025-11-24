@@ -17,8 +17,7 @@ SERVICE_NAME = os.getenv("SERVICE_NAME", "etl_service")
 # Supabase
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY") # Usamos la Service Key
-CONFIG_BUCKET = os.getenv("CONFIG_BUCKET", "etl-configs")
-CONFIG_OBJECT_NAME = os.getenv("CONFIG_OBJECT_NAME", "sources_config.json")
+
 
 # Scheduler / Config
 CONFIG_POLL_INTERVAL = int(os.getenv("CONFIG_POLL_INTERVAL", "300"))

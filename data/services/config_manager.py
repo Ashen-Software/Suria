@@ -13,8 +13,6 @@ CACHE_FILE = CACHE_DIR / "sources_config.json"
 # Usar variables desde settings
 SUPABASE_URL = settings.SUPABASE_URL
 SUPABASE_KEY = settings.SUPABASE_KEY
-CONFIG_BUCKET = settings.CONFIG_BUCKET
-CONFIG_OBJECT_NAME = settings.CONFIG_OBJECT_NAME
 
 
 class ConfigManager:
