@@ -38,7 +38,10 @@ nav:
     - Esquema: database/esquema.md
     - Relaciones: assets/diagrams/db-schema.png
   - Guías:
-    - Uso: guias/configuracion_fuentes.md
+    - Configuración de Fuentes: guias/configuracion_fuentes.md
+    - Storage: guias/storage_configuracion.md
+    - APIs: guias/api_configuracion.md
+    - Scripts Personalizados: guias/scripts_personalizados.md
 
 markdown_extensions:
   - admonition
