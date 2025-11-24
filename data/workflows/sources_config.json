@@ -4,7 +4,7 @@
     {
       "id": "api_gas",
       "name": "API Gas Colombia",
-      "active": true,
+      "active": false,
       "type": "api",
       "schedule": { "cron": "* * * * *", "note": "Dev: check each minute" },
       "config": {
@@ -39,6 +39,24 @@
       "storage": { 
         "bucket": "test-raw-data"
       }
+    },
+    {
+      "id": "api_regalias",
+      "name": "Consolidación de regalias por campo",
+      "active": false,
+      "type": "api",
+      "schedule": { "cron": "*/2 * * * *", "note": "Dev: check each 2 minutes" },
+      "config": {
+        "base_url": "https://www.datos.gov.co/api/v3/views/j7js-yk74/query.json",
+        "params": { 
+          "app_token": "$DATOS_GOV_TOKEN"
+        },
+        "headers": { "Accept": "application/json" }
+      },
+      "storage": { 
+        "bucket": "test-raw-data"
+      },
+      "force_change": false
     }
   ]
 }

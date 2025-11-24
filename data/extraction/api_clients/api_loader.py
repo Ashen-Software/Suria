@@ -4,16 +4,48 @@ from datetime import datetime
 from services.backend_client import BackendClient
 from logs_config.logger import app_logger as logger
 
+def _resolve_env_vars(value: str) -> str:
+    """
+    Si un valor comienza con $, lo interpreta como variable de entorno.
+    Ejemplo: "$API_TOKEN" -> valor de os.getenv("API_TOKEN")
+    """
+    if isinstance(value, str) and value.startswith("$"):
+        env_var = value[1:]  # Quita el $
+        env_value = os.getenv(env_var)
+        if env_value is None:
+            logger.warning(f"[api_loader] Variable de entorno '{env_var}' no encontrada, usando valor como está")
+            return value
+        return env_value
+    return value
+
+def _resolve_dict_env_vars(obj):
+    """
+    Resuelve variables de entorno en todos los valores de un diccionario (recursivamente).
+    """
+    if isinstance(obj, dict):
+        return {k: _resolve_dict_env_vars(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [_resolve_dict_env_vars(item) for item in obj]
+    elif isinstance(obj, str):
+        return _resolve_env_vars(obj)
+    else:
+        return obj
+
 def run_api_loader(source_config: dict):
     """
     Hace GET a base_url con headers y params del config y guarda en Supabase Storage.
     Soporta autenticación mediante variables de entorno.
+    Variables de entorno: cualquier valor que comience con $ será resuelto (ej: "$API_TOKEN").
     """
     url = source_config.get("config", {}).get("base_url")
     params = source_config.get("config", {}).get("params", {})
     headers = source_config.get("config", {}).get("headers", {}).copy()  # Copia para no mutar original
     
-    # Configuración de autenticacion
+    # Resolver variables de entorno en params y headers
+    params = _resolve_dict_env_vars(params)
+    headers = _resolve_dict_env_vars(headers)
+    
+    # Configuracion de autenticacion
     auth_type = source_config.get("config", {}).get("auth_type")
     auth_key_env = source_config.get("config", {}).get("auth_key_env")
     
