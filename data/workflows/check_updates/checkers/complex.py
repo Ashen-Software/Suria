@@ -1,6 +1,7 @@
 from typing import Dict, Any
 from .base import BaseChecker
 from extraction.scrapers.scraper_loader import run_scraper_loader
+from common.hash_utils import calculate_hash_sha256
 from logs_config.logger import app_logger as logger
 
 class ComplexScraperChecker(BaseChecker):
@@ -21,11 +22,10 @@ class ComplexScraperChecker(BaseChecker):
             # Nota: run_scraper_loader es un placeholder actualmente.
             # En una implementación real, le pasaríamos un flag 'check_only=True' 
             # para que solo verifique y no descargue todo si no es necesario.
-            current_value = run_scraper_loader(source_config)
+            current_value = run_scraper_loader(source_config, action="check")
             
             # Hasheamos el resultado retornado por el script custom
-            import hashlib
-            current_hash = hashlib.md5(str(current_value).encode('utf-8')).hexdigest()
+            current_hash = calculate_hash_sha256(str(current_value))
             
             last_state = self.client.get_source_state(src_id)
             last_hash = last_state.get("checksum")

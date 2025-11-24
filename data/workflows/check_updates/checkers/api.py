@@ -1,7 +1,8 @@
 from typing import Dict, Any
 import requests
-import hashlib
 from .base import BaseChecker
+from common.env_resolver import resolve_dict_env_vars
+from common.hash_utils import calculate_hash_sha256
 from logs_config.logger import app_logger as logger
 
 class ApiChecker(BaseChecker):
@@ -15,19 +16,40 @@ class ApiChecker(BaseChecker):
             return False
             
         try:
-            logger.info(f"[ApiChecker] Conectando a {url} para {src_id}")
-            response = requests.get(
-                url, 
-                params=config.get("params"), 
-                headers=config.get("headers"), 
-                timeout=10
-            )
-            response.raise_for_status()
+            # Resolver variables de entorno en params y headers
+            params = resolve_dict_env_vars(config.get("params", {}))
+            headers = resolve_dict_env_vars(config.get("headers", {}))
             
-            # Calcular hash del contenido
-            current_hash = hashlib.md5(response.content).hexdigest()
+            # Verificar si existe endpoint de chequeo (metadata)
+            check_endpoint = config.get("check_endpoint")
+            check_field = config.get("check_field")
+            
+            if check_endpoint and check_field:
+                # Consulta metadata (mucho más ligero que descargar todo)
+                logger.info(f"[ApiChecker] Consultando metadata de {src_id} en {check_endpoint}")
+                response = requests.get(check_endpoint, timeout=10)
+                response.raise_for_status()
+                
+                metadata = response.json()
+                value_to_hash = str(metadata.get(check_field, ""))
+                logger.info(f"[ApiChecker] Campo '{check_field}' obtenido: {value_to_hash}")
+            else:
+                # Fallback: consulta datos completos (lento para datasets grandes)
+                logger.info(f"[ApiChecker] Consultando datos completos de {url} para {src_id}")
+                response = requests.get(
+                    url, 
+                    params=params, 
+                    headers=headers, 
+                    timeout=60
+                )
+                response.raise_for_status()
+                value_to_hash = response.content
+            
+            # Calcular hash SHA256
+            current_hash = calculate_hash_sha256(value_to_hash)
             
             # Obtener estado previo
+            last_state = self.client.get_source_state(src_id)
             last_state = self.client.get_source_state(src_id)
             last_hash = last_state.get("checksum")
             
@@ -40,11 +62,11 @@ class ApiChecker(BaseChecker):
                     checksum=current_hash,
                     url=url,
                     method="api",
-                    notes="Cambio detectado por hash MD5"
+                    notes=f"Cambio detectado por {check_field if check_endpoint else 'hash SHA256'}"
                 )
                 return True
             
-            logger.info(f"[ApiChecker] {src_id} sin cambios (Hash: {current_hash})")
+            logger.info(f"[ApiChecker] {src_id} sin cambios")
             
             # Actualizamos el "visto por ultima vez" aunque no haya cambios
             self.client.update_source_state(

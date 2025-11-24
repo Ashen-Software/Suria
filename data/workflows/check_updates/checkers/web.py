@@ -1,8 +1,8 @@
 from typing import Dict, Any
 import requests
-import hashlib
 from bs4 import BeautifulSoup
 from .base import BaseChecker
+from common.hash_utils import calculate_hash_sha256
 from logs_config.logger import app_logger as logger
 
 class WebScraperChecker(BaseChecker):
@@ -29,7 +29,7 @@ class WebScraperChecker(BaseChecker):
             element = soup.select_one(selector)
             content_to_hash = str(element) if element else response.text
             
-            current_hash = hashlib.md5(content_to_hash.encode('utf-8')).hexdigest()
+            current_hash = calculate_hash_sha256(content_to_hash)
             
             last_state = self.client.get_source_state(src_id)
             last_hash = last_state.get("checksum") # Actualizado de last_hash a checksum
