@@ -2,16 +2,22 @@ from logs_config.logger import app_logger as logger
 from typing import List, Dict, Optional
 from .extractors import get_extractor
 from .transformers import get_transformer
+from .loaders import FactLoader
 from .storage import get_latest_raw_files
 from .pipeline import transform_multiple_files, success_percentage
 
 
-def full_etl_task(changed_sources: List[str], current_config: Dict):
+def full_etl_task(changed_sources: List[str], current_config: Dict, skip_load: bool = False):
     """
     Recibe la lista de fuentes cambiadas y ejecuta el pipeline ETL:
     1. EXTRACCIÓN: Obtiene datos de la fuente
     2. TRANSFORMACIÓN: Normaliza datos según schema
-    3. CARGA: Inserta en PostgreSQL (TODO)
+    3. CARGA: Inserta en PostgreSQL
+    
+    Args:
+        changed_sources: Lista de IDs de fuentes a procesar
+        current_config: Configuración con fuentes
+        skip_load: Si True, omite el paso de carga (útil para pruebas)
     """
     if not current_config:
         logger.error("[full_etl] No hay config disponible.")
@@ -77,11 +83,44 @@ def full_etl_task(changed_sources: List[str], current_config: Dict):
                     for category, count in sorted(error_categories.items(), key=lambda x: x[1], reverse=True):
                         logger.warning(f"[full_etl]   - {category}: {count}")
             
-            # TODO: PASO 3: CARGA (Load)
-            logger.info(f"[full_etl] PASO 3/3: CARGA (TODO)")
-            logger.info(f"[full_etl] {valid_count} registros listos para insertar en PostgreSQL")
-            # loader = get_loader(src_type)
-            # loader.load(transform_result, src)
+            # PASO 3: CARGA (Load)
+            logger.info(f"[full_etl] PASO 3/3: CARGA")
+            
+            valid_records = transform_result.get("valid_records", [])
+            
+            if skip_load:
+                logger.info(f"[full_etl] Carga omitida (skip_load=True). {valid_count} registros listos.")
+            elif valid_count == 0:
+                logger.warning(f"[full_etl] No hay registros válidos para cargar")
+            else:
+                # Determinar que loader usar segun fact_table del primer registro
+                fact_table = valid_records[0].get("fact_table", "unknown") if valid_records else "unknown"
+                logger.info(f"[full_etl]   Destino: {fact_table}")
+                logger.info(f"[full_etl]   Registros a cargar: {valid_count}")
+                
+                if fact_table == "fact_regalias":
+                    loader = FactLoader(batch_size=500)
+                    load_result = loader.load(valid_records, src_id)
+                    
+                    load_stats = load_result.get("stats", {})
+                    logger.info(f"[full_etl]   Carga completada:")
+                    logger.info(f"[full_etl]   - Insertados: {load_stats.get('inserted', 0)}")
+                    logger.info(f"[full_etl]   - Sin tiempo_id: {load_stats.get('skipped_no_tiempo', 0)}")
+                    logger.info(f"[full_etl]   - Sin campo_id: {load_stats.get('skipped_no_campo', 0)}")
+                    logger.info(f"[full_etl]   - Errores: {load_stats.get('errors', 0)}")
+                    
+                    # Mostrar stats del resolver
+                    resolver_stats = load_result.get("resolver_stats", {})
+                    if resolver_stats:
+                        logger.debug(f"[full_etl]   Resolver stats: {resolver_stats}")
+                    
+                    if load_result.get("status") == "error":
+                        logger.error(f"[full_etl] Carga falló para {src_id}")
+                        error_details = load_result.get("error_details", [])
+                        for err in error_details[:5]:  # Mostrar primeros 5 errores
+                            logger.error(f"[full_etl]   {err}")
+                else:
+                    logger.warning(f"[full_etl] No hay loader implementado para {fact_table}")
             
             logger.info(f"[full_etl] {'='*60}\n")
             
