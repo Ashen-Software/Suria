@@ -4,7 +4,6 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   flexRender,
   createColumnHelper,
   type SortingState,
@@ -18,15 +17,22 @@ import type { EtlSource, EtlSourceFormData } from '@/types/etlSource.types'
 const columnHelper = createColumnHelper<EtlSource>()
 
 export function EtlSourceList() {
-  const { data: etlSources, isLoading, error } = useEtlSources()
-  const createMutation = useCreateEtlSource()
-  const updateMutation = useUpdateEtlSource()
-  const deleteMutation = useDeleteEtlSource()
-
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingSource, setEditingSource] = useState<EtlSource | undefined>()
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 })
+
+  const { data, isLoading, error } = useEtlSources({ 
+    page: pagination.pageIndex, 
+    pageSize: pagination.pageSize 
+  })
+  const etlSources = data?.data || []
+  const totalCount = data?.count || 0
+
+  const createMutation = useCreateEtlSource()
+  const updateMutation = useUpdateEtlSource()
+  const deleteMutation = useDeleteEtlSource()
 
   const handleCreate = () => {
     setEditingSource(undefined)
@@ -109,19 +115,24 @@ export function EtlSourceList() {
     [deleteMutation.isPending]
   )
 
+  const pageCount = Math.ceil(totalCount / pagination.pageSize)
+
   const table = useReactTable({
-    data: etlSources || [],
+    data: etlSources,
     columns,
+    pageCount,
     state: {
       sorting,
       columnFilters,
+      pagination,
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
   })
 
   if (isLoading) {
@@ -233,12 +244,15 @@ export function EtlSourceList() {
                 table.setPageSize(Number(e.target.value))
               }}
             >
-              {[10, 20, 30, 40, 50].map((pageSize) => (
+              {[1, 20, 30, 40, 50].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
                   Mostrar {pageSize}
                 </option>
               ))}
             </select>
+            <span className="text-sm">
+              Total: {totalCount} registros
+            </span>
           </div>
         </>
       )}

@@ -13,24 +13,38 @@ export class EtlSourceService {
     return EtlSourceService.instance
   }
 
-  async getAll(): Promise<{ data: EtlSource[] | null; error: Error | null }> {
+  async getAll(params?: { 
+    page?: number; 
+    pageSize?: number 
+  }): Promise<{ 
+    data: EtlSource[] | null; 
+    error: Error | null;
+    count: number | null;
+  }> {
     try {
-      const { data, error } = await supabase
+      const page = params?.page ?? 0
+      const pageSize = params?.pageSize ?? 10
+      const from = page * pageSize
+      const to = from + pageSize - 1
+
+      const { data, error, count } = await supabase
         .from('etl_sources')
-        .select('*')
+        .select('*', { count: 'exact' })
         .order('created_at', { ascending: false })
+        .range(from, to)
 
       if (error) {
         console.error('Error fetching etl_sources:', error)
-        return { data: null, error: new Error(error.message) }
+        return { data: null, error: new Error(error.message), count: null }
       }
 
-      return { data: data as EtlSource[], error: null }
+      return { data: data as EtlSource[], error: null, count: count ?? 0 }
     } catch (error) {
       console.error('Unexpected error:', error)
       return { 
         data: null, 
-        error: error instanceof Error ? error : new Error('Unknown error occurred') 
+        error: error instanceof Error ? error : new Error('Unknown error occurred'),
+        count: null
       }
     }
   }
