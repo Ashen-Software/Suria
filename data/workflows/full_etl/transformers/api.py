@@ -118,24 +118,45 @@ class ApiTransformer(BaseTransformer):
         except Exception as e:
             return self._error_response(start_time, f"Error creando DataFrame: {e}", raw_data)
         
+        # Inicializar acumulador de errores
+        error_rows = []
+        
         # 4.5. Limpieza comun
         # Este paso es comun para API, Web, Excel, etc.
-        logger.debug(f"[ApiTransformer] Aplicando limpieza común a DataFrame")
+        # logger.debug(f"[ApiTransformer] Aplicando limpieza común a DataFrame")
         try:
-            df, common_errors = DataValidator.validate_and_clean(
+            df_clean, common_errors = DataValidator.validate_and_clean(
                 df=df,
                 records=records,
                 not_null_columns=transform_config.not_null_columns,
                 type_mapping=transform_config.type_mapping,
                 normalize_strings=True
             )
+            
+            # Eliminar records correspondientes a filas con errores de limpieza
+            error_indices = set(e["record_index"] for e in common_errors)
+            if error_indices:
+                # Crear mapeo de índices viejos a nuevos (después de eliminar filas)
+                old_to_new_idx = {}
+                new_idx = 0
+                for old_idx in range(len(records)):
+                    if old_idx not in error_indices:
+                        old_to_new_idx[old_idx] = new_idx
+                        new_idx += 1
+                
+                # Filtrar records
+                records = [r for i, r in enumerate(records) if i not in error_indices]
+            
+            # Resetear indices para que coincidan con records
+            df_clean = df_clean.reset_index(drop=True)
+            df = df_clean
             error_rows.extend(common_errors)
+            # logger.info(f"[ApiTransformer] Limpieza común completada: {len(df)} filas válidas, {len(common_errors)} errores detectados")
         except Exception as e:
             logger.warning(f"[ApiTransformer] Error en limpieza común: {e}")
             # Continuar con transformación incluso si limpieza parcial falla
 
         # 5. Pre-validaciones
-        error_rows = []
         required_cols = set(vc.column for vc in transform_config.column_validations) | \
                        set(col for cd in transform_config.column_derivations for col in cd.source_columns)
         missing = required_cols - set(df.columns)

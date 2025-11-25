@@ -44,7 +44,7 @@ class DataValidator:
         error_records = []
         invalid_indices = set()
         
-        logger.debug(f"[DataValidator] Iniciando limpieza. Filas: {len(df)}, Columnas: {len(df.columns)}")
+        # logger.debug(f"[DataValidator] Iniciando limpieza. Filas: {len(df)}, Columnas: {len(df.columns)}")
         
         # 1. Normalizar espacios en nombres de columnas
         df.columns = [c.strip() for c in df.columns]
@@ -70,9 +70,13 @@ class DataValidator:
             DataValidator._detect_duplicates(df)
         
         # Retornar solo filas validas
-        df_clean = df.drop(index=list(invalid_indices)) if invalid_indices else df
+        df_clean = df.drop(index=list(invalid_indices)) if invalid_indices else df.copy()
         
-        logger.debug(f"[DataValidator] Limpieza completada. Filas válidas: {len(df_clean)}, Errores: {len(error_records)}")
+        # Resetear indices para que coincidan con posiciones del DataFrame limpio
+        # IMPORTANTE: No resetear aqui, dejar que el consumidor lo haga si lo necesita
+        # df_clean = df_clean.reset_index(drop=True)
+        
+        # logger.debug(f"[DataValidator] Limpieza completada. Filas válidas: {len(df_clean)}, Errores: {len(error_records)}")
         
         return df_clean, error_records
     
@@ -112,8 +116,6 @@ class DataValidator:
                 if target_type == "int":
                     # Convertir a numeric primero (reemplaza no convertibles con NaN)
                     df[col] = pd.to_numeric(df[col], errors='coerce')
-                    # Encontrar NaN (que eran no convertibles)
-                    nan_mask = df[col].isna() & df[col].notna()  # Esto no funcionará bien
                     # Mejor: Convertir a int, pero primero validar
                     df[col] = df[col].astype('Int64', errors='ignore')  # Int64 maneja NaN
                     
@@ -129,7 +131,7 @@ class DataValidator:
                 elif target_type == "bool":
                     df[col] = df[col].astype(bool)
                 
-                logger.debug(f"[DataValidator] Columna '{col}' convertida a {target_type}")
+                # logger.debug(f"[DataValidator] Columna '{col}' convertida a {target_type}")
                 
             except Exception as e:
                 logger.error(f"[DataValidator] Error convirtiendo '{col}' a {target_type}: {e}")
@@ -176,23 +178,36 @@ class DataValidator:
         
         Args:
             df: DataFrame
-            key_columns: Columnas que forman la clave única. Si None, usa todas.
+            key_columns: Columnas que forman la clave única. Si None, usa solo columnas hashables.
         """
         try:
-            if key_columns:
-                duplicates = df.duplicated(subset=key_columns, keep=False)
-            else:
-                duplicates = df.duplicated(keep=False)
+            # Si no especifica columnas, usar solo las hashables (no dict, list, etc.)
+            if key_columns is None:
+                # Filtrar solo columnas con tipos hashables
+                hashable_cols = []
+                for col in df.columns:
+                    try:
+                        df[col].apply(hash)
+                        hashable_cols.append(col)
+                    except (TypeError, AttributeError):
+                        pass
+                
+                if not hashable_cols:
+                    logger.debug("[DataValidator] No hay columnas hashables para detectar duplicados")
+                    return
+                
+                key_columns = hashable_cols
             
+            duplicates = df.duplicated(subset=key_columns, keep=False)
             dup_count = duplicates.sum()
             if dup_count > 0:
-                logger.warning(f"[DataValidator] Detectados {dup_count} registros duplicados")
+                logger.warning(f"[DataValidator] Detectados {dup_count} registros duplicados en {key_columns}")
                 # Mostrar algunos ejemplos
                 dup_rows = df[duplicates].head(3)
                 logger.debug(f"[DataValidator] Ejemplos de duplicados:\n{dup_rows.to_string()}")
         
         except Exception as e:
-            logger.warning(f"[DataValidator] Error detectando duplicados: {e}")
+            logger.debug(f"[DataValidator] No se pudo detectar duplicados: {e}")
     
     @staticmethod
     def validate_constraints(
