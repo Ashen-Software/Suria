@@ -19,6 +19,7 @@ Flujo general (dirigido por TransformationConfig):
   7. Validar con Pydantic (solo filas limpias)
 """
 import time
+import json
 from typing import Dict, Any, Optional
 from .base import BaseTransformer
 from .config import get_transformation_config, ValidationRule
@@ -78,11 +79,25 @@ class ApiTransformer(BaseTransformer):
                 raw_data = _fast_json_loads(raw_data)
             except Exception as e:
                 return self._error_response(start_time, str(e), raw_data)
+        
+        # # DEBUG: Mostrar estructura de raw_data
+        # logger.debug(f"[ApiTransformer] raw_data tipo: {type(raw_data).__name__}")
+        # if isinstance(raw_data, dict):
+        #     logger.debug(f"[ApiTransformer] raw_data keys: {list(raw_data.keys())}")
+        # elif isinstance(raw_data, list):
+        #     logger.debug(f"[ApiTransformer] raw_data es lista con {len(raw_data)} items")
 
         # 3. Extraer registros
         records = self._extract_records(raw_data, transform_config)
         if records is None:
-            return self._error_response(start_time, "Estructura JSON no coincide con data_path", raw_data)
+            if isinstance(raw_data, dict):
+                sample_keys = list(raw_data.keys())[:5]
+                logger.error(f"[ApiTransformer] Extracción fallida. data_path='{transform_config.data_path}', keys encontradas: {sample_keys}")
+            elif isinstance(raw_data, list):
+                logger.error(f"[ApiTransformer] Extracción fallida. data_path='{transform_config.data_path}', raw_data es lista de {len(raw_data)} items")
+            else:
+                logger.error(f"[ApiTransformer] Extracción fallida. raw_data tipo: {type(raw_data).__name__}")
+            return self._error_response(start_time, f"Estructura JSON no coincide con data_path='{transform_config.data_path}'", raw_data)
 
         total_raw = len(records)
         if not records:
@@ -184,19 +199,56 @@ class ApiTransformer(BaseTransformer):
         }
     
     def _extract_records(self, raw_data: Any, config) -> Optional[list]:
-        """Extrae registros según data_path."""
-        if config.data_path == "data":
-            return raw_data.get("data") if isinstance(raw_data, dict) else None
-        elif config.data_path is None:
+        """
+        Extrae registros según data_path.
+        
+        Soporta:
+        - data_path = "data" → raw_data["data"]
+        - data_path = "result.records" → raw_data["result"]["records"]
+        - data_path = None → raw_data si es lista directa
+        """
+        if config.data_path is None:
+            # Lista directa de registros en raíz
             return raw_data if isinstance(raw_data, list) else None
-        return None
+        
+        if not isinstance(raw_data, dict):
+            logger.error(f"[ApiTransformer] raw_data no es dict, no se puede extraer con data_path='{config.data_path}'")
+            return None
+        
+        # Soportar rutas anidadas: "result.records" → raw_data["result"]["records"]
+        keys = config.data_path.split('.')
+        current = raw_data
+        
+        for key in keys:
+            if isinstance(current, dict) and key in current:
+                current = current[key]
+            else:
+                logger.error(f"[ApiTransformer] data_path '{config.data_path}' no encontrado en estructura JSON. "
+                           f"Keys disponibles en raíz: {list(raw_data.keys())}")
+                return None
+        
+        # Validar que el resultado final es lista
+        if not isinstance(current, list):
+            logger.error(f"[ApiTransformer] data_path '{config.data_path}' no apunta a una lista. "
+                       f"Tipo encontrado: {type(current).__name__}")
+            return None
+        
+        return current
     
     def _apply_validation_rule(self, df: pd.DataFrame, records: list, validation) -> list:
         """Validación vectorizada."""
         errors = []
         col = validation.column
         if col not in df.columns:
+            logger.debug(f"[ApiTransformer] Columna '{col}' no encontrada. Disponibles: {list(df.columns)[:10]}")
             return errors
+        
+        # Convertir a numerico si la validacion lo requiere
+        if validation.rule in [ValidationRule.RANGE, ValidationRule.NON_NEGATIVE, ValidationRule.POSITIVE, ValidationRule.BETWEEN_0_100]:
+            try:
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+            except Exception as e:
+                logger.warning(f"[ApiTransformer] No se pudo convertir '{col}' a numérico: {e}")
         
         invalid_mask = None
         if validation.rule == ValidationRule.RANGE:

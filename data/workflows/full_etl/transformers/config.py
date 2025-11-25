@@ -109,7 +109,7 @@ def _validate_regalias_coherencia(record: Dict[str, Any]) -> Optional[str]:
 REGALIAS_CONFIG = TransformationConfig(
     source_id="api_regalias",
     description="ANH - Consolidación de regalías por campo (Socrata)",
-    data_path="data",
+    data_path=None,
     
     column_validations=[
         ColumnValidation("mes", ValidationRule.RANGE, "Mes fuera de rango (1-12)",
