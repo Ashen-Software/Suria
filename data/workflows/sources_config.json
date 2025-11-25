@@ -44,8 +44,8 @@
       "id": "api_regalias",
       "name": "Consolidación de regalias por campo",
       "type": "api",
-      "active": false,
-      "schedule": { "cron": "* * * * *", "note": "Every hour" },
+      "active": true,
+      "schedule": { "cron": "*/8 * * * *", "note": "Every 8 minutes" },
       "config": {
         "base_url": "https://www.datos.gov.co/api/v3/views/j7js-yk74/query.json",
         "check_endpoint": "https://www.datos.gov.co/api/views/j7js-yk74.json",
@@ -57,10 +57,11 @@
           "enabled": true,
           "page_param": "pageNumber",
           "size_param": "pageSize",
-          "page_size": 20000
+          "page_size": 10000
         }
       },
-      "storage": { "bucket": "raw-data" }
+      "storage": { "bucket": "raw-data" },
+      "force_change": true
     }
   ]
 }

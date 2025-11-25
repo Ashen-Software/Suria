@@ -53,11 +53,13 @@ class DimensionResolver:
         # Caches en memoria
         self._tiempo_cache: Dict[date, int] = {}
         self._territorio_cache: Dict[Tuple[str, str], int] = {}  # Cache normalizado (sin tildes)
-        self._territorio_full_cache: Dict[Tuple[str, str], int] = {}  # Cache con nombres originales
         self._campo_cache: Dict[str, int] = {}
         
         # Tracking de campos creados (para resumen)
         self._campos_created_ids: list = []
+        
+        # Tracking de territorios no encontrados (para resumen)
+        self._territorios_not_found: set = set()
         
         # Estadísticas
         self.stats = {
@@ -143,46 +145,41 @@ class DimensionResolver:
         
         cache_key = (departamento_norm, municipio_norm)
         
-        # Verificar cache
+        # Verificar cache normalizado (pre-cargado por preload_territorio_cache)
         if cache_key in self._territorio_cache:
             self.stats["territorio_cache_hits"] += 1
             return self._territorio_cache[cache_key]
         
         self.stats["territorio_lookups"] += 1
         
+        # Si el cache fue pre-cargado y no está, no existe
+        if self._territorio_cache:
+            # Trackear para resumen al final (solo únicos)
+            self._territorios_not_found.add(cache_key)
+            return None
+        
+        # Fallback: Si cache no fue pre-cargado, buscar en DB
         if not self.client.client:
-            logger.warning("[DimensionResolver] Cliente no disponible para lookup territorio")
             return None
         
         try:
-            # Buscar comparando sin tildes usando cache precargado
-            # Si el cache está poblado, buscar ahí (más eficiente)
-            if self._territorio_full_cache:
-                for (depto_db, muni_db), tid in self._territorio_full_cache.items():
-                    depto_db_norm = remove_accents(depto_db).upper()
-                    muni_db_norm = remove_accents(muni_db).upper()
-                    if depto_db_norm == departamento_norm and muni_db_norm == municipio_norm:
-                        self._territorio_cache[cache_key] = tid
-                        return tid
-                logger.debug(f"[DimensionResolver] Territorio no encontrado en cache: {departamento_norm}/{municipio_norm}")
-                return None
-            
-            # Si no hay cache completo, buscar en DB
-            # Usamos ilike con el valor original (puede fallar con tildes)
             response = self.client.client.table("dim_territorios")\
                 .select("id, departamento, municipio")\
                 .execute()
             
             if response.data:
+                # Poblar cache mientras buscamos
                 for row in response.data:
-                    depto_db_norm = remove_accents(row["departamento"]).upper()
-                    muni_db_norm = remove_accents(row["municipio"]).upper()
-                    if depto_db_norm == departamento_norm and muni_db_norm == municipio_norm:
-                        territorio_id = row["id"]
-                        self._territorio_cache[cache_key] = territorio_id
-                        return territorio_id
+                    norm_key = (
+                        remove_accents(row["departamento"]).upper(),
+                        remove_accents(row["municipio"]).upper()
+                    )
+                    self._territorio_cache[norm_key] = row["id"]
+                
+                # Buscar ahora en cache poblado
+                if cache_key in self._territorio_cache:
+                    return self._territorio_cache[cache_key]
             
-            logger.debug(f"[DimensionResolver] Territorio no encontrado: {departamento_norm}/{municipio_norm}")
             return None
                 
         except Exception as e:
@@ -380,11 +377,7 @@ class DimensionResolver:
             
             if response.data:
                 for row in response.data:
-                    # Cache con nombres originales (para búsqueda interna)
-                    orig_key = (row["departamento"], row["municipio"])
-                    self._territorio_full_cache[orig_key] = row["id"]
-                    
-                    # Cache normalizado (sin tildes, mayúsculas)
+                    # Cache normalizado (sin tildes, mayúsculas) - O(1) lookup
                     norm_key = (
                         remove_accents(row["departamento"]).upper(),
                         remove_accents(row["municipio"]).upper()
@@ -446,10 +439,10 @@ class DimensionResolver:
             "cache_sizes": {
                 "tiempo": len(self._tiempo_cache),
                 "territorio": len(self._territorio_cache),
-                "territorio_full": len(self._territorio_full_cache),
                 "campo": len(self._campo_cache)
             },
-            "campos_created_range": self._get_campos_created_summary()
+            "campos_created_range": self._get_campos_created_summary(),
+            "territorios_not_found": len(self._territorios_not_found)
         }
     
     def _get_campos_created_summary(self) -> str:
@@ -462,8 +455,26 @@ class DimensionResolver:
             return f"ID {ids[0]}"
         return f"IDs {ids[0]} - {ids[-1]} ({len(ids)} campos)"
     
+    def log_summary(self) -> None:
+        """Loguea resumen de operaciones (llamar al final del proceso)."""
+        # Campos creados
+        if self._campos_created_ids:
+            summary = self._get_campos_created_summary()
+            logger.info(f"[DimensionResolver] Campos creados: {summary}")
+        
+        # Territorios no encontrados
+        if self._territorios_not_found:
+            count = len(self._territorios_not_found)
+            # Mostrar solo primeros 5 ejemplos si hay muchos
+            examples = list(self._territorios_not_found)[:5]
+            examples_str = ", ".join(f"{d}/{m}" for d, m in examples)
+            if count > 5:
+                logger.warning(f"[DimensionResolver] {count} territorios no encontrados. Ejemplos: {examples_str}...")
+            else:
+                logger.warning(f"[DimensionResolver] Territorios no encontrados: {examples_str}")
+    
     def log_campos_created_summary(self) -> None:
-        """Loguea resumen de campos creados (llamar al final del proceso)."""
+        """Loguea resumen de campos creados (llamar al final del proceso). DEPRECATED: usar log_summary()"""
         if self._campos_created_ids:
             summary = self._get_campos_created_summary()
             logger.info(f"[DimensionResolver] Campos creados: {summary}")
@@ -472,7 +483,7 @@ class DimensionResolver:
         """Limpia todos los caches."""
         self._tiempo_cache.clear()
         self._territorio_cache.clear()
-        self._territorio_full_cache.clear()
         self._campo_cache.clear()
         self._campos_created_ids.clear()
+        self._territorios_not_found.clear()
         logger.debug("[DimensionResolver] Caches limpiados")

@@ -41,7 +41,7 @@ class FactLoader(BaseLoader):
         self, 
         client: Optional[BackendClient] = None,
         dimension_resolver: Optional[DimensionResolver] = None,
-        batch_size: int = 500
+        batch_size: int = 10000
     ):
         """
         Inicializa el loader.
@@ -121,8 +121,8 @@ class FactLoader(BaseLoader):
         if self.stats["inserted"] == 0 and self.stats["errors"] > 0:
             status = "error"
         
-        # Log resumen de campos creados
-        self.resolver.log_campos_created_summary()
+        # Log resumen de operaciones del resolver
+        self.resolver.log_summary()
         
         result = self._result(status)
         result["error_details"] = error_details
