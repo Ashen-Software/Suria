@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import type { Producto } from "@/types/producto.types";
 
 interface ProductoListProps {
@@ -65,6 +66,11 @@ export function ProductoList({ productos, loading, error }: ProductoListProps) {
 
   return (
     <div className="p-4">
+      <div className="mb-4">
+        <Link to="/test" className="btn btn-secondary">
+          Ir a Página de Prueba
+        </Link>
+      </div>
       <ul className="list bg-base-100 rounded-box shadow-md">
         {productos.map((producto) => (
           <li key={producto.id} className="list-row">
