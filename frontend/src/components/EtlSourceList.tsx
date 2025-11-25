@@ -1,13 +1,8 @@
 import { Link } from 'react-router';
-import type { EtlSource } from "@/types/etlSource.types";
+import { useEtlSources } from '@/hooks/useEtlSources';
 
-interface EtlSourceListProps {
-  etlSources: EtlSource[];
-  loading?: boolean;
-  error?: Error | null;
-}
-
-export function EtlSourceList({ etlSources, loading, error }: EtlSourceListProps) {
+export function EtlSourceList() {
+  const { etlSources, loading, error } = useEtlSources()
   if (loading) {
     return (
       <div className="p-4">
