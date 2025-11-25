@@ -42,6 +42,7 @@ nav:
     - Storage: guias/storage_configuracion.md
     - APIs: guias/api_configuracion.md
     - Scripts Personalizados: guias/scripts_personalizados.md
+    - Proceso de transformación: guias/transform_process.md
 
 markdown_extensions:
   - admonition
