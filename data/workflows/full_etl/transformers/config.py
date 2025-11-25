@@ -72,6 +72,10 @@ class TransformationConfig:
     # Estructura del JSON esperado
     data_path: str = "data"  # "data" para Socrata {"data": [...]}, None para lista directa
     
+    # data_cleaner.py - aplica a CUALQUIER fuente
+    type_mapping: Dict[str, str] = field(default_factory=dict)  # {"mes": "int", "precio": "float"}
+    not_null_columns: List[str] = field(default_factory=list)  # Columnas requeridas
+    
     # Pre-validaciones vectorizadas (antes de Pydantic)
     column_validations: List[ColumnValidation] = field(default_factory=list)
     
@@ -110,6 +114,22 @@ REGALIAS_CONFIG = TransformationConfig(
     source_id="api_regalias",
     description="ANH - Consolidación de regalías por campo (Socrata)",
     data_path=None,
+    
+    # Conversión de tipos
+    type_mapping={
+        "mes": "int",
+        "a_o": "int",
+        "preciohidrocarburousd": "float",
+        "porcregalia": "float",
+        "prodgravableblskpc": "float",
+        "volumenregaliablskpc": "float",
+        "regaliascop": "float",
+        "latitud": "float",
+        "longitud": "float",
+    },
+    
+    # Columnas requeridas
+    not_null_columns=["mes", "a_o", "campo", "tipohidrocarburo"],
     
     column_validations=[
         ColumnValidation("mes", ValidationRule.RANGE, "Mes fuera de rango (1-12)",

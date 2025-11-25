@@ -23,6 +23,7 @@ import json
 from typing import Dict, Any, Optional
 from .base import BaseTransformer
 from .config import get_transformation_config, ValidationRule
+from .data_cleaner import DataValidator
 from .schemas import SocrataApiRegaliasRawSchema
 from logs_config.logger import app_logger as logger
 from pydantic import ValidationError
@@ -116,6 +117,22 @@ class ApiTransformer(BaseTransformer):
             df.columns = [c.strip() for c in df.columns]
         except Exception as e:
             return self._error_response(start_time, f"Error creando DataFrame: {e}", raw_data)
+        
+        # 4.5. Limpieza comun
+        # Este paso es comun para API, Web, Excel, etc.
+        logger.debug(f"[ApiTransformer] Aplicando limpieza común a DataFrame")
+        try:
+            df, common_errors = DataValidator.validate_and_clean(
+                df=df,
+                records=records,
+                not_null_columns=transform_config.not_null_columns,
+                type_mapping=transform_config.type_mapping,
+                normalize_strings=True
+            )
+            error_rows.extend(common_errors)
+        except Exception as e:
+            logger.warning(f"[ApiTransformer] Error en limpieza común: {e}")
+            # Continuar con transformación incluso si limpieza parcial falla
 
         # 5. Pre-validaciones
         error_rows = []
