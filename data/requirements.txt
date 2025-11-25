@@ -19,8 +19,10 @@ hyperframe==6.1.0
 idna==3.11
 jsonschema==4.23.0
 jsonschema-specifications==2025.9.1
+openpyxl==3.1.5
 orjson==3.10.12
 packaging==25.0
+pandas==2.2.3
 postgrest==0.16.11
 pydantic==2.9.2
 pydantic_core==2.23.4
