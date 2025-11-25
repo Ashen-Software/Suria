@@ -21,14 +21,11 @@ Flujo (5 pasos):
 
 NOTA: Funciones comunes importadas desde run.py para evitar duplicación.
 """
-import json
 import sys
-from datetime import datetime
-from pathlib import Path
 
-from services.backend_client import BackendClient
 from workflows.full_etl.transformers import get_transformer, get_transformation_config
-from workflows.full_etl.run import _get_latest_raw_files, _transform_multiple_files, _pct
+from workflows.full_etl.storage import get_latest_raw_files
+from workflows.full_etl.pipeline import transform_multiple_files, success_percentage
 from logs_config.logger import app_logger as logger
 
 
@@ -43,7 +40,7 @@ def main():
     
     # 1. Obtener archivos RAW mas recientes
     logger.info(f"\n[1/5] Buscando archivos RAW más recientes para {source_id}...")
-    raw_files = _get_latest_raw_files(source_id, source_config=source_config)
+    raw_files = get_latest_raw_files(source_id, source_config)
     if raw_files is None:
         logger.error("No se encontró archivo RAW. Verifica que el extraction completó exitosamente.")
         return False
@@ -76,7 +73,7 @@ def main():
     # 4. Transformar archivos
     logger.info(f"\n[4/5] Transformando {len(raw_files)} archivo(s)...")
     try:
-        result = _transform_multiple_files(raw_files, transformer, source_config)
+        result = transform_multiple_files(raw_files, transformer, source_config)
     except Exception as e:
         logger.error(f"Error durante transformación: {e}")
         import traceback
@@ -93,8 +90,8 @@ def main():
     logger.info(f"[✓] Transformación completada:")
     logger.info(f"    - Archivos procesados: {stats.get('files_processed')}")
     logger.info(f"    - Total RAW: {stats.get('total_raw')}")
-    logger.info(f"    - Válidos: {stats.get('valid')} ({_pct(stats.get('valid'), stats.get('total_raw'))}%)")
-    logger.info(f"    - Errores: {stats.get('errors')} ({_pct(stats.get('errors'), stats.get('total_raw'))}%)")
+    logger.info(f"    - Válidos: {stats.get('valid')} ({success_percentage(stats.get('valid'), stats.get('total_raw')):.1f}%)")
+    logger.info(f"    - Errores: {stats.get('errors')} ({success_percentage(stats.get('errors'), stats.get('total_raw')):.1f}%)")
     logger.info(f"    - Tiempo total: {stats.get('processing_time_seconds', 0):.2f}s")
     
     # Mostrar categorias de error
