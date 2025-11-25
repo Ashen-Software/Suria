@@ -1,31 +1,31 @@
 import { supabase } from '@/config/supabase'
-import type { Producto } from '@/types/producto.types';
+import type { EtlSource } from '@/types/etlSource.types';
 
-export class ProductoService {
-  private static instance: ProductoService
+export class EtlSourceService {
+  private static instance: EtlSourceService
 
   private constructor() {}
 
-  static getInstance(): ProductoService {
-    if (!ProductoService.instance) {
-      ProductoService.instance = new ProductoService()
+  static getInstance(): EtlSourceService {
+    if (!EtlSourceService.instance) {
+      EtlSourceService.instance = new EtlSourceService()
     }
-    return ProductoService.instance
+    return EtlSourceService.instance
   }
 
-  async getAll(): Promise<{ data: Producto[] | null; error: Error | null }> {
+  async getAll(): Promise<{ data: EtlSource[] | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
-        .from('productos')
+        .from('etl_sources')
         .select('*')
         .order('created_at', { ascending: false })
 
       if (error) {
-        console.error('Error fetching productos:', error)
+        console.error('Error fetching etl_sources:', error)
         return { data: null, error: new Error(error.message) }
       }
 
-      return { data: data as Producto[], error: null }
+      return { data: data as EtlSource[], error: null }
     } catch (error) {
       console.error('Unexpected error:', error)
       return { 
@@ -35,20 +35,20 @@ export class ProductoService {
     }
   }
 
-  async getById(id: string): Promise<{ data: Producto | null; error: Error | null }> {
+  async getById(id: string): Promise<{ data: EtlSource | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
-        .from('productos')
+        .from('etl_sources')
         .select('*')
         .eq('id', id)
         .single()
 
       if (error) {
-        console.error('Error fetching producto:', error)
+        console.error('Error fetching etl_source:', error)
         return { data: null, error: new Error(error.message) }
       }
 
-      return { data: data as Producto, error: null }
+      return { data: data as EtlSource, error: null }
     } catch (error) {
       console.error('Unexpected error:', error)
       return { 
@@ -58,20 +58,20 @@ export class ProductoService {
     }
   }
 
-  async create(producto: Omit<Producto, 'id' | 'created_at' | 'updated_at'>): Promise<{ data: Producto | null; error: Error | null }> {
+  async create(etlSource: Omit<EtlSource, 'id' | 'created_at' | 'updated_at'>): Promise<{ data: EtlSource | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
-        .from('productos')
-        .insert(producto)
+        .from('etl_sources')
+        .insert(etlSource)
         .select()
         .single()
 
       if (error) {
-        console.error('Error creating producto:', error)
+        console.error('Error creating etl_source:', error)
         return { data: null, error: new Error(error.message) }
       }
 
-      return { data: data as Producto, error: null }
+      return { data: data as EtlSource, error: null }
     } catch (error) {
       console.error('Unexpected error:', error)
       return { 
@@ -81,21 +81,21 @@ export class ProductoService {
     }
   }
 
-  async update(id: string, producto: Partial<Producto>): Promise<{ data: Producto | null; error: Error | null }> {
+  async update(id: string, etlSource: Partial<EtlSource>): Promise<{ data: EtlSource | null; error: Error | null }> {
     try {
       const { data, error } = await supabase
-        .from('productos')
-        .update(producto)
+        .from('etl_sources')
+        .update(etlSource)
         .eq('id', id)
         .select()
         .single()
 
       if (error) {
-        console.error('Error updating producto:', error)
+        console.error('Error updating etl_source:', error)
         return { data: null, error: new Error(error.message) }
       }
 
-      return { data: data as Producto, error: null }
+      return { data: data as EtlSource, error: null }
     } catch (error) {
       console.error('Unexpected error:', error)
       return { 
@@ -108,12 +108,12 @@ export class ProductoService {
   async delete(id: string): Promise<{ error: Error | null }> {
     try {
       const { error } = await supabase
-        .from('productos')
+        .from('etl_sources')
         .delete()
         .eq('id', id)
 
       if (error) {
-        console.error('Error deleting producto:', error)
+        console.error('Error deleting etl_source:', error)
         return { error: new Error(error.message) }
       }
 
@@ -127,4 +127,4 @@ export class ProductoService {
   }
 }
 
-export const productoService = ProductoService.getInstance()
+export const etlSourceService = EtlSourceService.getInstance()

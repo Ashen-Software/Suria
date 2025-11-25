@@ -1,12 +1,12 @@
 import { Routes, Route } from 'react-router'
-import { useProductos } from '@/hooks/useProductos'
-import { ProductoList } from '@/components/ProductoList'
+import { useEtlSources } from '@/hooks/useEtlSources'
+import { EtlSourceList } from '@/components/EtlSourceList'
 import { TestPage } from '@/pages/TestPage'
 
 function HomePage() {
-  const { productos, loading, error } = useProductos()
+  const { etlSources, loading, error } = useEtlSources()
 
-  return <ProductoList productos={productos} loading={loading} error={error} />
+  return <EtlSourceList etlSources={etlSources} loading={loading} error={error} />
 }
 
 function App() {
