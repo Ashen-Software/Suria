@@ -123,7 +123,11 @@ print(f"Errores: {len(result['errors'])}")
         "total_raw": 1000,
         "valid": 995,
         "errors": 5,
-        "processing_time_seconds": 12.5
+        "processing_time_seconds": 12.5,
+        "error_categories": {
+            "Porcentaje regalía fuera de rango": 3,
+            "Tipo hidrocarburo inválido": 2
+        }
     }
 }
 ```
@@ -132,23 +136,25 @@ print(f"Errores: {len(result['errors'])}")
 
 ### ApiTransformer (`api.py`)
 
-Transforma JSON de APIs (principalmente Socrata).
+Transforma JSON de APIs (principalmente Socrata). **Genérico y parametrizado** mediante `TransformationConfig`.
 
 **Fuentes soportadas:**
 - `api_regalias` → ANH Consolidación de Regalías → `fact_regalias`
+- Extensible: cualquier API Socrata registrando config en `CONFIG_REGISTRY`
 
 **Características:**
-- Parseo automático de JSON
-- Validación con `SocrataApiRegaliasRawSchema`
-- Mapeo de columnas Socrata a modelo interno
-- Conversión automática a `FactRegaliasSchema`
+- Parseo rápido con orjson (fallback a json)
+- Pre-validaciones vectorizadas en pandas (masivas, eficientes)
+- Derivación de columnas parametrizada
+- Mapeo genérico a fact tables + dimensiones
+- **Dirigido por config**: sin código hardcodeado por fuente
 
 **Ejemplo de uso:**
 ```python
 from workflows.full_etl.transformers import ApiTransformer
 
 transformer = ApiTransformer()
-result = transformer.transform(json_data, source_config)
+result = transformer.transform(json_data, {"id": "api_regalias"})
 ```
 
 ### ExcelTransformer (`excel.py`)
@@ -310,24 +316,26 @@ Crear archivo `custom_scripts/{source_id}_transformer.py` con función `transfor
 
 ## Validación de Datos
 
-Todos los transformers validan datos con Pydantic antes de retornarlos. Esto garantiza:
+**En ApiTransformer (parametrizado):**
+- Pre-validaciones vectorizadas en pandas (antes de mapear)
+- Reglas definidas en `TransformationConfig.column_validations`
+- Tipos: RANGE, ENUM, NON_NEGATIVE, BETWEEN_0_100, DATE_VALID, etc.
+- Cada violación genera error sin detener procesamiento
 
-**Ejemplo de validación:**
+**Ejemplo de regla de validación:**
 ```python
-from workflows.full_etl.transformers.schemas import FactRegaliasSchema
-from pydantic import ValidationError
-
-try:
-    fact = FactRegaliasSchema(
-        tiempo_fecha="2024-01-01",
-        campo_nombre="RUBIALES",
-        tipo_hidrocarburo="G",
-        precio_usd=-5.0,  # Error: debe ser >= 0
-        ...
-    )
-except ValidationError as e:
-    print(e.errors())
+# En config.py
+ColumnValidation(
+    column="porcregalia",
+    rule=ValidationRule.BETWEEN_0_100,
+    error_message="Porcentaje regalía fuera de rango"
+)
 ```
+
+**En ExcelTransformer & CustomTransformer:**
+- Pueden usar schemas Pydantic (e.g., `FactRegaliasSchema`)
+- Validación exhaustiva post-extracción
+- Genera `ValidationError` capturado en estructura de errores
 
 ## Manejo de Errores
 
@@ -376,3 +384,7 @@ result = transformer.transform(raw_data, source_config)
 assert result["stats"]["valid"] > 0
 assert len(result["valid_records"]) == result["stats"]["valid"]
 ```
+
+## Documentación Complementaria
+
+- **`api_transformer_extension.md`**: Guía paso-a-paso para extender ApiTransformer a nuevas fuentes
