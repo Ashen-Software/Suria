@@ -150,14 +150,6 @@ def test_load(transform_result: dict, source_id: str) -> dict:
     
     load_result = loader.load(valid_records, source_id)
     
-    # Mostrar resultados
-    print(f"\nResultado Load:")
-    print(f"   Status: {load_result.get('status')}")
-    print(f"   Insertados: {load_result.get('inserted', 0)}")
-    print(f"   Sin tiempo_id: {load_result.get('skipped_no_tiempo', 0)}")
-    print(f"   Sin campo_id: {load_result.get('skipped_no_campo', 0)}")
-    print(f"   Errores: {load_result.get('errors', 0)}")
-    
     # Stats del resolver
     resolver_stats = load_result.get("resolver_stats", {})
     if resolver_stats:
