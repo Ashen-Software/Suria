@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router'
-import { MainLayout } from '@/components/layout'
+import { MainLayout } from '@/components/layout/MainLayout'
 import { HomePage } from '@/pages/Home'
 import { EtlSourceManager } from '@/components/EtlSourceManager'
 import { TestPage } from '@/pages/TestPage'
