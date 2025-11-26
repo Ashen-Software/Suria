@@ -224,47 +224,40 @@ class DimensionResolver:
             return None
         
         try:
-            # Primero intentar lookup
-            response = self.client.client.table("dim_campos")\
-                .select("id")\
-                .eq("nombre_campo", nombre_campo)\
-                .limit(1)\
-                .execute()
-            
-            if response.data and len(response.data) > 0:
-                campo_id = response.data[0]["id"]
-                self._campo_cache[nombre_campo] = campo_id
-                return campo_id
-            
-            # No existe, crear
-            self.stats["campo_inserts"] += 1
-            
-            new_campo = {
+            # Construir datos del campo
+            campo_data = {
                 "nombre_campo": nombre_campo,
                 "activo": True
             }
             
             if contrato:
-                new_campo["contrato"] = contrato.strip()
+                campo_data["contrato"] = contrato.strip()
             
             if territorio_id:
-                new_campo["territorio_id"] = territorio_id
+                campo_data["territorio_id"] = territorio_id
             
-            insert_response = self.client.client.table("dim_campos")\
-                .insert(new_campo)\
+            # UPSERT: INSERT si no existe, UPDATE si ya existe
+            # on_conflict="nombre_campo" indica la columna UNIQUE para detectar conflicto
+            upsert_response = self.client.client.table("dim_campos")\
+                .upsert(campo_data, on_conflict="nombre_campo")\
                 .execute()
             
-            if insert_response.data and len(insert_response.data) > 0:
-                campo_id = insert_response.data[0]["id"]
+            if upsert_response.data and len(upsert_response.data) > 0:
+                campo_id = upsert_response.data[0]["id"]
+                
+                # Si es nuevo (no estaba en cache), trackear
+                if nombre_campo not in self._campo_cache:
+                    self.stats["campo_inserts"] += 1
+                    self._campos_created_ids.append(campo_id)
+                
                 self._campo_cache[nombre_campo] = campo_id
-                self._campos_created_ids.append(campo_id)  # Trackear para resumen
                 return campo_id
             else:
-                logger.error(f"[DimensionResolver] No se pudo crear campo: {nombre_campo}")
+                logger.error(f"[DimensionResolver] No se pudo upsert campo: {nombre_campo}")
                 return None
                 
         except Exception as e:
-            # Si es error de duplicado (race condition), intentar lookup de nuevo
+            # Fallback: si falla el upsert, intentar lookup simple
             if "duplicate" in str(e).lower() or "unique" in str(e).lower():
                 try:
                     response = self.client.client.table("dim_campos")\
