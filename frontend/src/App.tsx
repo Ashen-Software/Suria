@@ -1,14 +1,7 @@
-import { Routes, Route } from 'react-router'
-import { EtlSourceList } from '@/components/EtlSourceList'
-import { TestPage } from '@/pages/TestPage'
+import { AppRoutes } from '@/routes'
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<EtlSourceList />} />
-      <Route path="/test" element={<TestPage />} />
-    </Routes>
-  )
+  return <AppRoutes />
 }
 
 export default App
