@@ -16,7 +16,7 @@ import type { EtlSource, EtlSourceFormData } from '@/types/etlSource.types'
 
 const columnHelper = createColumnHelper<EtlSource>()
 
-export function EtlSourceList() {
+export function EtlSourceManager() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingSource, setEditingSource] = useState<EtlSource | undefined>()
   const [sorting, setSorting] = useState<SortingState>([])
