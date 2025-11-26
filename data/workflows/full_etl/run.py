@@ -99,7 +99,7 @@ def full_etl_task(changed_sources: List[str], current_config: Dict, skip_load: b
                 logger.info(f"[full_etl]   Registros a cargar: {valid_count}")
                 
                 # FactLoader es generico: maneja cualquier fact_table configurada
-                loader = FactLoader(batch_size=5000)
+                loader = FactLoader(batch_size=10000)
                 load_result = loader.load(valid_records, src_id)
                 
                 load_stats = load_result.get("stats", {})
