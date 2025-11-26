@@ -42,6 +42,34 @@ import pandas as pd
 import numpy as np
 
 
+def _sanitize_value(value):
+    """
+    Sanitiza un valor para evitar NaN/Inf en la salida.
+    
+    pandas/numpy NaN e Inf no son serializables a JSON y PostgreSQL no los acepta.
+    """
+    if value is None:
+        return None
+    if isinstance(value, float):
+        if pd.isna(value) or np.isinf(value):
+            return None
+    # Para numpy types
+    if hasattr(value, 'item'):  # numpy scalar
+        try:
+            py_value = value.item()
+            if isinstance(py_value, float) and (pd.isna(py_value) or np.isinf(py_value)):
+                return None
+            return py_value
+        except (ValueError, AttributeError):
+            pass
+    return value
+
+
+def _sanitize_dict(d: dict) -> dict:
+    """Sanitiza todos los valores de un diccionario."""
+    return {k: _sanitize_value(v) for k, v in d.items()}
+
+
 class ApiTransformer(BaseTransformer):
     """
     Transforma datos de APIs (JSON) a estructura normalizada.
@@ -309,19 +337,29 @@ class ApiTransformer(BaseTransformer):
         return errors
     
     def _build_record_from_config(self, row: pd.Series, config, source_id: str) -> Dict[str, Any]:
-        """Mapeo genérico desde config."""
+        """Mapeo genérico desde config con sanitización de NaN."""
         mapping = config.fact_mapping
-        fact_data = {
-            target: row.get(source, source) if source in row.index else source
-            for target, source in mapping.column_mapping.items()
-        }
-        dimensions = {
-            dim.dimension_name: {
-                tf: row.get(sc, sc) if isinstance(sc, str) and sc in row.index else sc
-                for tf, sc in dim.column_mapping.items()
-            }
-            for dim in mapping.dimension_mappings
-        }
+        
+        # Construir fact_data con sanitizacion de NaN/Inf
+        fact_data = {}
+        for target, source in mapping.column_mapping.items():
+            if source in row.index:
+                value = _sanitize_value(row.get(source))
+            else:
+                value = source  # Valor literal (ej: "Bls/Kpc")
+            fact_data[target] = value
+        
+        # Construir dimensions con sanitizacion
+        dimensions = {}
+        for dim in mapping.dimension_mappings:
+            dim_data = {}
+            for tf, sc in dim.column_mapping.items():
+                if isinstance(sc, str) and sc in row.index:
+                    dim_data[tf] = _sanitize_value(row.get(sc))
+                else:
+                    dim_data[tf] = sc  # Valor literal (ej: False para es_proyeccion)
+            dimensions[dim.dimension_name] = dim_data
+        
         return {"fact_table": mapping.fact_table, "data": fact_data, "dimensions": dimensions}
     
     def _error_response(self, start_time: float, msg: str, payload: Any) -> Dict[str, Any]:

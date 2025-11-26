@@ -94,6 +94,45 @@ class DataValidator:
         return df
     
     @staticmethod
+    def _normalize_numeric_format(series: pd.Series) -> pd.Series:
+        """
+        Normaliza formato numérico europeo (coma decimal) a formato estándar (punto decimal).
+        
+        Maneja casos como:
+        - '63,13' → '63.13'
+        - '549279642,9' → '549279642.9'
+        - '1.234,56' → '1234.56' (miles con punto, decimales con coma)
+        
+        Args:
+            series: Serie de pandas con valores numéricos en formato string
+            
+        Returns:
+            Serie con formato normalizado (punto como separador decimal)
+        """
+        def normalize_value(x):
+            if pd.isna(x):
+                return x
+            if isinstance(x, (int, float)):
+                return x
+            if isinstance(x, str):
+                x = x.strip()
+                if x == '':
+                    return np.nan
+                # Detectar formato europeo: si tiene coma pero no punto, o punto antes de coma
+                # Casos:
+                # - "63,13" → europeo simple
+                # - "1.234,56" → europeo con separador de miles
+                # - "1234.56" → formato estándar (no modificar)
+                if ',' in x:
+                    # Si hay coma, asumimos formato europeo
+                    # Eliminar puntos de miles y reemplazar coma por punto
+                    x = x.replace('.', '').replace(',', '.')
+                return x
+            return x
+        
+        return series.apply(normalize_value)
+    
+    @staticmethod
     def _convert_types(
         df: pd.DataFrame,
         type_mapping: Dict[str, str],
@@ -114,12 +153,16 @@ class DataValidator:
             
             try:
                 if target_type == "int":
+                    # Normalizar formato europeo (coma → punto) antes de convertir
+                    df[col] = DataValidator._normalize_numeric_format(df[col])
                     # Convertir a numeric primero (reemplaza no convertibles con NaN)
                     df[col] = pd.to_numeric(df[col], errors='coerce')
                     # Mejor: Convertir a int, pero primero validar
                     df[col] = df[col].astype('Int64', errors='ignore')  # Int64 maneja NaN
                     
                 elif target_type == "float":
+                    # Normalizar formato europeo (coma → punto) antes de convertir
+                    df[col] = DataValidator._normalize_numeric_format(df[col])
                     df[col] = pd.to_numeric(df[col], errors='coerce')
                     
                 elif target_type == "str":

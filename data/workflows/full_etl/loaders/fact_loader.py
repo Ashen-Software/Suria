@@ -11,6 +11,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
+from common.sanitizers import sanitize_value
 from services.backend_client import BackendClient
 from logs_config.logger import app_logger as logger
 from .base import BaseLoader
@@ -88,9 +89,17 @@ class FactLoader(BaseLoader):
         # Procesar registros
         fact_records = []
         error_details = []
+        total_records = len(records)
+        progress_interval = 10000  # Log cada 10k registros
+        
+        logger.info(f"[FactLoader] Preparando {total_records} registros...")
         
         for i, record in enumerate(records):
             self.stats["total_processed"] += 1
+            
+            # Log de progreso cada N registros
+            if (i + 1) % progress_interval == 0:
+                logger.info(f"[FactLoader] Progreso: {i + 1}/{total_records} registros preparados ({len(fact_records)} válidos)")
             
             try:
                 fact_record = self._prepare_fact_record(record, source_id)
@@ -108,6 +117,8 @@ class FactLoader(BaseLoader):
                     "record": record.get("data", {}).get("campo_nombre", "unknown")
                 })
                 logger.warning(f"[FactLoader] Error preparando registro {i}: {e}")
+        
+        logger.info(f"[FactLoader] Preparación completada: {len(fact_records)} registros válidos de {total_records}")
         
         # Insertar en lotes
         if fact_records:
@@ -193,7 +204,11 @@ class FactLoader(BaseLoader):
                     except (ValueError, TypeError):
                         value = None
                 
-                fact_record[fact_col] = value
+                # Sanitizar NaN/Inf (PostgreSQL JSON no los acepta)
+                value = sanitize_value(value)
+                
+                if value is not None:
+                    fact_record[fact_col] = value
         
         return fact_record
     
@@ -217,9 +232,14 @@ class FactLoader(BaseLoader):
         error_details = []
         
         total_batches = (len(records) + self.batch_size - 1) // self.batch_size
+        logger.info(f"[FactLoader] Insertando {len(records)} registros en {total_batches} lotes (batch_size={self.batch_size})")
         
         for batch_num, i in enumerate(range(0, len(records), self.batch_size), 1):
             batch = records[i:i + self.batch_size]
+            
+            # Log de progreso cada 5 lotes o en el último
+            if batch_num % 5 == 0 or batch_num == total_batches:
+                logger.info(f"[FactLoader] Lote {batch_num}/{total_batches} - {inserted} insertados hasta ahora")
             
             try:
                 response = self.client.client.table("fact_regalias")\
@@ -228,10 +248,6 @@ class FactLoader(BaseLoader):
                 
                 if response.data:
                     inserted += len(response.data)
-                    logger.debug(
-                        f"[FactLoader] Lote {batch_num}/{total_batches}: "
-                        f"{len(response.data)} registros insertados"
-                    )
                     
             except Exception as e:
                 error_msg = str(e)
