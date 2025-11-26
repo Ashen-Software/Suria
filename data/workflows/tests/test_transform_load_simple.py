@@ -56,7 +56,7 @@ def test_transform(source_id: str, source_config: dict, limit: int = None) -> di
     print("FASE: TRANSFORM")
     print("="*60)
     
-    # 1. Obtener transformer (igual que run.py)
+    # 1. Obtener transformer
     src_type = source_config.get("type", source_id)
     transformer = get_transformer(src_type)
     
@@ -66,7 +66,7 @@ def test_transform(source_id: str, source_config: dict, limit: int = None) -> di
     
     print(f"✓ Transformer: {transformer.__class__.__name__}")
     
-    # 2. Obtener archivos RAW del storage (igual que run.py)
+    # 2. Obtener archivos RAW del storage
     print(f"\nCargando archivos desde bucket...")
     raw_files = get_latest_raw_files(source_id, source_config)
     
@@ -78,7 +78,7 @@ def test_transform(source_id: str, source_config: dict, limit: int = None) -> di
     for file_path, content in raw_files:
         print(f"   - {file_path.split('/')[-1]} ({len(content)} bytes)")
     
-    # 3. Transformar usando transform_multiple_files (igual que run.py)
+    # 3. Transformar usando transform_multiple_files
     print(f"\nTransformando...")
     transform_result = transform_multiple_files(raw_files, transformer, source_config)
     
@@ -94,7 +94,7 @@ def test_transform(source_id: str, source_config: dict, limit: int = None) -> di
     print(f"   Errores: {error_count} ({success_percentage(error_count, total_raw):.1f}%)")
     print(f"   Tiempo: {processing_time:.2f}s")
     
-    # Categorías de error
+    # Categorias de error
     error_categories = transform_result.get("stats", {}).get("error_categories", {})
     if error_categories:
         print(f"\n   Categorías de error:")
@@ -113,7 +113,7 @@ def test_transform(source_id: str, source_config: dict, limit: int = None) -> di
         if dims:
             print(f"      dimensions: tiempo={dims.get('tiempo')}, territorio={dims.get('territorio')}")
     
-    # Aplicar límite si se especifico
+    # Aplicar limite si se especifico
     if limit and valid_count > limit:
         transform_result["valid_records"] = valid_records[:limit]
         print(f"\n   Limitado a {limit} registros para Load")
@@ -135,7 +135,6 @@ def test_load(transform_result: dict, source_id: str) -> dict:
         print("No hay registros válidos para cargar")
         return {}
     
-    # Determinar fact_table (igual que run.py)
     fact_table = valid_records[0].get("fact_table", "unknown")
     print(f"   Destino: {fact_table}")
     print(f"   Registros a cargar: {len(valid_records)}")
@@ -144,7 +143,6 @@ def test_load(transform_result: dict, source_id: str) -> dict:
         print(f"No hay loader implementado para '{fact_table}'")
         return {}
     
-    # Usar FactLoader (igual que run.py)
     loader = FactLoader(batch_size=10000)
     print(f"FactLoader creado (batch_size=10000)")
     
@@ -202,7 +200,7 @@ def main():
         print("\nNo hay registros válidos. Abortando.")
         return
     
-    # Load (si no se skip)
+    # Load (si no se salta)
     if not args.skip_load:
         test_load(transform_result, args.source)
     else:
