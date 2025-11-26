@@ -23,26 +23,34 @@ class FactLoader(BaseLoader):
     Carga registros transformados a tablas de hechos (fact_regalias, etc.).
     
     Resuelve FKs usando DimensionResolver antes de insertar.
+    Usa UPSERT para evitar duplicados cuando se re-ejecuta el ETL.
+    
+    DISEÑO GENÉRICO:
+    - El transformer produce records con estructura {"fact_table": str, "data": dict, "dimensions": dict}
+    - El loader es agnóstico a la fuente: lee fact_table del record
+    - Solo necesita conocer las unique_columns por tabla para el UPSERT
     """
     
-    # Mapeo de campos del transformer a columnas de fact_regalias
-    REGALIAS_COLUMN_MAPPING = {
-        # fact_column: data_field
-        "tipo_produccion": "tipo_produccion",
-        "tipo_hidrocarburo": "tipo_hidrocarburo",
-        "precio_usd": "precio_usd",
-        "porcentaje_regalia": "porcentaje_regalia",
-        "produccion_gravable": "produccion_gravable",
-        "volumen_regalia": "volumen_regalia",
-        "unidad": "unidad",
-        "valor_regalias_cop": "valor_regalias_cop",
+    # UNIQUE columns por fact_table
+    # Necesario para el ON CONFLICT del UPSERT
+    UNIQUE_COLUMNS_BY_TABLE = {
+        "fact_regalias": "tiempo_id,campo_id,tipo_hidrocarburo",
+        "fact_demanda_gas": "tiempo_id,territorio_id,escenario",
+        # Agregar
+    }
+    
+    # Columnas numericas que requieren conversion a float (en todas las tablas)
+    NUMERIC_COLUMNS = {
+        "precio_usd", "porcentaje_regalia", "produccion_gravable",
+        "volumen_regalia", "valor_regalias_cop", "demanda_gbtud",
+        "latitud", "longitud"
     }
     
     def __init__(
         self, 
         client: Optional[BackendClient] = None,
         dimension_resolver: Optional[DimensionResolver] = None,
-        batch_size: int = 10000
+        batch_size: int = 5000
     ):
         """
         Inicializa el loader.
@@ -60,6 +68,7 @@ class FactLoader(BaseLoader):
         self.stats = {
             "total_processed": 0,
             "inserted": 0,
+            "duplicates_in_batch": 0,
             "skipped_no_tiempo": 0,
             "skipped_no_campo": 0,
             "errors": 0,
@@ -120,12 +129,19 @@ class FactLoader(BaseLoader):
         
         logger.info(f"[FactLoader] Preparación completada: {len(fact_records)} registros válidos de {total_records}")
         
-        # Insertar en lotes
+        # Deduplicar registros antes del UPSERT
         if fact_records:
-            insert_result = self._batch_insert(fact_records, source_id)
-            self.stats["inserted"] = insert_result.get("inserted", 0)
-            self.stats["errors"] += insert_result.get("errors", 0)
-            error_details.extend(insert_result.get("error_details", []))
+            fact_records, duplicates_removed = self._deduplicate_records(fact_records)
+            if duplicates_removed > 0:
+                logger.info(f"[FactLoader] Removidos {duplicates_removed} registros duplicados. Quedan {len(fact_records)} únicos.")
+                self.stats["duplicates_in_batch"] = duplicates_removed
+        
+        # UPSERT en lotes
+        if fact_records:
+            upsert_result = self._batch_upsert(fact_records, source_id)
+            self.stats["inserted"] = upsert_result.get("upserted", 0)
+            self.stats["errors"] += upsert_result.get("errors", 0)
+            error_details.extend(upsert_result.get("error_details", []))
         
         # Resultado final
         status = "success" if self.stats["errors"] == 0 else "partial"
@@ -140,7 +156,8 @@ class FactLoader(BaseLoader):
         result["resolver_stats"] = self.resolver.get_stats()
         
         logger.info(
-            f"[FactLoader] Carga completada: {self.stats['inserted']} insertados, "
+            f"[FactLoader] Carga completada: {self.stats['inserted']} upserted, "
+            f"{self.stats.get('duplicates_in_batch', 0)} duplicados removidos, "
             f"{self.stats['skipped_no_tiempo']} sin tiempo, "
             f"{self.stats['skipped_no_campo']} sin campo, "
             f"{self.stats['errors']} errores"
@@ -154,17 +171,23 @@ class FactLoader(BaseLoader):
         source_id: str
     ) -> Optional[Dict[str, Any]]:
         """
-        Prepara un registro para inserción en fact_regalias.
+        Prepara un registro para inserción en su fact_table correspondiente.
         
-        Resuelve FKs y mapea campos.
+        GENÉRICO: Lee la estructura del transformer sin mapeos hardcodeados.
+        El transformer ya produjo {"fact_table": str, "data": dict, "dimensions": dict}
+        
+        Resuelve FKs y construye el registro final.
         
         Returns:
-            Dict listo para INSERT, o None si faltan FKs críticas
+            Dict listo para UPSERT, o None si faltan FKs críticas
         """
-        # Resolver FKs
+        # Resolver FKs desde dimensions
         fks = self.resolver.resolve_all_for_record(record)
         
-        # Validar FKs criticas
+        # Obtener fact_table del record (definido por transformer)
+        fact_table = record.get("fact_table", "fact_regalias")
+        
+        # Validar FKs críticas (tiempo es siempre requerido)
         if fks["tiempo_id"] is None:
             self.stats["skipped_no_tiempo"] += 1
             data = record.get("data", {})
@@ -174,7 +197,8 @@ class FactLoader(BaseLoader):
             )
             return None
         
-        if fks["campo_id"] is None:
+        # campo_id es crítico para fact_regalias
+        if fact_table == "fact_regalias" and fks["campo_id"] is None:
             self.stats["skipped_no_campo"] += 1
             data = record.get("data", {})
             logger.debug(
@@ -183,104 +207,161 @@ class FactLoader(BaseLoader):
             )
             return None
         
-        # Construir registro para fact table
-        data = record.get("data", {})
-        
+        # Construir registro base con FKs y metadata
         fact_record = {
             "tiempo_id": fks["tiempo_id"],
-            "campo_id": fks["campo_id"],
             "source_id": source_id,
         }
         
-        # Mapear campos del transformer
-        for fact_col, data_field in self.REGALIAS_COLUMN_MAPPING.items():
-            value = data.get(data_field)
+        # Agregar campo_id si existe
+        if fks.get("campo_id"):
+            fact_record["campo_id"] = fks["campo_id"]
+        
+        # Agregar territorio_id si existe y la tabla lo necesita
+        if fks.get("territorio_id"):
+            fact_record["territorio_id"] = fks["territorio_id"]
+        
+        # Copiar TODOS los campos de data (ya vienen mapeados del transformer)
+        data = record.get("data", {})
+        for col, value in data.items():
+            # Saltar campos que ya procesamos o son para dimensiones
+            if col in ["tiempo_fecha", "campo_nombre", "departamento", "municipio", 
+                       "latitud", "longitud", "contrato"]:
+                continue
+            
             if value is not None:
-                # Limpiar valores numéricos
-                if fact_col in ["precio_usd", "porcentaje_regalia", "produccion_gravable", 
-                               "volumen_regalia", "valor_regalias_cop"]:
+                # Convertir a float si es columna numérica
+                if col in self.NUMERIC_COLUMNS:
                     try:
                         value = float(value) if value != "" else None
                     except (ValueError, TypeError):
                         value = None
                 
-                # Sanitizar NaN/Inf (PostgreSQL JSON no los acepta)
+                # Sanitizar NaN/Inf
                 value = sanitize_value(value)
                 
                 if value is not None:
-                    fact_record[fact_col] = value
+                    fact_record[col] = value
+        
+        # Guardar fact_table para uso en batch_upsert
+        fact_record["_fact_table"] = fact_table
         
         return fact_record
     
-    def _batch_insert(
+    def _deduplicate_records(
+        self, 
+        records: List[Dict[str, Any]]
+    ) -> tuple[List[Dict[str, Any]], int]:
+        """
+        Elimina registros duplicados basándose en la clave única por tabla.
+        
+        PostgreSQL no permite que un UPSERT afecte la misma fila dos veces
+        en un solo comando, así que debemos deduplicar antes de enviar.
+        
+        GENÉRICO: Usa UNIQUE_COLUMNS_BY_TABLE para determinar la clave.
+        Mantiene el ÚLTIMO registro para cada clave (asumiendo datos más recientes).
+        
+        Returns:
+            Tupla (registros_únicos, cantidad_duplicados_removidos)
+        """
+        seen = {}
+        
+        for record in records:
+            # Obtener la tabla y sus columnas únicas
+            fact_table = record.get("_fact_table", "fact_regalias")
+            unique_cols_str = self.UNIQUE_COLUMNS_BY_TABLE.get(fact_table, "tiempo_id")
+            unique_cols = unique_cols_str.split(",")
+            
+            # Construir clave dinámica basada en las columnas únicas
+            key = tuple([fact_table] + [record.get(col) for col in unique_cols])
+            
+            # Sobrescribe si ya existe (mantiene el último)
+            seen[key] = record
+        
+        unique_records = list(seen.values())
+        duplicates_removed = len(records) - len(unique_records)
+        
+        return unique_records, duplicates_removed
+    
+    def _batch_upsert(
         self, 
         records: List[Dict[str, Any]], 
         source_id: str
     ) -> Dict[str, Any]:
         """
-        Inserta registros en lotes.
+        Upsert de registros en lotes.
+        
+        UPSERT = INSERT si no existe, UPDATE si ya existe.
+        Evita duplicados cuando se re-ejecuta el ETL con datos actualizados.
+        
+        GENÉRICO: Agrupa por fact_table y usa unique_columns correspondientes.
         
         Returns:
-            Dict con estadísticas de inserción
+            Dict con estadísticas de upsert
         """
         if not self.client.client:
-            logger.error("[FactLoader] Cliente no disponible para inserción")
-            return {"inserted": 0, "errors": len(records), "error_details": []}
+            logger.error("[FactLoader] Cliente no disponible para upsert")
+            return {"upserted": 0, "errors": len(records), "error_details": []}
         
-        inserted = 0
+        # Agrupar registros por fact_table
+        records_by_table: Dict[str, List[Dict]] = {}
+        for record in records:
+            fact_table = record.pop("_fact_table", "fact_regalias")
+            if fact_table not in records_by_table:
+                records_by_table[fact_table] = []
+            records_by_table[fact_table].append(record)
+        
+        upserted = 0
         errors = 0
         error_details = []
         
-        total_batches = (len(records) + self.batch_size - 1) // self.batch_size
-        logger.info(f"[FactLoader] Insertando {len(records)} registros en {total_batches} lotes (batch_size={self.batch_size})")
-        
-        for batch_num, i in enumerate(range(0, len(records), self.batch_size), 1):
-            batch = records[i:i + self.batch_size]
+        # Procesar cada tabla
+        for fact_table, table_records in records_by_table.items():
+            unique_columns = self.UNIQUE_COLUMNS_BY_TABLE.get(fact_table)
             
-            # Log de progreso cada 5 lotes o en el último
-            if batch_num % 5 == 0 or batch_num == total_batches:
-                logger.info(f"[FactLoader] Lote {batch_num}/{total_batches} - {inserted} insertados hasta ahora")
+            if not unique_columns:
+                logger.warning(f"[FactLoader] No hay unique_columns definidas para {fact_table}, saltando...")
+                continue
             
-            try:
-                response = self.client.client.table("fact_regalias")\
-                    .insert(batch)\
-                    .execute()
+            total_batches = (len(table_records) + self.batch_size - 1) // self.batch_size
+            logger.info(f"[FactLoader] Upsert en {fact_table}: {len(table_records)} registros en {total_batches} lotes")
+            
+            for batch_num, i in enumerate(range(0, len(table_records), self.batch_size), 1):
+                batch = table_records[i:i + self.batch_size]
                 
-                if response.data:
-                    inserted += len(response.data)
+                # Log de progreso cada 5 lotes o en el último
+                if batch_num % 5 == 0 or batch_num == total_batches:
+                    logger.info(f"[FactLoader] {fact_table} lote {batch_num}/{total_batches} - {upserted} procesados")
+                
+                try:
+                    response = self.client.client.table(fact_table)\
+                        .upsert(batch, on_conflict=unique_columns)\
+                        .execute()
                     
-            except Exception as e:
-                error_msg = str(e)
-                
-                # Si es error de duplicado, intentar uno por uno
-                if "duplicate" in error_msg.lower() or "unique" in error_msg.lower():
-                    logger.debug(f"[FactLoader] Lote {batch_num} tiene duplicados, procesando individualmente")
+                    if response.data:
+                        upserted += len(response.data)
+                        
+                except Exception as e:
+                    # Si falla el batch, intentar uno por uno
+                    logger.warning(f"[FactLoader] Error en lote {batch_num} de {fact_table}, procesando individualmente: {e}")
                     
                     for record in batch:
                         try:
-                            self.client.client.table("fact_regalias")\
-                                .insert(record)\
+                            self.client.client.table(fact_table)\
+                                .upsert(record, on_conflict=unique_columns)\
                                 .execute()
-                            inserted += 1
+                            upserted += 1
                         except Exception as e2:
-                            if "duplicate" not in str(e2).lower():
-                                errors += 1
-                                error_details.append({
-                                    "batch": batch_num,
-                                    "error": str(e2),
-                                    "record_campo_id": record.get("campo_id")
-                                })
-                else:
-                    errors += len(batch)
-                    error_details.append({
-                        "batch": batch_num,
-                        "error": error_msg,
-                        "batch_size": len(batch)
-                    })
-                    logger.error(f"[FactLoader] Error en lote {batch_num}: {e}")
+                            errors += 1
+                            error_details.append({
+                                "table": fact_table,
+                                "batch": batch_num,
+                                "error": str(e2),
+                                "record_tiempo_id": record.get("tiempo_id")
+                            })
         
         return {
-            "inserted": inserted,
+            "upserted": upserted,
             "errors": errors,
             "error_details": error_details
         }

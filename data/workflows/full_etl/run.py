@@ -93,34 +93,33 @@ def full_etl_task(changed_sources: List[str], current_config: Dict, skip_load: b
             elif valid_count == 0:
                 logger.warning(f"[full_etl] No hay registros válidos para cargar")
             else:
-                # Determinar que loader usar segun fact_table del primer registro
+                # Determinar fact_table del primer registro (para logging)
                 fact_table = valid_records[0].get("fact_table", "unknown") if valid_records else "unknown"
                 logger.info(f"[full_etl]   Destino: {fact_table}")
                 logger.info(f"[full_etl]   Registros a cargar: {valid_count}")
                 
-                if fact_table == "fact_regalias":
-                    loader = FactLoader(batch_size=500)
-                    load_result = loader.load(valid_records, src_id)
-                    
-                    load_stats = load_result.get("stats", {})
-                    logger.info(f"[full_etl]   Carga completada:")
-                    logger.info(f"[full_etl]   - Insertados: {load_stats.get('inserted', 0)}")
-                    logger.info(f"[full_etl]   - Sin tiempo_id: {load_stats.get('skipped_no_tiempo', 0)}")
-                    logger.info(f"[full_etl]   - Sin campo_id: {load_stats.get('skipped_no_campo', 0)}")
-                    logger.info(f"[full_etl]   - Errores: {load_stats.get('errors', 0)}")
-                    
-                    # Mostrar stats del resolver
-                    resolver_stats = load_result.get("resolver_stats", {})
-                    if resolver_stats:
-                        logger.debug(f"[full_etl]   Resolver stats: {resolver_stats}")
-                    
-                    if load_result.get("status") == "error":
-                        logger.error(f"[full_etl] Carga falló para {src_id}")
-                        error_details = load_result.get("error_details", [])
-                        for err in error_details[:5]:  # Mostrar primeros 5 errores
-                            logger.error(f"[full_etl]   {err}")
-                else:
-                    logger.warning(f"[full_etl] No hay loader implementado para {fact_table}")
+                # FactLoader es generico: maneja cualquier fact_table configurada
+                loader = FactLoader(batch_size=5000)
+                load_result = loader.load(valid_records, src_id)
+                
+                load_stats = load_result.get("stats", {})
+                logger.info(f"[full_etl]   Carga completada:")
+                logger.info(f"[full_etl]   - Upserted: {load_stats.get('inserted', 0)}")
+                logger.info(f"[full_etl]   - Duplicados removidos: {load_stats.get('duplicates_in_batch', 0)}")
+                logger.info(f"[full_etl]   - Sin tiempo_id: {load_stats.get('skipped_no_tiempo', 0)}")
+                logger.info(f"[full_etl]   - Sin campo_id: {load_stats.get('skipped_no_campo', 0)}")
+                logger.info(f"[full_etl]   - Errores: {load_stats.get('errors', 0)}")
+                
+                # Mostrar stats del resolver
+                resolver_stats = load_result.get("resolver_stats", {})
+                if resolver_stats:
+                    logger.debug(f"[full_etl]   Resolver stats: {resolver_stats}")
+                
+                if load_result.get("status") == "error":
+                    logger.error(f"[full_etl] Carga falló para {src_id}")
+                    error_details = load_result.get("error_details", [])
+                    for err in error_details[:5]:  # Mostrar primeros 5 errores
+                        logger.error(f"[full_etl]   {err}")
             
             logger.info(f"[full_etl] {'='*60}\n")
             
