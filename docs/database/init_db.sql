@@ -153,7 +153,11 @@ CREATE TABLE IF NOT EXISTS public.fact_regalias (
   
   -- Trazabilidad ETL
   source_id TEXT REFERENCES public.etl_sources(id),
-  etl_timestamp TIMESTAMPTZ DEFAULT NOW()
+  etl_timestamp TIMESTAMPTZ DEFAULT NOW(),
+  
+  -- Constraint UNIQUE: evita duplicados al re-ejecutar ETL
+  -- Un campo solo puede tener un registro por mes y tipo de hidrocarburo
+  CONSTRAINT fact_regalias_unique_key UNIQUE (tiempo_id, campo_id, tipo_hidrocarburo)
 );
 
 CREATE INDEX IF NOT EXISTS idx_regalias_tiempo ON public.fact_regalias(tiempo_id);
