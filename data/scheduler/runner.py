@@ -22,7 +22,7 @@ def start_scheduler():
     }
     job_defaults = {
         'coalesce': False,
-        'max_instances': 2,
+        'max_instances': 1,
         'misfire_grace_time': 60,
     }
 

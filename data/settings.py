@@ -20,7 +20,7 @@ SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY") # Usamos la Service Key
 
 
 # Scheduler / Config
-CONFIG_POLL_INTERVAL = int(os.getenv("CONFIG_POLL_INTERVAL", "300"))
+# CONFIG_POLL_INTERVAL = int(os.getenv("CONFIG_POLL_INTERVAL", "300"))
 CONFIG_RELOAD_INTERVAL = int(os.getenv("CONFIG_RELOAD_INTERVAL", "120"))
 USE_REMOTE_CONFIG = os.getenv("USE_REMOTE_CONFIG", "false").lower() == "true"
 
