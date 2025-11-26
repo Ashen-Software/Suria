@@ -32,8 +32,8 @@ COPY . /home/suria/app/
 RUN chown -R suria:suria /home/suria/app
 USER suria
 
-ENV CONFIG_OBJECT_NAME="sources_config.json"
-ENV CONFIG_POLL_INTERVAL=300
+# ENV CONFIG_OBJECT_NAME="sources_config.json"
+# ENV CONFIG_POLL_INTERVAL=300
 
 # Workdir ya es /home/suria/app
 WORKDIR /home/suria/app
