@@ -244,7 +244,7 @@ export function EtlSourceManager() {
                 table.setPageSize(Number(e.target.value))
               }}
             >
-              {[1, 20, 30, 40, 50].map((pageSize) => (
+              {[10, 20, 30, 40, 50].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
                   Mostrar {pageSize}
                 </option>
