@@ -9,116 +9,57 @@ import {
   type SortingState,
   type ColumnFiltersState,
 } from '@tanstack/react-table'
-import { useEtlSources } from '@/hooks/useEtlSources'
-import { useCreateEtlSource, useUpdateEtlSource, useDeleteEtlSource } from '@/hooks/useEtlSourcesMutation'
-import { EtlSourceForm } from './EtlSourceForm'
-import type { EtlSource, EtlSourceFormData } from '@/types/etlSource.types'
+import { useDimTerritorios } from '@/hooks/useDimTerritorios'
+import type { DimTerritorios } from '@/types/dim_territorios.types'
 
-const columnHelper = createColumnHelper<EtlSource>()
+const columnHelper = createColumnHelper<DimTerritorios>()
 
-export function EtlSourceList() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingSource, setEditingSource] = useState<EtlSource | undefined>()
+export function DimTerritoriosViewer() {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 })
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 })
 
-  const { data, isLoading, error } = useEtlSources({ 
+  const { data, isLoading, error } = useDimTerritorios({ 
     page: pagination.pageIndex, 
     pageSize: pagination.pageSize 
   })
-  const etlSources = data?.data || []
+  const dimTerritoriosData = data?.data || []
   const totalCount = data?.count || 0
-
-  const createMutation = useCreateEtlSource()
-  const updateMutation = useUpdateEtlSource()
-  const deleteMutation = useDeleteEtlSource()
-
-  const handleCreate = () => {
-    setEditingSource(undefined)
-    setIsModalOpen(true)
-  }
-
-  const handleEdit = (source: EtlSource) => {
-    setEditingSource(source)
-    setIsModalOpen(true)
-  }
-
-  const handleDelete = async (id: string) => {
-    if (confirm('¿Estás seguro de eliminar esta fuente ETL?')) {
-      const result = await deleteMutation.mutateAsync(id)
-      if (result.error) {
-        alert('Error al eliminar: ' + result.error.message)
-      }
-    }
-  }
-
-  const handleSubmit = async (data: EtlSourceFormData) => {
-    if (editingSource) {
-      const result = await updateMutation.mutateAsync({ id: editingSource.id, data })
-      if (result.error) {
-        alert('Error al actualizar: ' + result.error.message)
-      } else {
-        setIsModalOpen(false)
-      }
-    } else {
-      const result = await createMutation.mutateAsync(data)
-      if (result.error) {
-        alert('Error al crear: ' + result.error.message)
-      } else {
-        setIsModalOpen(false)
-      }
-    }
-  }
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('name', {
-        header: 'Nombre',
+      columnHelper.accessor('id', {
+        header: 'ID',
         cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor('type', {
-        header: 'Tipo',
+      columnHelper.accessor('departamento', {
+        header: 'Departamento',
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor('municipio', {
+        header: 'Municipio',
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor('divipola', {
+        header: 'DIVIPOLA',
         cell: (info) => info.getValue() || 'N/A',
       }),
-      columnHelper.accessor('active', {
-        header: 'Activo',
-        cell: (info) => (
-          <span className={`badge ${info.getValue() ? 'badge-success' : 'badge-error'}`}>
-            {info.getValue() ? 'Activo' : 'Inactivo'}
-          </span>
-        ),
+      columnHelper.accessor('latitud', {
+        header: 'Latitud',
+        cell: (info) => info.getValue()?.toFixed(7) || 'N/A',
       }),
-      columnHelper.accessor('schedule_cron', {
-        header: 'Cron',
-        cell: (info) => info.getValue(),
-      }),
-      columnHelper.display({
-        id: 'actions',
-        header: 'Acciones',
-        cell: (props) => (
-          <div className="flex gap-2">
-            <button className="btn btn-sm btn-info" onClick={() => handleEdit(props.row.original)}>
-              Editar
-            </button>
-            <button
-              className="btn btn-sm btn-error"
-              onClick={() => handleDelete(props.row.original.id)}
-              disabled={deleteMutation.isPending}
-            >
-              Eliminar
-            </button>
-          </div>
-        ),
+      columnHelper.accessor('longitud', {
+        header: 'Longitud',
+        cell: (info) => info.getValue()?.toFixed(7) || 'N/A',
       }),
     ],
-    [deleteMutation.isPending]
+    []
   )
 
   const pageCount = Math.ceil(totalCount / pagination.pageSize)
 
   const table = useReactTable({
-    data: etlSources,
+    data: dimTerritoriosData,
     columns,
     pageCount,
     state: {
@@ -157,16 +98,14 @@ export function EtlSourceList() {
 
   return (
     <div className="p-4">
-      <div className="mb-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Fuentes ETL</h1>
-        <button className="btn btn-primary" onClick={handleCreate}>
-          Crear Nueva
-        </button>
+      <div className="mb-4">
+        <h1 className="text-2xl font-bold">Dimensión Territorios</h1>
+        <p className="text-sm text-gray-500 mt-1">Vista de solo lectura</p>
       </div>
 
-      {etlSources && etlSources.length === 0 ? (
+      {dimTerritoriosData && dimTerritoriosData.length === 0 ? (
         <div className="alert alert-info">
-          <span>No hay fuentes ETL disponibles</span>
+          <span>No hay datos disponibles en la dimensión territorios</span>
         </div>
       ) : (
         <>
@@ -244,7 +183,7 @@ export function EtlSourceList() {
                 table.setPageSize(Number(e.target.value))
               }}
             >
-              {[1, 20, 30, 40, 50].map((pageSize) => (
+              {[20, 30, 40, 50, 100].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
                   Mostrar {pageSize}
                 </option>
@@ -255,25 +194,6 @@ export function EtlSourceList() {
             </span>
           </div>
         </>
-      )}
-
-      {isModalOpen && (
-        <dialog className="modal modal-open">
-          <div className="modal-box max-w-2xl">
-            <h3 className="font-bold text-lg mb-4">
-              {editingSource ? 'Editar Fuente ETL' : 'Crear Fuente ETL'}
-            </h3>
-            <EtlSourceForm
-              etlSource={editingSource}
-              onSubmit={handleSubmit}
-              onCancel={() => setIsModalOpen(false)}
-              isLoading={createMutation.isPending || updateMutation.isPending}
-            />
-          </div>
-          <form method="dialog" className="modal-backdrop">
-            <button onClick={() => setIsModalOpen(false)}>close</button>
-          </form>
-        </dialog>
       )}
     </div>
   )

@@ -1,0 +1,837 @@
+{
+  "extraction_date": "2025-11-26T16:42:06.967413",
+  "source_url": "https://www.minenergia.gov.co/es/misional/hidrocarburos/funcionamiento-del-sector/gas-natural/",
+  "declarations": [
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2025 - 2034",
+      "resolutions": [
+        {
+          "number": "00739",
+          "date": "2025-05-28",
+          "url": "https://normativame.minenergia.gov.co/normatividad/7269/norma/",
+          "title": "Resolución No. 00739 del 28 de mayo de 2025",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción de Gas Natural 2025 - 2034",
+              "url": "https://www.minenergia.gov.co/documents/13717/Soporte_Magnetico_Declaracion_de_Producci%C3%B2n_de_Gas_Natural_GN_2025-2034-1.xlsm",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01281",
+          "date": "2025-07-29",
+          "url": "https://normativame.minenergia.gov.co/normatividad/7326/norma/",
+          "title": "Resolución No. 01281 del 29 de julio de 2025",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción de Gas Natural 2025 - 2034",
+              "url": "https://www.minenergia.gov.co/documents/14163/Soporte_Magnetico_Declaracion_de_Producci%C3%B2n_de_Gas_Natural_GN_2025-2034-1_8EVNMZr.xlsm",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01448",
+          "date": "2025-08-29",
+          "url": "https://normativame.minenergia.gov.co/normatividad/7351/norma/",
+          "title": "Resolución No. 01448 del 29 de agosto de 2025",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción de Gas Natural 2025 - 2034",
+              "url": "https://www.minenergia.gov.co/documents/14371/Soporte_Magnetico_Declaracion_de_Produccion_de_Gas_Natural_GN_2025-2034-2.xlsm",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01640",
+          "date": "2025-09-30",
+          "url": "https://www.minenergia.gov.co/documents/14563/5-2025-001640.pdf",
+          "title": "Resolución No. 01640 del 30 de septiembre de 2025",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción de Gas Natural 2025 - 2034",
+              "url": "https://www.minenergia.gov.co/documents/14564/Soporte_Magnetico_Declaracion_de_Produccion_de_Gas_Natural_GN_2025-2034-3.xlsm",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01722",
+          "date": "2025-10-10",
+          "url": "https://normativame.minenergia.gov.co/normatividad/7382/norma/",
+          "title": "Resolución No. 01722 del 10 de octubre de 2025",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción de Gas Natural 2025 - 2034",
+              "url": "https://www.minenergia.gov.co/documents/14629/Soporte_Magnetico_Declaracion_de_Produccion_de_Gas_Natural_GN_2025-2034-4.xlsm",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01884",
+          "date": "2025-10-31",
+          "url": "https://normativame.minenergia.gov.co/normatividad/7406/norma/",
+          "title": "Resolución No. 01884 del 31 de octubre de 2025",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción de Gas Natural 2025 - 2034",
+              "url": "https://www.minenergia.gov.co/documents/14792/declaracion_2025_2034_30102025_V2.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            },
+            {
+              "title": "Declaración Gas Natural",
+              "url": "https://www.minenergia.gov.co/documents/13288/Formato_DPGN_2025-2034.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 6,
+      "acceso_sistema": {
+        "title": "https://declaragas.minenergia.gov.co/login.aspx",
+        "url": "https://declaragas.minenergia.gov.co/login.aspx"
+      }
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2024 - 2033",
+      "resolutions": [
+        {
+          "number": "00662",
+          "date": "2024-07-03",
+          "url": "https://www.minenergia.gov.co/documents/12124/Resoluci%C3%B3n_5-2024-000662Jul0324.pdf",
+          "title": "Resolución No.00662 del 03 de julio de 2024",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción de Gas Natural",
+              "url": "https://www.minenergia.gov.co/documents/12139/2024_2033_RESUMEN-2_V4.xlsm",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01217",
+          "date": "2024-10-12",
+          "url": "https://normativame.minenergia.gov.co/normatividad/7050/norma/",
+          "title": "Resolución No.01217 del 12 de octubre de 2024",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción de Gas Natural",
+              "url": "https://www.minenergia.gov.co/documents/12676/2024_2033_RESUMEN-2_V4-1_Oct.072024.xlsm",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01626",
+          "date": "2024-11-27",
+          "url": "https://www.minenergia.gov.co/documents/12841/2024_11_27_RESOLUCION_01626_GN_EAYiJXH.pdf",
+          "title": "Resolución No.01626 del 27 de noviembre de 2024",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción de Gas Natural",
+              "url": "https://www.minenergia.gov.co/documents/13145/2024_2033_RESUMEN-2_V4-1_Nov-24-2024-25.xlsm",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 3,
+      "acceso_sistema": {
+        "title": "https://declaragas.minenergia.gov.co/login.aspx",
+        "url": "https://declaragas.minenergia.gov.co/login.aspx"
+      }
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2023 - 2032",
+      "resolutions": [
+        {
+          "number": "01743",
+          "date": "2023-12-28",
+          "url": "https://www.minenergia.gov.co/documents/11314/Resolucion_01743_de_2023_-_Act_2_DPG_2023_28.Dic_2023.pdf",
+          "title": "Resolución 01743 del 28 de diciembre de 2023",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/11315/Declaracion_de_produccion_de_Gas_Natural_2023_2032_Act2.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "00943",
+          "date": "2023-09-05",
+          "url": "https://normativame.minenergia.gov.co/normatividad/6749/norma/",
+          "title": "Resolución 00943 del 05 de septiembre de 2023",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/10527/Declaracion_de_produccion_de_Gas_Natural_2023_2032_Act1.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "00478",
+          "date": "2023-05-30",
+          "url": "https://www.minenergia.gov.co/documents/10183/Resoluci%C3%B3n_000478_30May2023.pdf",
+          "title": "Resolución 00478 del 30 de mayo de 2023",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/10185/Declaracion_de_produccion_de_Gas_Natural_2023_2032.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 3,
+      "acceso_sistema": {
+        "title": "Acceso al Sistema de Declaración de Gas",
+        "url": "https://declaragas.minminas.gov.co/login.aspx"
+      }
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2022 - 2031",
+      "resolutions": [
+        {
+          "number": "00841",
+          "date": "2022-05-06",
+          "url": "https://www.minenergia.gov.co/documents/7191/49316-Resolucion_00841_de_2022.pdf",
+          "title": "Resolución 00841 del 6 de mayo de 2022",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/7192/Declaracion_de_produccion_de_Gas_Natural_2022_2031.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "00940",
+          "date": "2022-05-24",
+          "url": "https://www.minenergia.gov.co/documents/7193/49324-RESOLUCION_NUMERO_00940_DE_2022.pdf",
+          "title": "Resolución 00940 del 24 de mayo de 2022",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/7194/Declaracion_de_produccion_de_Gas_Natural_2022_2031_24_de_mayo_2022.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01023",
+          "date": "2022-06-14",
+          "url": "https://www.minenergia.gov.co/documents/7195/49341-5-2022-001023.pdf",
+          "title": "Resolución 01023 del 14 de junio de 2022",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/7196/Declaracion_de_produccion_de_GN_2022-2031_14_de_junio_de_2022.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01240",
+          "date": "2022-07-19",
+          "url": "https://www.minenergia.gov.co/documents/8302/5-2022-001240.pdf",
+          "title": "Resolución 01240 del 19 de julio de 2022",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/8303/Declaracion_de_produccion_de_Gas_Natural_2022_2031_14_de_julio_2022.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01394",
+          "date": "2022-08-24",
+          "url": "https://normativame.minenergia.gov.co/normatividad/6212/norma/",
+          "title": "Resolución 01394 del 24 de agosto de 2022",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/9098/Anexo_Declaracion_de_produccion_de_GN_2022-2031_actualizacion_16_de_agosto_22.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01475",
+          "date": "2022-09-19",
+          "url": "https://normativame.minenergia.gov.co/normatividad/6261/norma/",
+          "title": "Resolución 01475 del 19 de septiembre de 2022",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/9307/Anexo_Declaracion_de_produccion_de_GN_2022-2031_actualizacion_14_de_septiembre_22_1.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01553",
+          "date": "2022-10-03",
+          "url": "https://normativame.minenergia.gov.co/normatividad/6277/norma/",
+          "title": "Resolución 01553 del 03 de octubre de 2022",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/9353/Declaracion_de_produccion_de_Gas_Natural_2022_2031_3_de_Octubre_2022.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01684",
+          "date": "2022-11-01",
+          "url": "https://normativame.minenergia.gov.co/normatividad/6296/norma/",
+          "title": "Resolución 01684 del 1 de noviembre de 2022",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/9476/Declaracion_de_produccion_de_Gas_Natural_2022_2031_28_de_Octubre_2022.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01834",
+          "date": "2022-12-02",
+          "url": "https://normativame.minenergia.gov.co/normatividad/6334/norma/",
+          "title": "Resolución 01834 del 02 de diciembre de 2022",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/9624/Anexo_Declaracion_de_produccion_de_GN_2022-2031_actualizacion_30_de_Noviembre-22.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01944",
+          "date": "2022-12-20",
+          "url": "https://normativame.minenergia.gov.co/normatividad/6347/norma/",
+          "title": "Resolución 01944 del 20 de diciembre de 2022",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/9669/Anexo_Declaracion_de_produccion_de_GN_2022-2031_actualizacion_19_de_Diciembre-22.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 10,
+      "acceso_sistema": {
+        "title": "Acceso al Sistema de Declaración de Gas",
+        "url": "https://declaragas.minminas.gov.co/login.aspx"
+      }
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2021 - 2030",
+      "resolutions": [
+        {
+          "number": "00014",
+          "date": "2021-05-31",
+          "url": "https://www.minenergia.gov.co/documents/2644/48953-Resolucion_Declaracion_de_produccion_de_GN_2021-2030.pdf",
+          "title": "Resolución 00014 del 31 de mayo de 2021",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2645/Soporte_Declaracion_de_produccion_de_gas_natural_2021-2030_version_final.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "00120",
+          "date": null,
+          "url": "https://www.minenergia.gov.co/documents/2646/48980-5-2021-000120.pdf",
+          "title": "Resolución 00120 del 28 de Junio 2021",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2647/Soporte_Declaracion_de_produccion_de_gas_natural_2021-2030__24-06-2021.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "00509",
+          "date": null,
+          "url": "https://www.minenergia.gov.co/documents/2648/49038-5-2021-000509.pdf",
+          "title": "Resolución 00509 del 27 de Agosto 2021",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2649/Soporte_Declaracion_de_produccion_de_gas_natural_2021-2030_version_final_1.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "00763",
+          "date": "2021-10-19",
+          "url": "https://www.minenergia.gov.co/documents/2650/49088-5-2021-000763.pdf",
+          "title": "Resolución 00763 del 19 de Octubre de 2021",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2651/Soporte_Declaracion_de_produccion_de_gas_natural_2021-2030-251021.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01124",
+          "date": "2021-12-03",
+          "url": "https://www.minenergia.gov.co/documents/2652/49136-5-2021-001124.pdf",
+          "title": "Resolución 01124 del 03 de Diciembre de 2021",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2653/Soporte_Declaracion_de_produccion_de_gas_natural_2021-2030__03-12-21.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "01446",
+          "date": "2021-12-28",
+          "url": "https://www.minenergia.gov.co/documents/2654/49161-5-2021-001446.pdf",
+          "title": "Resolución 01446 del 28 de diciembre de 2021",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2655/Soporte_Declaracion_de_produccion_de_gas_natural_27-12-21.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 6
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2020 - 2029",
+      "resolutions": [
+        {
+          "number": "31329",
+          "date": "2020-06-05",
+          "url": "https://www.minenergia.gov.co/documents/2659/48576-Resoluci%C3%B3n_31_329__05.06.2020.pdf",
+          "title": "Resolución 31329 del 05 de junio de 2020",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2660/Soporte_magn%C3%A9tico_declaraci%C3%B3n_de_producci%C3%B3n_GN_2020-2029_1.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 1
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2019 - 2028",
+      "resolutions": [
+        {
+          "number": "31269",
+          "date": "2019-12-10",
+          "url": "https://www.minenergia.gov.co/documents/2664/48401-Resoluci%C3%B3n_31269_del_10_diciembre_de_2019_Modificaci%C3%B3n_DP_de_GN_2019-2028.pdf",
+          "title": "Resolución 31269 del 10 de diciembre de 2019",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2665/Soporte_magn%C3%A9tico_declaraci%C3%B3n_de_producci%C3%B3n_GN_2019-2028_Guajira.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "31246",
+          "date": "2019-10-17",
+          "url": "https://www.minenergia.gov.co/documents/2666/48251-Resoluci%C3%B3n_31246_del_17_de_octubre_de_2019_Declaraci%C3%B3n_de_Producci%C3%B3n_de__TGc8mw2.pdf",
+          "title": "Resolución 31246 del 17 de octubre de 2019",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2667/Soporte_magn%C3%A9tico_declaraci%C3%B3n_de_producci%C3%B3n_GN_2019-2028_Flore%C3%B1a.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "31175",
+          "date": "2019-07-12",
+          "url": "https://www.minenergia.gov.co/documents/2668/48158-Resoluci%C3%B3n_31_175_de_Julio_12_de_2019.pdf",
+          "title": "Resolución 31175 del 12 de julio de 2019",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2669/Soporte_modificacion_declaracion_de_produccion.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "31146",
+          "date": "2019-06-14",
+          "url": "https://www.minenergia.gov.co/documents/2670/48137-Resoluci%C3%B3n_31_146_del_14_de_junio_de_2019_Dp_de_Gas_Natural_2019-2028.pdf",
+          "title": "Resolución 31146 del 14 de junio de 2019",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2671/Soporte_magn%C3%A9tico_declaraci%C3%B3n_de_producci%C3%B3n_GN_2019-2028_2.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 4
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2018 - 2027",
+      "resolutions": [
+        {
+          "number": "31912",
+          "date": "2018-10-19",
+          "url": "https://www.minenergia.gov.co/documents/2675/47954-res_31912_191018.pdf",
+          "title": "Resolución 31912 del 19 de octubre de 2018",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2676/191018_soporte_declaracion_GN_2018_2027.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "31876",
+          "date": "2018-09-29",
+          "url": "https://www.minenergia.gov.co/documents/2677/47940-res_31876_260918.pdf",
+          "title": "Resolución 31876 del 29 de septiembre de 2018",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2678/270918_soporte_declaracion_GN_2018_2027.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            },
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2679/280618_soporte_declaracion_GN_2018_2022.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            },
+            {
+              "title": "Soporte magnético declaración de producción",
+              "url": "https://www.minenergia.gov.co/documents/2680/100518_soporte_declaracion_GN_2018_2022.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 2
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2017 - 2026",
+      "resolutions": [
+        {
+          "number": "31385",
+          "date": "2017-06-07",
+          "url": "https://www.minenergia.gov.co/documents/2682/37500-Resoluci%C3%B3n-31385-7Jun2017.pdf",
+          "title": "Resolución 31385 del 7 de junio de 2017.",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción Resolución 31385 del 7 de junio de 2017.",
+              "url": "https://www.minenergia.gov.co/documents/2683/270617_soporte_magnet_res_070617.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        },
+        {
+          "number": "31159",
+          "date": "2017-04-03",
+          "url": "https://www.minenergia.gov.co/documents/2684/37456-res_31159_030417.pdf",
+          "title": "Resolución 31159 del 3 de abril de 2017.",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción Resolución 31159 del 3 de abril de 2017.",
+              "url": "https://www.minenergia.gov.co/documents/2685/210417_soporte_magnet_declara_produc_gas_natural.xlsx",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 2
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2016 - 2025",
+      "resolutions": [
+        {
+          "number": "31132",
+          "date": "2016-03-30",
+          "url": "https://www.minenergia.gov.co/documents/2689/36946-Resolucion-31132-30Mar2016.pdf",
+          "title": "Resolución 31 132 del 30 de marzo de 2016.",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción resolución 31132 del 30 de marzo de 2016(pdf).",
+              "url": "https://www.minenergia.gov.co/documents/2690/Consolidado_TODOS_LOS_CAMPOS_Mar2016_imp.pdf",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            },
+            {
+              "title": "Soporte magnético declaración de producción resolución 31289 del 30 de marzo de 2016(Excel).",
+              "url": "https://www.minenergia.gov.co/documents/2691/Consolidado_TODOS_LOS_CAMPOS_Mar2016_imp.xlsm",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 1
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2015 - 2024",
+      "resolutions": [
+        {
+          "number": "31289",
+          "date": "2015-06-03",
+          "url": "https://www.minenergia.gov.co/documents/2692/36459-Resolucion-31289-3Jun2015.pdf",
+          "title": "Resolución 31 289 del 3 de junio de 2015.",
+          "soporte_magnetico": [
+            {
+              "title": "Soporte magnético declaración de producción resolución 31289 del 3 de junio de 2015(pdf).",
+              "url": "https://www.minenergia.gov.co/documents/2693/Medio_Magnetico.pdf",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            },
+            {
+              "title": "Soporte magnético declaración de producción resolución 31289 del 3 de junio de 2015(Excel).",
+              "url": "https://www.minenergia.gov.co/documents/2694/Res_31_289_del_3Jun2015_DPGN_2015-2024.xls",
+              "local_path": null,
+              "file_size_bytes": null,
+              "file_size_mb": null
+            }
+          ],
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 1
+    },
+    {
+      "declaration_title": "Declaración de Producción de Gas Natural 2014 - 2023",
+      "resolutions": [
+        {
+          "number": "72206",
+          "date": "2014-06-13",
+          "url": "https://www.minenergia.gov.co/documents/2695/22587-11596.pdf",
+          "title": "Resolución 72 206 del 13 de Junio de 2014.",
+          "soporte_magnetico": null,
+          "extracted_data": null
+        },
+        {
+          "number": "72215",
+          "date": "2014-06-26",
+          "url": "https://www.minenergia.gov.co/documents/2696/36425-Resolucion-72215-26Jun2014.pdf",
+          "title": "Resolución 72 215 del 26 de junio de 2014.",
+          "soporte_magnetico": null,
+          "extracted_data": null
+        }
+      ],
+      "total_resolutions": 2
+    }
+  ],
+  "total_declarations": 12,
+  "plantillas": [
+    {
+      "type": "plantillas",
+      "declaration_title": "Plantillas de cargue Declaración 2021 - 2030",
+      "plantillas": [
+        {
+          "type": "OPERADOR",
+          "title": "Plantillas de cargue OPERADOR",
+          "url": "https://www.minenergia.gov.co/documents/2657/Plantilla_de_cargue_OPERADOR_1.xlsx"
+        },
+        {
+          "type": "ASOCIADO",
+          "title": "Plantillas de cargue ASOCIADO",
+          "url": "https://www.minenergia.gov.co/documents/2658/Plantilla_de_cargue_ASOCIADO_1.xlsm"
+        }
+      ]
+    },
+    {
+      "type": "plantillas",
+      "declaration_title": "Plantillas de cargue Declaración 2020-2029",
+      "plantillas": [
+        {
+          "type": "OPERADOR",
+          "title": "Plantillas de cargue OPERADOR",
+          "url": "https://www.minenergia.gov.co/documents/2662/Plantilla_de_cargue_OPERADOR.xlsx"
+        },
+        {
+          "type": "ASOCIADO",
+          "title": "Plantillas de cargue ASOCIADO",
+          "url": "https://www.minenergia.gov.co/documents/2663/Plantilla_de_cargue_ASOCIADO.xlsm"
+        }
+      ]
+    },
+    {
+      "type": "plantillas",
+      "declaration_title": "Plantillas de cargue Declaración 2019-2028",
+      "plantillas": [
+        {
+          "type": "OPERADOR",
+          "title": "Plantillas de cargue OPERADOR.",
+          "url": "https://www.minenergia.gov.co/documents/2673/Platilla_de_cargue__OPERADOR.xlsm"
+        },
+        {
+          "type": "ASOCIADO",
+          "title": "Plantillas de cargue ASOCIADO.",
+          "url": "https://www.minenergia.gov.co/documents/2674/Plantilla_de_cargue_ASOCIADO_2.xlsm"
+        }
+      ]
+    },
+    {
+      "type": "plantillas",
+      "declaration_title": "Plantillas de cargue Declaración 2017-2026",
+      "plantillas": [
+        {
+          "type": "OPERADOR",
+          "title": "Plantillas de cargue OPERADOR.",
+          "url": "https://www.minenergia.gov.co/documents/2687/FORMATO_OPERADOR_1.xlsm"
+        },
+        {
+          "type": "ASOCIADO",
+          "title": "Plantillas de cargue ASOCIADO.",
+          "url": "https://www.minenergia.gov.co/documents/2688/FORMATO_ASOCIADO.xlsm"
+        }
+      ]
+    }
+  ],
+  "total_plantillas": 4
+}
