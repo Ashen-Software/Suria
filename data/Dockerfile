@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONPATH=/home/suria/app
 
-# Dependencias del sistema
+# Dependencias del sistema (incluye las necesarias para Playwright)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
@@ -14,6 +14,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     unzip \
     gnupg \
+    # Dependencias para Playwright/Chromium
+    libnss3 \
+    libnspr4 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libdbus-1-3 \
+    libxkbcommon0 \
+    libatspi2.0-0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libasound2 \
+    libpango-1.0-0 \
+    libcairo2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Crear usuario sin privilegios
@@ -21,9 +39,12 @@ RUN useradd --create-home --shell /bin/bash suria
 WORKDIR /home/suria/app
 RUN chown -R suria:suria /home/suria/app
 
-# Instalar dependencias Python como root, luego cambiar a usuario no-root
+# Instalar dependencias Python como root
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Instalar navegadores de Playwright
+RUN playwright install chromium --with-deps
 
 # Copiar el código de la carpeta `data/`
 COPY . /home/suria/app/
