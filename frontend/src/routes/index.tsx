@@ -4,6 +4,7 @@ import { HomePage } from '@/pages/Home'
 import { EtlSourcePage } from '@/pages/EtlSourcePage'
 import { DimTiempoPage } from '@/pages/DimTiempoPage'
 import { DimTerritoriosPage } from '@/pages/DimTerritoriosPage'
+import { UPMEPage } from '@/pages/UPMEPage'
 
 export function AppRoutes() {
   return (
@@ -13,6 +14,7 @@ export function AppRoutes() {
         <Route path="/etl" element={<EtlSourcePage />} />
         <Route path="/tiempo" element={<DimTiempoPage />} />
         <Route path="/territorios" element={<DimTerritoriosPage />} />
+        <Route path="/upme" element={<UPMEPage />} />
       </Route>
     </Routes>
   )
