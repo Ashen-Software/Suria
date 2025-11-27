@@ -127,7 +127,7 @@ def test_extraction_dry_run(source_config: dict):
             declarations = meta_dict.get("declarations", [])
             if declarations:
                 logger.info(f"\nDeclaraciones ({len(declarations)}):")
-                for decl in declarations[:3]:  # Mostrar máximo 3
+                for decl in declarations[:3]:
                     title = decl.get("declaration_title", "Unknown")
                     resolutions = len(decl.get("resolutions", []))
                     logger.info(f"      - {title}: {resolutions} resoluciones")

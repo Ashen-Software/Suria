@@ -1,14 +1,13 @@
 """
 Scraper para Declaraciones de Producción de Gas Natural del Ministerio de Minas y Energía.
 
-Este scraper:
+Este scraper (EXTRACTION):
 - Accede a la página de gas natural usando requests + BeautifulSoup
 - Extrae declaraciones, resoluciones, cronogramas, anexos y plantillas
-- Descarga archivos Excel (.xlsm) con progreso (opcional, activado con --excel)
-- Asocia cada Excel con su resolución PDF correspondiente
-- Extrae datos estructurados de los Excel (opcional)
+- Descarga archivos Excel (.xlsm/.xlsx) crudos al bucket
+- NO parsea los Excel (eso se hace en TRANSFORMATION)
 """
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from datetime import datetime
 import json
 
@@ -17,8 +16,6 @@ from common.hash_utils import calculate_hash_sha256
 
 from extraction.scrapers.declaracion.web_scraper import extract_declaration_links
 from extraction.scrapers.declaracion.file_downloader import download_excel_file
-from extraction.scrapers.declaracion.excel_parser import extract_excel_data
-from extraction.scrapers.declaracion.file_manager import save_json_to_processed
 
 
 def check(source_config: Dict[str, Any]) -> str:
@@ -177,8 +174,11 @@ def extract(source_config: Dict[str, Any]) -> Dict[str, Any]:
             f"{len(excel_files)} archivos Excel"
         )
         
-        # Guardar copia local (debug)
-        save_json_to_processed(result)
+        # # Guardar copia local solo si esta habilitado (debug/desarrollo)
+        # save_local = config.get("save_local_copy", False)
+        # if save_local:
+        #     save_json_to_processed(result)
+        #     logger.info("[gas_natural_declaracion] Copia local guardada (save_local_copy=True)")
         
         # Retornar estructura con metadata y archivos Excel
         return {
@@ -246,8 +246,7 @@ def _process_declaration(
         soportes_list = soporte_magnetico if isinstance(soporte_magnetico, list) else [soporte_magnetico]
         
         processed_soportes = []
-        extracted_data = None
-        excel_file_processed = None
+        excel_file_processed = False
         
         for soporte in soportes_list:
             soporte_url = soporte.get("url")
@@ -303,26 +302,20 @@ def _process_declaration(
                     processed_soporte["file_size_mb"] = file_size_mb
                     processed_soporte["bucket_path"] = f"excel/{excel_filename}"
                     
-                    # Parsear contenido del Excel
-                    logger.info(f"[gas_natural_declaracion] Analizando contenido del Excel: {soporte_title}")
-                    parsed_data = None
-                    try:
-                        excel_bytes.seek(0)
-                        parsed_data = extract_excel_data(excel_bytes, excel_declaration)
-                        extracted_data = parsed_data
-                    except Exception as e:
-                        logger.error(f"[gas_natural_declaracion] Error analizando Excel: {e}")
-                        extracted_data = None
-                    
-                    # Acumular archivo Excel para subir al bucket
+                    # Solo guardar el Excel crudo, sin parsear
+                    # El parseo se hará en el paso de TRANSFORMATION
                     excel_bytes.seek(0)
                     excel_files.append({
                         "filename": excel_filename,
                         "content": excel_bytes.read(),
-                        "parsed_data": parsed_data,
                         "declaration_title": declaration_title,
                         "resolution_number": resolution_num
                     })
+                    
+                    logger.info(
+                        f"[gas_natural_declaracion] Excel descargado: {excel_filename} "
+                        f"({file_size_mb:.2f} MB)"
+                    )
                     
                     excel_file_processed = True
                 else:
@@ -337,8 +330,7 @@ def _process_declaration(
             "date": resolution.get("date"),
             "url": resolution.get("url"),
             "title": resolution.get("title"),
-            "soporte_magnetico": processed_soportes if len(processed_soportes) > 0 else None,
-            "extracted_data": extracted_data
+            "soporte_magnetico": processed_soportes if len(processed_soportes) > 0 else None
         }
         
         processed_resolutions.append(processed_resolution)

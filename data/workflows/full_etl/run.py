@@ -45,6 +45,7 @@ def full_etl_task(changed_sources: List[str], current_config: Dict, skip_load: b
 
             extractor.extract(src)
             logger.info(f"[full_etl] Extracción completada para {src_id}")
+            breakpoint()
             
             # PASO 2: TRANSFORMACION
             logger.info(f"[full_etl] PASO 2/3: TRANSFORMACIÓN")
