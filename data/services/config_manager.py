@@ -79,32 +79,28 @@ class ConfigManager:
     def get_config(self) -> Dict[str, Any]:
         """
         Devuelve siempre el config actualizado.
-        Prioriza DB > Storage > Local Cache.
+        Prioriza: DB Supabase > Cache Local.
         """
+        # 1. Intentar obtener desde Base de Datos
         try:
             db_sources = self.get_remote_sources_from_db()
             if db_sources:
                 logger.info("Usando configuracion desde Base de Datos Supabase")
-                return {"sources": db_sources}
-        except Exception:
-            pass # Fallback
-            
+                config = {"sources": db_sources}
+                # Actualizar cache local con la version de DB
+                self.save_local_config(config)
+                return config
+        except Exception as e:
+            logger.warning(f"Error consultando DB, intentando cache local: {e}")
+        
+        # 2. Fallback: usar cache local
         local_config = self.load_local_config()
-        remote_config = self.download_remote_config()
-
-        if remote_config is None:
-            logger.info("Usando solo configuracion local (sin acceso a Supabase)")
-            if local_config is None:
-                raise RuntimeError("No hay config local ni remoto disponible")
+        if local_config:
+            logger.info("Usando configuracion desde cache local")
             return local_config
-
-        if local_config != remote_config:
-            logger.warning("Detectado cambio en configuracion remota.")
-            self.save_local_config(remote_config)
-        else:
-            logger.info("Config local ya esta actualizado.")
-
-        return remote_config
+        
+        # 3. Sin config disponible
+        raise RuntimeError("No hay config disponible (ni DB ni cache local)")
 
 
 # EJEMPLO DE USO

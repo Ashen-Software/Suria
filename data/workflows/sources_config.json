@@ -44,7 +44,7 @@
       "id": "api_regalias",
       "name": "Consolidación de regalias por campo",
       "type": "api",
-      "active": true,
+      "active": false,
       "schedule": { "cron": "*/8 * * * *", "note": "Every 8 minutes" },
       "config": {
         "base_url": "https://www.datos.gov.co/api/v3/views/j7js-yk74/query.json",
