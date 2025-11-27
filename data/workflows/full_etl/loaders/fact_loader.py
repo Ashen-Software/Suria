@@ -34,7 +34,7 @@ class FactLoader(BaseLoader):
     # UNIQUE columns por fact_table
     # Necesario para el ON CONFLICT del UPSERT
     UNIQUE_COLUMNS_BY_TABLE = {
-        "fact_regalias": "tiempo_id,campo_id,tipo_hidrocarburo",
+        "fact_regalias": "tiempo_id,campo_id,tipo_hidrocarburo,regimen_regalias",
         "fact_demanda_gas": "tiempo_id,territorio_id,escenario",
         # Agregar
     }
@@ -217,8 +217,9 @@ class FactLoader(BaseLoader):
         if fks.get("campo_id"):
             fact_record["campo_id"] = fks["campo_id"]
         
-        # Agregar territorio_id si existe y la tabla lo necesita
-        if fks.get("territorio_id"):
+        # fact_regalias usa campo_id -> dim_campos -> territorio_id (relación indirecta)
+        tables_with_territorio = ["fact_demanda_gas"]
+        if fact_table in tables_with_territorio and fks.get("territorio_id"):
             fact_record["territorio_id"] = fks["territorio_id"]
         
         # Copiar TODOS los campos de data (ya vienen mapeados del transformer)
@@ -230,7 +231,7 @@ class FactLoader(BaseLoader):
                 continue
             
             if value is not None:
-                # Convertir a float si es columna numérica
+                # Convertir a float si es columna numerica
                 if col in self.NUMERIC_COLUMNS:
                     try:
                         value = float(value) if value != "" else None
@@ -272,10 +273,10 @@ class FactLoader(BaseLoader):
             unique_cols_str = self.UNIQUE_COLUMNS_BY_TABLE.get(fact_table, "tiempo_id")
             unique_cols = unique_cols_str.split(",")
             
-            # Construir clave dinámica basada en las columnas únicas
+            # Construir clave dinámica basada en las columnas unicas
             key = tuple([fact_table] + [record.get(col) for col in unique_cols])
             
-            # Sobrescribe si ya existe (mantiene el último)
+            # Sobrescribe si ya existe
             seen[key] = record
         
         unique_records = list(seen.values())
