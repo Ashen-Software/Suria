@@ -10,7 +10,6 @@ Incluye cache en memoria para evitar queries repetidas.
 """
 from typing import Dict, Any, Optional, Tuple
 from datetime import date
-from functools import lru_cache
 import unicodedata
 
 import sys
@@ -196,11 +195,12 @@ class DimensionResolver:
         Obtiene o crea el ID de dim_campos para un campo.
         
         Si el campo no existe, lo crea con los datos proporcionados.
+        territorio_id es opcional: si no se resuelve (ej: "NN"), se omite.
         
         Args:
             nombre_campo: Nombre del campo (clave única)
             contrato: Código del contrato (opcional)
-            territorio_id: FK a dim_territorios (opcional)
+            territorio_id: FK a dim_territorios (opcional, puede ser None si no existe)
             
         Returns:
             ID de la dimensión
@@ -224,7 +224,7 @@ class DimensionResolver:
             return None
         
         try:
-            # Construir datos del campo
+            # Construir datos del campo (solo campos con valor)
             campo_data = {
                 "nombre_campo": nombre_campo,
                 "activo": True
@@ -233,7 +233,8 @@ class DimensionResolver:
             if contrato:
                 campo_data["contrato"] = contrato.strip()
             
-            if territorio_id:
+            # Esto evita errores de FK cuando el territorio no existe (ej: "NN")
+            if territorio_id is not None:
                 campo_data["territorio_id"] = territorio_id
             
             # UPSERT: INSERT si no existe, UPDATE si ya existe
