@@ -56,95 +56,90 @@ export function EtlSourceForm({ etlSource, onSubmit, onCancel, isLoading }: EtlS
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="label">
-          <span className="label-text">Nombre</span>
-        </label>
-        <input
-          type="text"
-          className="input input-bordered w-full"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          required
-        />
-      </div>
-
-      <div>
-        <label className="label">
-          <span className="label-text">Tipo</span>
-        </label>
-        <input
-          type="text"
-          className="input input-bordered w-full"
-          value={formData.type || ''}
-          onChange={(e) => setFormData({ ...formData, type: e.target.value || null })}
-        />
-      </div>
-
-      <div>
-        <label className="label">
-          <span className="label-text">Schedule Cron</span>
-        </label>
-        <input
-          type="text"
-          className="input input-bordered w-full"
-          value={formData.schedule_cron}
-          onChange={(e) => setFormData({ ...formData, schedule_cron: e.target.value })}
-          required
-          placeholder="0 0 * * *"
-        />
-      </div>
-
-      <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Activo</span>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-base-content/70">Nombre</label>
           <input
-            type="checkbox"
-            className="checkbox"
-            checked={formData.active}
-            onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+            type="text"
+            className="input input-bordered w-full rounded-2xl bg-base-100/70"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
           />
-        </label>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-base-content/70">Tipo</label>
+          <input
+            type="text"
+            className="input input-bordered w-full rounded-2xl bg-base-100/70"
+            value={formData.type || ''}
+            onChange={(e) => setFormData({ ...formData, type: e.target.value || null })}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-base-content/70">Schedule Cron</label>
+          <input
+            type="text"
+            className="input input-bordered w-full rounded-2xl bg-base-100/70"
+            value={formData.schedule_cron}
+            onChange={(e) => setFormData({ ...formData, schedule_cron: e.target.value })}
+            required
+            placeholder="0 0 * * *"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-base-content/70">Estado</label>
+          <div className="glass-panel flex items-center justify-between rounded-2xl p-3">
+            <span className="text-sm text-base-content/60">Activo</span>
+            <input
+              type="checkbox"
+              className="toggle toggle-primary"
+              checked={formData.active}
+              onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+            />
+          </div>
+        </div>
       </div>
 
-      <div>
-        <label className="label">
-          <span className="label-text">Config (JSON)</span>
-        </label>
-        <textarea
-          className="textarea textarea-bordered w-full"
-          rows={4}
-          value={configJson}
-          onChange={(e) => setConfigJson(e.target.value)}
-          placeholder="{}"
-        />
-      </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-base-content/70">Config (JSON)</label>
+          <textarea
+            className="textarea textarea-bordered w-full rounded-2xl bg-base-100/70 font-mono text-sm"
+            rows={6}
+            value={configJson}
+            onChange={(e) => setConfigJson(e.target.value)}
+            placeholder="{}"
+          />
+        </div>
 
-      <div>
-        <label className="label">
-          <span className="label-text">Storage Config (JSON)</span>
-        </label>
-        <textarea
-          className="textarea textarea-bordered w-full"
-          rows={4}
-          value={storageConfigJson}
-          onChange={(e) => setStorageConfigJson(e.target.value)}
-          placeholder="{}"
-        />
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-base-content/70">Storage Config (JSON)</label>
+          <textarea
+            className="textarea textarea-bordered w-full rounded-2xl bg-base-100/70 font-mono text-sm"
+            rows={6}
+            value={storageConfigJson}
+            onChange={(e) => setStorageConfigJson(e.target.value)}
+            placeholder="{}"
+          />
+        </div>
       </div>
 
       {jsonError && (
-        <div className="alert alert-error">
+        <div className="alert alert-error rounded-2xl">
           <span>{jsonError}</span>
         </div>
       )}
 
-      <div className="flex gap-2">
-        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+      <div className="flex flex-wrap gap-3">
+        <button type="submit" className="btn btn-primary rounded-2xl px-6" disabled={isLoading}>
           {isLoading ? 'Guardando...' : 'Guardar'}
         </button>
-        <button type="button" className="btn" onClick={onCancel}>
+        <button type="button" className="btn btn-ghost rounded-2xl px-6" onClick={onCancel}>
           Cancelar
         </button>
       </div>
