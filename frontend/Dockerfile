@@ -11,17 +11,25 @@ ARG VITE_SUPABASE_ANON_KEY
 ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 
-# Copiar archivos de dependencias
-COPY package.json pnpm-lock.yaml ./
+# Copiar el código fuente del frontend
+COPY frontend/ .
 
-# Instalar pnpm y dependencias
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
+# Los datos procesados de UPME serán buscados por copy-upme-data.js durante el build
+# El script buscará en múltiples ubicaciones y continuará sin fallar si no los encuentra
+# Si los datos están disponibles en el contexto de build, se pueden copiar aquí:
+# COPY data/extraction/scrapers/proyeccion/processed ./data/extraction/scrapers/proyeccion/processed/
 
-# Copiar el código fuente
-COPY . .
+# Instalar dependencias (usa npm si hay package-lock.json, pnpm si hay pnpm-lock.yaml)
+RUN if [ -f package-lock.json ]; then \
+      npm ci; \
+    elif [ -f pnpm-lock.yaml ]; then \
+      npm install -g pnpm && pnpm install --frozen-lockfile; \
+    else \
+      npm install; \
+    fi
 
 # Build de la aplicación
-RUN pnpm run build
+RUN npm run build
 
 # Stage 2: Serve
 FROM node:24-alpine
