@@ -128,9 +128,11 @@ export function PotenciaMaximaCharts() {
             <XAxis dataKey="year" />
             <YAxis label={{ value: 'MW-mes', angle: -90, position: 'insideLeft' }} />
             <Tooltip 
-              formatter={(value: number | null) => {
+              formatter={(value: any) => {
                 if (value === null || value === undefined) return 'N/A';
-                return `${value.toLocaleString('es-ES', { maximumFractionDigits: 0 })} MW`;
+                const numValue = typeof value === 'number' ? value : parseFloat(value);
+                if (isNaN(numValue)) return 'N/A';
+                return `${numValue.toLocaleString('es-ES', { maximumFractionDigits: 0 })} MW`;
               }}
               labelFormatter={(label) => `Año: ${label}`}
             />

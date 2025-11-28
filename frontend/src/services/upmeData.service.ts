@@ -1,4 +1,4 @@
-import { EnergiaElectricaRecord, PotenciaMaximaRecord, CapacidadInstaladaRecord, GasNaturalRecord } from '@/types/upme.types';
+import type { EnergiaElectricaRecord, PotenciaMaximaRecord, CapacidadInstaladaRecord, GasNaturalRecord } from '@/types/upme.types';
 
 // Rutas hardcodeadas a los CSVs procesados
 // Nota: En producción, estos deberían venir de un endpoint API
