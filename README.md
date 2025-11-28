@@ -20,3 +20,15 @@ Los archivos fuente de la documentación se encuentran en la carpeta docs/. Para
 - 2. Ejecutar previsualización local:
 
 ```mkdocs serve```
+
+---
+
+## Autores
+
+- Yulian Stiven Bedoya Buritica (ybedoyab@unal.edu.co)
+
+- Marycielo Berrio Zapata (mberrioz@unal.edu.co)
+
+- Alejandro Feria Gonzales (aferiag@unal.edu.co)
+
+- Juan Fernando Quintero Perez (juquinterope@unal.edu.co)
