@@ -32,4 +32,4 @@ Metodología basada en relaciones con variables macroeconómicas y desagregació
 
 - **Autor(es):** UPME
 - **Formato de datos:** Anexos por proyecciones anuales (XLSX)
-- **Enlace:** [Proyecciones de demanda — UPME](https://www1.upme.gov.co/DemandayEficiencia/Paginas/Proyecciones-de-demanda.aspx)
+- **Enlace:** [Proyecciones de demanda — UPME](https://www.upme.gov.co/simec/planeacion-energetica/proyeccion_de_demanda/)
