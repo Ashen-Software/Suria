@@ -1,0 +1,2242 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentación técnica del proyecto">
+      
+      
+      
+        <link rel="canonical" href="https://Juanqu261.github.io/Datos2025/guias/transform_process/">
+      
+      
+        <link rel="prev" href="../scripts_personalizados/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Proceso de transformación - Reto - Gas natural</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#transform" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Reto - Gas natural" class="md-header__button md-logo" aria-label="Reto - Gas natural" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Reto - Gas natural
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Proceso de transformación
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="blue"  aria-label="Modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="dark" data-md-color-primary="teal" data-md-color-accent="blue"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../arquitectura/overview/" class="md-tabs__link">
+          
+  
+  
+  Arquitectura
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/endpoints/" class="md-tabs__link">
+          
+  
+  
+  API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../database/esquema/" class="md-tabs__link">
+          
+  
+  
+  Base de Datos
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../configuracion_fuentes/" class="md-tabs__link">
+          
+  
+  
+  Guías
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Reto - Gas natural" class="md-nav__button md-logo" aria-label="Reto - Gas natural" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Reto - Gas natural
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Arquitectura
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitectura/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/diagrams/arquitectura.svg" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrama
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitectura/implementacion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Implementación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../arquitectura/directorios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Directorios
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/diagrams/pipeline_despliegue.svg" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Despliegue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/endpoints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Endpoints
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Base de Datos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Base de Datos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../database/esquema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Esquema
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assets/diagrams/db-schema.png" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Relaciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guías
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guías
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuracion_fuentes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuración de Fuentes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage_configuracion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Storage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_configuracion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    APIs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scripts_personalizados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripts Personalizados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proceso de transformación
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proceso de transformación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#arquitectura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitectura
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flujo-de-transformacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flujo de Transformación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Uso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-obtener-transformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Obtener Transformer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-transformar-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Transformar Datos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-estructura-del-resultado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Estructura del Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transformers-disponibles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transformers Disponibles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformers Disponibles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apitransformer-apipy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApiTransformer (api.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exceltransformer-excelpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ExcelTransformer (excel.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customtransformer-custompy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CustomTransformer (custom.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schemas-de-validacion-schemaspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schemas de Validación (schemas.py)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schemas de Validación (schemas.py)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tablas-de-hechos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tablas de Hechos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas de Hechos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#factregaliasschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FactRegaliasSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#factdemandagasnaturalschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FactDemandaGasNaturalSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#factenergiaelectricaschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FactEnergiaElectricaSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#factpotenciamaximaschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FactPotenciaMaximaSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#factofertagasschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FactOfertaGasSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimensiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dimensiones
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dimensiones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dimtiemposchema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DimTiempoSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimterritorioschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DimTerritorioSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimcamposchema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DimCampoSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimareaselectricasschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DimAreasElectricasSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimresolucionesschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DimResolucionesSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agregar-nuevo-transformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agregar Nuevo Transformer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agregar Nuevo Transformer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-para-api-nueva" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Para API nueva:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-para-excel-nuevo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Para Excel nuevo:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-para-script-totalmente-custom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Para script totalmente custom:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validacion-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validación de Datos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manejo-de-errores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manejo de Errores
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentacion-complementaria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentación Complementaria
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#arquitectura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitectura
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flujo-de-transformacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flujo de Transformación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Uso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Uso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-obtener-transformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Obtener Transformer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-transformar-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Transformar Datos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-estructura-del-resultado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Estructura del Resultado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transformers-disponibles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transformers Disponibles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformers Disponibles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apitransformer-apipy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApiTransformer (api.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exceltransformer-excelpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ExcelTransformer (excel.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customtransformer-custompy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CustomTransformer (custom.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schemas-de-validacion-schemaspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schemas de Validación (schemas.py)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schemas de Validación (schemas.py)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tablas-de-hechos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tablas de Hechos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas de Hechos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#factregaliasschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FactRegaliasSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#factdemandagasnaturalschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FactDemandaGasNaturalSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#factenergiaelectricaschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FactEnergiaElectricaSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#factpotenciamaximaschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FactPotenciaMaximaSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#factofertagasschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FactOfertaGasSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimensiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dimensiones
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dimensiones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dimtiemposchema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DimTiempoSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimterritorioschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DimTerritorioSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimcamposchema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DimCampoSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimareaselectricasschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DimAreasElectricasSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dimresolucionesschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DimResolucionesSchema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agregar-nuevo-transformer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agregar Nuevo Transformer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agregar Nuevo Transformer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-para-api-nueva" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Para API nueva:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-para-excel-nuevo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Para Excel nuevo:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-para-script-totalmente-custom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Para script totalmente custom:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validacion-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validación de Datos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manejo-de-errores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manejo de Errores
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentacion-complementaria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentación Complementaria
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="transform">Transform<a class="headerlink" href="#transform" title="Permanent link">&para;</a></h1>
+<p>Módulo de transformación de datos RAW a estructura normalizada para carga en PostgreSQL.</p>
+<h2 id="arquitectura">Arquitectura<a class="headerlink" href="#arquitectura" title="Permanent link">&para;</a></h2>
+<p>El módulo <code>transformers/</code> sigue el patrón Strategy, permitiendo transformaciones específicas según el tipo de fuente de datos:</p>
+<div class="highlight"><pre><span></span><code>transformers/
+├── __init__.py          # Registry de transformers
+├── base.py              # Clase abstracta BaseTransformer
+├── schemas.py           # Modelos Pydantic para validación
+├── api.py               # Transforma JSON de APIs (Socrata)
+├── excel.py             # Transforma archivos Excel (UPME, MinMinas)
+├── custom.py            # Ejecuta scripts custom
+└── custom_scripts/      # Scripts de transformación personalizados
+    └── __example_transformer.py
+</code></pre></div>
+<h2 id="flujo-de-transformacion">Flujo de Transformación<a class="headerlink" href="#flujo-de-transformacion" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>┌─────────────────────┐
+│   Archivo RAW       │ (JSON/Excel/bytes desde Supabase Storage)
+│   (Storage)         │
+└──────────┬──────────┘
+           │
+           ├─ get_transformer(source_type)
+           ▼
+┌─────────────────────┐
+│   Transformer       │ (api.py / excel.py / custom.py)
+│   (parse + validate)│
+└──────────┬──────────┘
+           │
+           ├─ Parsear contenido según formato
+           ├─ Validar con Pydantic schemas
+           ▼
+┌─────────────────────┐
+│  Estructura         │ {&quot;valid_records&quot;: [...],
+│  Normalizada        │  &quot;errors&quot;: [...],
+│                     │  &quot;stats&quot;: {...}}
+└──────────┬──────────┘
+           │
+           ├─ Listo para Loader
+           ▼
+┌─────────────────────┐
+│   PostgreSQL        │ (fact_regalias, fact_demanda_gas, etc.)
+└─────────────────────┘
+</code></pre></div>
+<h2 id="uso">Uso<a class="headerlink" href="#uso" title="Permanent link">&para;</a></h2>
+<h3 id="1-obtener-transformer">1. Obtener Transformer<a class="headerlink" href="#1-obtener-transformer" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">workflows.full_etl.transformers</span> <span class="kn">import</span> <span class="n">get_transformer</span>
+
+<span class="c1"># Obtener transformer según tipo de fuente</span>
+<span class="n">transformer</span> <span class="o">=</span> <span class="n">get_transformer</span><span class="p">(</span><span class="s2">&quot;api&quot;</span><span class="p">)</span>  <span class="c1"># ApiTransformer</span>
+<span class="n">transformer</span> <span class="o">=</span> <span class="n">get_transformer</span><span class="p">(</span><span class="s2">&quot;complex_scraper&quot;</span><span class="p">)</span>  <span class="c1"># CustomTransformer</span>
+</code></pre></div>
+<h3 id="2-transformar-datos">2. Transformar Datos<a class="headerlink" href="#2-transformar-datos" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Cargar datos RAW desde Storage</span>
+<span class="n">raw_data</span> <span class="o">=</span> <span class="n">supabase</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="s2">&quot;raw-data&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s2">&quot;api/api_regalias/2024-11-25_120000.json&quot;</span><span class="p">)</span>
+
+<span class="c1"># Transformar</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">source_config</span><span class="p">)</span>
+
+<span class="c1"># Resultado</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Válidos: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;valid_records&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Errores: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;errors&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="3-estructura-del-resultado">3. Estructura del Resultado<a class="headerlink" href="#3-estructura-del-resultado" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">&quot;valid_records&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;fact_table&quot;</span><span class="p">:</span> <span class="s2">&quot;fact_regalias&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;tiempo_fecha&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;campo_nombre&quot;</span><span class="p">:</span> <span class="s2">&quot;RUBIALES&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;tipo_hidrocarburo&quot;</span><span class="p">:</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;precio_usd&quot;</span><span class="p">:</span> <span class="mf">3.45</span><span class="p">,</span>
+                <span class="o">...</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;dimensions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;tiempo&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;fecha&quot;</span><span class="p">:</span> <span class="s2">&quot;2024-01-01&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;anio&quot;</span><span class="p">:</span> <span class="mi">2024</span><span class="p">,</span>
+                    <span class="s2">&quot;mes&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="s2">&quot;es_proyeccion&quot;</span><span class="p">:</span> <span class="kc">False</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;territorio&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;departamento&quot;</span><span class="p">:</span> <span class="s2">&quot;META&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;municipio&quot;</span><span class="p">:</span> <span class="s2">&quot;ACACIAS&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;latitud&quot;</span><span class="p">:</span> <span class="mf">3.98</span><span class="p">,</span>
+                    <span class="s2">&quot;longitud&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">73.76</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;campo&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;nombre_campo&quot;</span><span class="p">:</span> <span class="s2">&quot;RUBIALES&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;contrato&quot;</span><span class="p">:</span> <span class="s2">&quot;LLANOS 5&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;activo&quot;</span><span class="p">:</span> <span class="kc">True</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="o">...</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;errors&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;record_index&quot;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span>
+            <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;ValidationError: campo &#39;precio_usd&#39; debe ser &gt;= 0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;raw_record&quot;</span><span class="p">:</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+        <span class="p">},</span>
+        <span class="o">...</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;stats&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;total_raw&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="mi">995</span><span class="p">,</span>
+        <span class="s2">&quot;errors&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">&quot;processing_time_seconds&quot;</span><span class="p">:</span> <span class="mf">12.5</span><span class="p">,</span>
+        <span class="s2">&quot;error_categories&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;Porcentaje regalía fuera de rango&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">&quot;Tipo hidrocarburo inválido&quot;</span><span class="p">:</span> <span class="mi">2</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="transformers-disponibles">Transformers Disponibles<a class="headerlink" href="#transformers-disponibles" title="Permanent link">&para;</a></h2>
+<h3 id="apitransformer-apipy">ApiTransformer (<code>api.py</code>)<a class="headerlink" href="#apitransformer-apipy" title="Permanent link">&para;</a></h3>
+<p>Transforma JSON de APIs (principalmente Socrata). <strong>Genérico y parametrizado</strong> mediante <code>TransformationConfig</code>.</p>
+<p><strong>Fuentes soportadas:</strong>
+- <code>api_regalias</code> → ANH Consolidación de Regalías → <code>fact_regalias</code>
+- Extensible: cualquier API Socrata registrando config en <code>CONFIG_REGISTRY</code></p>
+<p><strong>Características:</strong>
+- Parseo rápido con orjson (fallback a json)
+- Pre-validaciones vectorizadas en pandas (masivas, eficientes)
+- Derivación de columnas parametrizada
+- Mapeo genérico a fact tables + dimensiones
+- <strong>Dirigido por config</strong>: sin código hardcodeado por fuente</p>
+<p><strong>Ejemplo de uso:</strong>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">workflows.full_etl.transformers</span> <span class="kn">import</span> <span class="n">ApiTransformer</span>
+
+<span class="n">transformer</span> <span class="o">=</span> <span class="n">ApiTransformer</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">json_data</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;api_regalias&quot;</span><span class="p">})</span>
+</code></pre></div></p>
+<h3 id="exceltransformer-excelpy">ExcelTransformer (<code>excel.py</code>)<a class="headerlink" href="#exceltransformer-excelpy" title="Permanent link">&para;</a></h3>
+<p>Transforma archivos Excel (UPME, MinMinas).</p>
+<p><strong>Fuentes soportadas:</strong>
+- <code>upme_gas_natural</code> → Proyección Gas Natural → <code>fact_demanda_gas_natural</code>
+- <code>upme_energia_electrica</code> → Proyección Energía Eléctrica → <code>fact_energia_electrica</code>
+- <code>upme_potencia_maxima</code> → Proyección Potencia Máxima → <code>fact_potencia_maxima</code>
+- <code>upme_capacidad_instalada</code> → Capacidad Instalada GD → <code>fact_capacidad_instalada</code>
+- <code>minminas_oferta</code> → Declaración de Producción → <code>fact_oferta_gas</code></p>
+<p><strong>Características:</strong>
+- Parseo con Pandas + OpenPyXL
+- Soporte para múltiples hojas
+- Conversión automática de unidades (KPCD/MPCD → GBTUD)
+- Validación de CHECK constraints</p>
+<p><strong>Ejemplo de uso:</strong>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">workflows.full_etl.transformers</span> <span class="kn">import</span> <span class="n">ExcelTransformer</span>
+
+<span class="n">transformer</span> <span class="o">=</span> <span class="n">ExcelTransformer</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">excel_bytes</span><span class="p">,</span> <span class="n">source_config</span><span class="p">)</span>
+</code></pre></div></p>
+<h3 id="customtransformer-custompy">CustomTransformer (<code>custom.py</code>)<a class="headerlink" href="#customtransformer-custompy" title="Permanent link">&para;</a></h3>
+<p>Ejecuta scripts de transformación personalizados.</p>
+<p><strong>Convención:</strong>
+- Scripts en: <code>transformers/custom_scripts/{source_id}_transformer.py</code>
+- Debe exponer: <code>transform(raw_data, source_config) → dict</code></p>
+<p><strong>Ejemplo de script custom:</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># custom_scripts/banco_central_transformer.py</span>
+
+<span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">source_config</span><span class="p">):</span>
+    <span class="n">valid_records</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Tu lógica de transformación aquí</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;valid_records&quot;</span><span class="p">:</span> <span class="n">valid_records</span><span class="p">,</span>
+        <span class="s2">&quot;errors&quot;</span><span class="p">:</span> <span class="n">errors</span><span class="p">,</span>
+        <span class="s2">&quot;stats&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;total_raw&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_records</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">),</span>
+            <span class="s2">&quot;valid&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_records</span><span class="p">),</span>
+            <span class="s2">&quot;errors&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></p>
+<h2 id="schemas-de-validacion-schemaspy">Schemas de Validación (<code>schemas.py</code>)<a class="headerlink" href="#schemas-de-validacion-schemaspy" title="Permanent link">&para;</a></h2>
+<h3 id="tablas-de-hechos">Tablas de Hechos<a class="headerlink" href="#tablas-de-hechos" title="Permanent link">&para;</a></h3>
+<h4 id="factregaliasschema">FactRegaliasSchema<a class="headerlink" href="#factregaliasschema" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">tiempo_fecha</span><span class="p">:</span> <span class="n">date</span>
+<span class="n">campo_nombre</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">tipo_hidrocarburo</span><span class="p">:</span> <span class="n">TipoHidrocarburo</span>  <span class="c1"># &quot;G&quot; o &quot;O&quot;</span>
+<span class="n">precio_usd</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">porcentaje_regalia</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">produccion_gravable</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">volumen_regalia</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">valor_regalias_cop</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="factdemandagasnaturalschema">FactDemandaGasNaturalSchema<a class="headerlink" href="#factdemandagasnaturalschema" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">tiempo_fecha</span><span class="p">:</span> <span class="n">date</span>
+<span class="n">periodicidad</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &quot;mensual&quot;, &quot;anual&quot;</span>
+<span class="n">categoria</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># COMPRESORES, INDUSTRIAL, PETROLERO, PETROQUIMICO, RESIDENCIAL, TERCIARIO, TERMOELECTRICO, GNC_TRANSPORTE, GNL_TRANSPORTE, AGREGADO</span>
+<span class="n">region</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Región geográfica</span>
+<span class="n">nodo</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Nodo específico (opcional)</span>
+<span class="n">escenario</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># ESC_BAJO, ESC_MEDIO, ESC_ALTO</span>
+<span class="n">valor</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">revision</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># REV_JULIO_2025, REV_DIC_2023, etc.</span>
+</code></pre></div>
+<h4 id="factenergiaelectricaschema">FactEnergiaElectricaSchema<a class="headerlink" href="#factenergiaelectricaschema" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">tiempo_fecha</span><span class="p">:</span> <span class="n">date</span>
+<span class="n">periodicidad</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &quot;mensual&quot;, &quot;anual&quot;</span>
+<span class="n">unidad</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># GWh-mes, GWh-año</span>
+<span class="n">area_id</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">descriptor</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">escenario</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># ESC_BAJO, ESC_MEDIO, ESC_ALTO, IC_SUP_95, IC_INF_95, IC_SUP_68, IC_INF_68</span>
+<span class="n">revision</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">valor</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="factpotenciamaximaschema">FactPotenciaMaximaSchema<a class="headerlink" href="#factpotenciamaximaschema" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">tiempo_fecha</span><span class="p">:</span> <span class="n">date</span>
+<span class="n">periodicidad</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &quot;mensual&quot;, &quot;anual&quot;</span>
+<span class="n">unidad</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># MW-mes, MW-año</span>
+<span class="n">area_id</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">descriptor</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">escenario</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># ESC_BAJO, ESC_MEDIO, ESC_ALTO, IC_SUP_*, IC_INF_*</span>
+<span class="n">revision</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">valor</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="factofertagasschema">FactOfertaGasSchema<a class="headerlink" href="#factofertagasschema" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">tiempo_fecha</span><span class="p">:</span> <span class="n">date</span>
+<span class="n">campo_nombre</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">resolucion_id</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">tipo_produccion</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># PTDV, PC_CONTRATOS, PC_EXPORTACIONES, PP, GAS_OPERACION, CIDV</span>
+<span class="n">operador</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">es_operador_campo</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="n">es_participacion_estado</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="n">valor_gbtud</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">poder_calorifico_btu_pc</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">optional</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="dimensiones">Dimensiones<a class="headerlink" href="#dimensiones" title="Permanent link">&para;</a></h3>
+<h4 id="dimtiemposchema">DimTiempoSchema<a class="headerlink" href="#dimtiemposchema" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">fecha</span><span class="p">:</span> <span class="n">date</span>
+<span class="n">anio</span><span class="p">:</span> <span class="nb">int</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1900</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">2100</span><span class="p">)</span>
+<span class="n">mes</span><span class="p">:</span> <span class="nb">int</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">nombre_mes</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &quot;Enero&quot;, &quot;Febrero&quot;, etc.</span>
+<span class="n">es_proyeccion</span><span class="p">:</span> <span class="nb">bool</span>
+</code></pre></div>
+<h4 id="dimterritorioschema">DimTerritorioSchema<a class="headerlink" href="#dimterritorioschema" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">departamento</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">municipio</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">latitud</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">longitud</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=-</span><span class="mi">180</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">divipola</span><span class="p">:</span> <span class="nb">str</span> <span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="dimcamposchema">DimCampoSchema<a class="headerlink" href="#dimcamposchema" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">nombre_campo</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">contrato</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">operador</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">asociados</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="n">participacion_estado</span><span class="p">:</span> <span class="n">Decimal</span> <span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">territorio_id</span><span class="p">:</span> <span class="nb">int</span>
+<span class="n">activo</span><span class="p">:</span> <span class="nb">bool</span>
+</code></pre></div>
+<h4 id="dimareaselectricasschema">DimAreasElectricasSchema<a class="headerlink" href="#dimareaselectricasschema" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">codigo</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Código único del área</span>
+<span class="n">nombre</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Nombre del área</span>
+<span class="n">categoria</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># nacional, area_sin, combinado, gd, proyecto</span>
+<span class="n">descripcion</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<h4 id="dimresolucionesschema">DimResolucionesSchema<a class="headerlink" href="#dimresolucionesschema" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="n">numero_resolucion</span><span class="p">:</span> <span class="nb">str</span>
+<span class="n">fecha_resolucion</span><span class="p">:</span> <span class="n">date</span>
+<span class="n">periodo_desde</span><span class="p">:</span> <span class="n">date</span>
+<span class="n">periodo_hasta</span><span class="p">:</span> <span class="n">date</span>
+<span class="n">url_pdf</span><span class="p">:</span> <span class="nb">str</span> <span class="p">(</span><span class="n">optional</span><span class="p">)</span>
+<span class="n">url_soporte_magnetico</span><span class="p">:</span> <span class="nb">str</span> <span class="p">(</span><span class="n">optional</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="agregar-nuevo-transformer">Agregar Nuevo Transformer<a class="headerlink" href="#agregar-nuevo-transformer" title="Permanent link">&para;</a></h2>
+<h3 id="1-para-api-nueva">1. Para API nueva:<a class="headerlink" href="#1-para-api-nueva" title="Permanent link">&para;</a></h3>
+<p>Editar <code>api.py</code>:
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_get_transformer_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">transformers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;api_regalias&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_socrata_regalias</span><span class="p">,</span>
+        <span class="s2">&quot;nueva_api&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_nueva_api</span><span class="p">,</span>  <span class="c1"># ← Agregar</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">transformers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_generic_json</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_transform_nueva_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_record</span><span class="p">,</span> <span class="n">source_id</span><span class="p">):</span>
+    <span class="c1"># Tu lógica aquí</span>
+    <span class="k">pass</span>
+</code></pre></div></p>
+<h3 id="2-para-excel-nuevo">2. Para Excel nuevo:<a class="headerlink" href="#2-para-excel-nuevo" title="Permanent link">&para;</a></h3>
+<p>Editar <code>excel.py</code>:
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">_get_transformer_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">transformers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;upme_demanda&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_upme_demanda</span><span class="p">,</span>
+        <span class="s2">&quot;minminas_oferta&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_minminas_oferta</span><span class="p">,</span>
+        <span class="s2">&quot;nuevo_excel&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_nuevo_excel</span><span class="p">,</span>  <span class="c1"># ← Agregar</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">transformers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_generic_excel</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_transform_nuevo_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">excel_file</span><span class="p">,</span> <span class="n">source_id</span><span class="p">):</span>
+    <span class="c1"># Tu lógica aquí</span>
+    <span class="k">return</span> <span class="n">valid_records</span><span class="p">,</span> <span class="n">errors</span>
+</code></pre></div></p>
+<h3 id="3-para-script-totalmente-custom">3. Para script totalmente custom:<a class="headerlink" href="#3-para-script-totalmente-custom" title="Permanent link">&para;</a></h3>
+<p>Crear archivo <code>custom_scripts/{source_id}_transformer.py</code> con función <code>transform()</code>.</p>
+<h2 id="validacion-de-datos">Validación de Datos<a class="headerlink" href="#validacion-de-datos" title="Permanent link">&para;</a></h2>
+<p><strong>En ApiTransformer (parametrizado):</strong>
+- Pre-validaciones vectorizadas en pandas (antes de mapear)
+- Reglas definidas en <code>TransformationConfig.column_validations</code>
+- Tipos: RANGE, ENUM, NON_NEGATIVE, BETWEEN_0_100, DATE_VALID, etc.
+- Cada violación genera error sin detener procesamiento</p>
+<p><strong>Ejemplo de regla de validación:</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># En config.py</span>
+<span class="n">ColumnValidation</span><span class="p">(</span>
+    <span class="n">column</span><span class="o">=</span><span class="s2">&quot;porcregalia&quot;</span><span class="p">,</span>
+    <span class="n">rule</span><span class="o">=</span><span class="n">ValidationRule</span><span class="o">.</span><span class="n">BETWEEN_0_100</span><span class="p">,</span>
+    <span class="n">error_message</span><span class="o">=</span><span class="s2">&quot;Porcentaje regalía fuera de rango&quot;</span>
+<span class="p">)</span>
+</code></pre></div></p>
+<p><strong>En ExcelTransformer &amp; CustomTransformer:</strong>
+- Pueden usar schemas Pydantic (e.g., <code>FactRegaliasSchema</code>)
+- Validación exhaustiva post-extracción
+- Genera <code>ValidationError</code> capturado en estructura de errores</p>
+<h2 id="manejo-de-errores">Manejo de Errores<a class="headerlink" href="#manejo-de-errores" title="Permanent link">&para;</a></h2>
+<p>Los transformers <strong>NO detienen el procesamiento</strong> ante errores de validación individual. En su lugar:</p>
+<ol>
+<li><strong>Registro inválido</strong> → Se agrega a <code>errors[]</code></li>
+<li><strong>Continúa procesando</strong> siguientes registros</li>
+<li><strong>Al final retorna</strong> todos los válidos + todos los errores</li>
+</ol>
+<p>Esto permite:
+- Cargar datos parciales (registros válidos)
+- Auditar errores para corrección manual
+- No perder todo el batch por un solo registro corrupto</p>
+<p><strong>Ejemplo de error:</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="s2">&quot;record_index&quot;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span>
+    <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;1 validation error for FactRegaliasSchema</span><span class="se">\n</span><span class="s2">precio_usd</span><span class="se">\n</span><span class="s2">  Input should be greater than or equal to 0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;raw_record&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;departamento&quot;</span><span class="p">:</span> <span class="s2">&quot;META&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;campo&quot;</span><span class="p">:</span> <span class="s2">&quot;RUBIALES&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;precio_usd&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">,</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># Test básico de transformer</span>
+<span class="kn">from</span> <span class="nn">workflows.full_etl.transformers</span> <span class="kn">import</span> <span class="n">get_transformer</span>
+
+<span class="n">source_config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;api_regalias&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;api&quot;</span><span class="p">,</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+
+<span class="n">raw_data</span> <span class="o">=</span> <span class="s1">&#39;{&quot;data&quot;: [{&quot;departamento&quot;: &quot;META&quot;, ...}]}&#39;</span>
+
+<span class="n">transformer</span> <span class="o">=</span> <span class="n">get_transformer</span><span class="p">(</span><span class="s2">&quot;api&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">source_config</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;valid&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;valid_records&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">][</span><span class="s2">&quot;valid&quot;</span><span class="p">]</span>
+</code></pre></div>
+<h2 id="documentacion-complementaria">Documentación Complementaria<a class="headerlink" href="#documentacion-complementaria" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>api_transformer_extension.md</code></strong>: Guía paso-a-paso para extender ApiTransformer a nuevas fuentes</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

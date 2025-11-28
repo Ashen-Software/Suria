@@ -16,7 +16,7 @@
         <link rel="prev" href="../../api/endpoints/">
       
       
-        <link rel="next" href="../../assets/diagrams/db-schema.png">
+        <link rel="next" href="../../guias/configuracion_fuentes/">
       
       
         
@@ -784,10 +784,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#diagrama-relacional-simplificado" class="md-nav__link">
+  <a href="#diagrama-relacional" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Diagrama Relacional Simplificado
+        Diagrama Relacional
       
     </span>
   </a>
@@ -795,22 +795,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tablas" class="md-nav__link">
+  <a href="#tablas-de-configuracion-etl" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tablas
+        Tablas de Configuración ETL
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Tablas">
+    <nav class="md-nav" aria-label="Tablas de Configuración ETL">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-etl_sources" class="md-nav__link">
+  <a href="#etl_sources" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. etl_sources
+        etl_sources
       
     </span>
   </a>
@@ -818,10 +818,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-source_check_history" class="md-nav__link">
+  <a href="#source_check_history" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. source_check_history
+        source_check_history
       
     </span>
   </a>
@@ -834,10 +834,204 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tipos-enumerados-enums" class="md-nav__link">
+  <a href="#tablas-de-dimensiones" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tipos Enumerados (ENUMs)
+        Tablas de Dimensiones
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas de Dimensiones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dim_tiempo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_tiempo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_territorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_territorios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_campos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_campos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_areas_electricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_areas_electricas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_resoluciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_resoluciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tablas-de-referencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tablas de Referencia
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas de Referencia">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ref_unidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ref_unidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tablas-de-hechos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tablas de Hechos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas de Hechos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fact_regalias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_regalias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_demanda_gas_natural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_demanda_gas_natural
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_energia_electrica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_energia_electrica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_potencia_maxima" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_potencia_maxima
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_capacidad_instalada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_capacidad_instalada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_oferta_gas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_oferta_gas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_participacion_campo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_participacion_campo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tipos-enumerados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipos Enumerados
       
     </span>
   </a>
@@ -845,10 +1039,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#migracion-script" class="md-nav__link">
+  <a href="#script-de-migracion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Migracion script
+        Script de Migración
       
     </span>
   </a>
@@ -1065,6 +1259,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/transform_process/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proceso de transformación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1099,10 +1321,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#diagrama-relacional-simplificado" class="md-nav__link">
+  <a href="#diagrama-relacional" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Diagrama Relacional Simplificado
+        Diagrama Relacional
       
     </span>
   </a>
@@ -1110,22 +1332,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tablas" class="md-nav__link">
+  <a href="#tablas-de-configuracion-etl" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tablas
+        Tablas de Configuración ETL
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Tablas">
+    <nav class="md-nav" aria-label="Tablas de Configuración ETL">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-etl_sources" class="md-nav__link">
+  <a href="#etl_sources" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. etl_sources
+        etl_sources
       
     </span>
   </a>
@@ -1133,10 +1355,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-source_check_history" class="md-nav__link">
+  <a href="#source_check_history" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. source_check_history
+        source_check_history
       
     </span>
   </a>
@@ -1149,10 +1371,204 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tipos-enumerados-enums" class="md-nav__link">
+  <a href="#tablas-de-dimensiones" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tipos Enumerados (ENUMs)
+        Tablas de Dimensiones
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas de Dimensiones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dim_tiempo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_tiempo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_territorios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_territorios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_campos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_campos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_areas_electricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_areas_electricas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dim_resoluciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_resoluciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tablas-de-referencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tablas de Referencia
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas de Referencia">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ref_unidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ref_unidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tablas-de-hechos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tablas de Hechos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tablas de Hechos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fact_regalias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_regalias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_demanda_gas_natural" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_demanda_gas_natural
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_energia_electrica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_energia_electrica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_potencia_maxima" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_potencia_maxima
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_capacidad_instalada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_capacidad_instalada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_oferta_gas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_oferta_gas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact_participacion_campo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fact_participacion_campo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tipos-enumerados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipos Enumerados
       
     </span>
   </a>
@@ -1160,10 +1576,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#migracion-script" class="md-nav__link">
+  <a href="#script-de-migracion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Migracion script
+        Script de Migración
       
     </span>
   </a>
@@ -1188,12 +1604,40 @@
 
 
 <h1 id="esquema-de-base-de-datos">Esquema de Base de Datos<a class="headerlink" href="#esquema-de-base-de-datos" title="Permanent link">&para;</a></h1>
-<p>Este documento detalla la estructura de la base de datos en Supabase (PostgreSQL) utilizada para orquestar el ETL.</p>
-<h2 id="diagrama-relacional-simplificado">Diagrama Relacional Simplificado<a class="headerlink" href="#diagrama-relacional-simplificado" title="Permanent link">&para;</a></h2>
-<p><code>etl_sources (1) &lt;---&gt; (N) source_check_history</code></p>
-<h2 id="tablas">Tablas<a class="headerlink" href="#tablas" title="Permanent link">&para;</a></h2>
-<h3 id="1-etl_sources">1. <code>etl_sources</code><a class="headerlink" href="#1-etl_sources" title="Permanent link">&para;</a></h3>
-<p>Almacena la configuración maestra de cada fuente de datos. Es la fuente de verdad para el Scheduler.</p>
+<p>Estructura de la base de datos en Supabase (PostgreSQL) para el sistema ETL de datos energéticos.</p>
+<h2 id="diagrama-relacional">Diagrama Relacional<a class="headerlink" href="#diagrama-relacional" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>                              ┌─────────────────┐
+                              │   etl_sources   │
+                              └────────┬────────┘
+                                       │ 1:N
+    ┌──────────────┬───────────────────┼───────────────────┬──────────────────┐
+    │              │                   │                   │                  │
+    ▼              ▼                   ▼                   ▼                  ▼
+┌─────────┐  ┌───────────────┐  ┌─────────────┐  ┌────────────┐  ┌─────────────────┐
+│fact_    │  │fact_demanda_  │  │fact_energia_│  │fact_poten- │  │fact_capacidad_  │
+│regalias │  │ gas_natural   │  │  electrica  │  │cia_maxima  │  │   instalada     │
+│ (ANH)   │  │   (UPME)      │  │   (UPME)    │  │  (UPME)    │  │     (UPME)      │
+└────┬────┘  └───────┬───────┘  └──────┬──────┘  └─────┬──────┘  └────────┬────────┘
+     │               │                 │               │                  │
+     └───────────────┴────────┬────────┴───────────────┴──────────────────┘
+                              ▼
+                       ┌──────────────┐
+                       │  dim_tiempo  │
+                       └──────────────┘
+
+┌──────────────────┐    ┌───────────────┐    ┌───────────────┐
+│dim_areas_electric│    │  dim_campos   │───►│dim_territorios│
+└──────────────────┘    └───────────────┘    └───────────────┘
+
+    ┌────────────────┐    ┌──────────────────────┐
+    │dim_resoluciones│    │fact_participacion_   │
+    └────────────────┘    │       campo          │
+                          └──────────────────────┘
+</code></pre></div>
+<hr />
+<h2 id="tablas-de-configuracion-etl">Tablas de Configuración ETL<a class="headerlink" href="#tablas-de-configuracion-etl" title="Permanent link">&para;</a></h2>
+<h3 id="etl_sources"><code>etl_sources</code><a class="headerlink" href="#etl_sources" title="Permanent link">&para;</a></h3>
+<p>Configuración maestra de cada fuente de datos.</p>
 <table>
 <thead>
 <tr>
@@ -1206,52 +1650,42 @@
 <tr>
 <td style="text-align: left;"><code>id</code></td>
 <td style="text-align: left;"><code>text</code></td>
-<td style="text-align: left;"><strong>PK</strong>. Identificador único (ej: <code>min_minas_gas</code>, <code>precios_bolsa</code>).</td>
+<td style="text-align: left;"><strong>PK</strong>. Identificador único.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>name</code></td>
 <td style="text-align: left;"><code>text</code></td>
-<td style="text-align: left;">Nombre legible para humanos.</td>
+<td style="text-align: left;">Nombre legible.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>active</code></td>
 <td style="text-align: left;"><code>boolean</code></td>
-<td style="text-align: left;">Interruptor general. Si es <code>false</code>, el scheduler ignora esta fuente.</td>
+<td style="text-align: left;">Activar/desactivar fuente.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>type</code></td>
 <td style="text-align: left;"><code>text</code></td>
-<td style="text-align: left;">Define el checker a usar: <code>api</code>, <code>scrape</code>, <code>complex_scraper</code>.</td>
+<td style="text-align: left;">Tipo: <code>api</code>, <code>scrape</code>, <code>complex_scraper</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>schedule_cron</code></td>
 <td style="text-align: left;"><code>text</code></td>
-<td style="text-align: left;">Expresión CRON para la frecuencia de chequeo (ej: <code>0 8 * * *</code>).</td>
+<td style="text-align: left;">Expresión CRON.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>config</code></td>
 <td style="text-align: left;"><code>jsonb</code></td>
-<td style="text-align: left;">Parámetros específicos del checker (URL, headers, selectores CSS).</td>
+<td style="text-align: left;">Configuración del checker.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>storage_config</code></td>
 <td style="text-align: left;"><code>jsonb</code></td>
-<td style="text-align: left;">Configuración de dónde guardar los datos RAW (rutas, buckets).</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>created_at</code></td>
-<td style="text-align: left;"><code>timestamptz</code></td>
-<td style="text-align: left;">Fecha de creación.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>updated_at</code></td>
-<td style="text-align: left;"><code>timestamptz</code></td>
-<td style="text-align: left;">Fecha de última modificación de la config.</td>
+<td style="text-align: left;">Configuración de almacenamiento.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="2-source_check_history">2. <code>source_check_history</code><a class="headerlink" href="#2-source_check_history" title="Permanent link">&para;</a></h3>
-<p>Bitácora inmutable de cada ejecución del proceso <code>check-updates</code>. Permite auditar la salud de las fuentes y detectar cuándo hubo cambios reales.</p>
+<h3 id="source_check_history"><code>source_check_history</code><a class="headerlink" href="#source_check_history" title="Permanent link">&para;</a></h3>
+<p>Bitácora de ejecuciones del proceso <code>check-updates</code>.</p>
 <table>
 <thead>
 <tr>
@@ -1264,42 +1698,735 @@
 <tr>
 <td style="text-align: left;"><code>id</code></td>
 <td style="text-align: left;"><code>bigint</code></td>
-<td style="text-align: left;"><strong>PK</strong>. Autoincremental.</td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>source_id</code></td>
 <td style="text-align: left;"><code>text</code></td>
-<td style="text-align: left;"><strong>FK</strong>. Referencia a <code>etl_sources.id</code>.</td>
+<td style="text-align: left;"><strong>FK</strong> → <code>etl_sources.id</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>status</code></td>
 <td style="text-align: left;"><code>enum</code></td>
-<td style="text-align: left;">Estado del chequeo: <code>no_change</code>, <code>changed</code>, <code>failed</code>.</td>
+<td style="text-align: left;"><code>no_change</code>, <code>changed</code>, <code>failed</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>checksum</code></td>
 <td style="text-align: left;"><code>text</code></td>
-<td style="text-align: left;">Hash MD5 del contenido detectado (para comparar cambios).</td>
+<td style="text-align: left;">Hash MD5 del contenido.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>metadata</code></td>
 <td style="text-align: left;"><code>jsonb</code></td>
-<td style="text-align: left;">Datos variables de la ejecución (URL consultada, notas de error, método usado).</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>created_at</code></td>
-<td style="text-align: left;"><code>timestamptz</code></td>
-<td style="text-align: left;">Fecha y hora exacta de la ejecución.</td>
+<td style="text-align: left;">Datos de la ejecución.</td>
 </tr>
 </tbody>
 </table>
-<h2 id="tipos-enumerados-enums">Tipos Enumerados (ENUMs)<a class="headerlink" href="#tipos-enumerados-enums" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="tablas-de-dimensiones">Tablas de Dimensiones<a class="headerlink" href="#tablas-de-dimensiones" title="Permanent link">&para;</a></h2>
+<h3 id="dim_tiempo"><code>dim_tiempo</code><a class="headerlink" href="#dim_tiempo" title="Permanent link">&para;</a></h3>
+<p>Dimensión temporal compartida. Granularidad mensual.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>serial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>fecha</code></td>
+<td style="text-align: left;"><code>date</code></td>
+<td style="text-align: left;">Fecha del período (UNIQUE).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>anio</code></td>
+<td style="text-align: left;"><code>smallint</code></td>
+<td style="text-align: left;">Año.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>mes</code></td>
+<td style="text-align: left;"><code>smallint</code></td>
+<td style="text-align: left;">Mes (1-12).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>trimestre</code></td>
+<td style="text-align: left;"><code>smallint</code></td>
+<td style="text-align: left;"><strong>GENERATED</strong>. (1-4).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>semestre</code></td>
+<td style="text-align: left;"><code>smallint</code></td>
+<td style="text-align: left;"><strong>GENERATED</strong>. (1-2).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>nombre_mes</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Nombre en español.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>es_proyeccion</code></td>
+<td style="text-align: left;"><code>boolean</code></td>
+<td style="text-align: left;">Dato proyectado vs histórico.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dim_territorios"><code>dim_territorios</code><a class="headerlink" href="#dim_territorios" title="Permanent link">&para;</a></h3>
+<p>Dimensión geográfica con departamentos y municipios.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>serial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>departamento</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Nombre del departamento.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>municipio</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Nombre del municipio.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>latitud</code></td>
+<td style="text-align: left;"><code>numeric(10,7)</code></td>
+<td style="text-align: left;">Coordenada.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>longitud</code></td>
+<td style="text-align: left;"><code>numeric(10,7)</code></td>
+<td style="text-align: left;">Coordenada.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>divipola</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Código DANE DIVIPOLA.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dim_campos"><code>dim_campos</code><a class="headerlink" href="#dim_campos" title="Permanent link">&para;</a></h3>
+<p>Dimensión de campos petroleros/gasíferos.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>serial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>nombre_campo</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Nombre del campo (UNIQUE).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>contrato</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Contrato asociado.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>operador</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Empresa operadora.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>asociados</code></td>
+<td style="text-align: left;"><code>text[]</code></td>
+<td style="text-align: left;">Empresas asociadas.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>participacion_estado</code></td>
+<td style="text-align: left;"><code>numeric(5,2)</code></td>
+<td style="text-align: left;">% participación estatal.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>territorio_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_territorios.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>activo</code></td>
+<td style="text-align: left;"><code>boolean</code></td>
+<td style="text-align: left;">Estado del campo.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dim_areas_electricas"><code>dim_areas_electricas</code><a class="headerlink" href="#dim_areas_electricas" title="Permanent link">&para;</a></h3>
+<p>Catálogo de ámbitos/áreas para proyecciones eléctricas.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>serial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>codigo</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Código único.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>nombre</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Nombre del área.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>categoria</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>nacional</code>, <code>area_sin</code>, <code>combinado</code>, <code>gd</code>, <code>proyecto</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>descripcion</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Descripción.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dim_resoluciones"><code>dim_resoluciones</code><a class="headerlink" href="#dim_resoluciones" title="Permanent link">&para;</a></h3>
+<p>Resoluciones MinMinas con periodos de vigencia.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>serial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>numero_resolucion</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Número de resolución (UNIQUE).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>fecha_resolucion</code></td>
+<td style="text-align: left;"><code>date</code></td>
+<td style="text-align: left;">Fecha de emisión.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>periodo_desde</code></td>
+<td style="text-align: left;"><code>date</code></td>
+<td style="text-align: left;">Inicio de vigencia.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>periodo_hasta</code></td>
+<td style="text-align: left;"><code>date</code></td>
+<td style="text-align: left;">Fin de vigencia.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>url_pdf</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Enlace al PDF.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>url_soporte_magnetico</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Enlace a anexos.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tablas-de-referencia">Tablas de Referencia<a class="headerlink" href="#tablas-de-referencia" title="Permanent link">&para;</a></h2>
+<h3 id="ref_unidades"><code>ref_unidades</code><a class="headerlink" href="#ref_unidades" title="Permanent link">&para;</a></h3>
+<p>Factores de conversión entre unidades de medida.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Código</th>
+<th style="text-align: left;">Nombre</th>
+<th style="text-align: left;">Factor a GBTUD</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>GBTUD</code></td>
+<td style="text-align: left;">Giga BTU por Día</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">Unidad base demanda</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>KPCD</code></td>
+<td style="text-align: left;">Kilo Pies Cúbicos por Día</td>
+<td style="text-align: left;">0.001</td>
+<td style="text-align: left;">1 KPCD ≈ 0.001 GBTUD</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>MPCD</code></td>
+<td style="text-align: left;">Millones Pies Cúbicos por Día</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1 MPCD ≈ 1 GBTUD</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>BLS</code></td>
+<td style="text-align: left;">Barriles</td>
+<td style="text-align: left;">NULL</td>
+<td style="text-align: left;">Unidad de líquidos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>KPC</code></td>
+<td style="text-align: left;">Kilo Pies Cúbicos</td>
+<td style="text-align: left;">0.001</td>
+<td style="text-align: left;">Volumen gas</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tablas-de-hechos">Tablas de Hechos<a class="headerlink" href="#tablas-de-hechos" title="Permanent link">&para;</a></h2>
+<h3 id="fact_regalias"><code>fact_regalias</code><a class="headerlink" href="#fact_regalias" title="Permanent link">&para;</a></h3>
+<p><strong>Fuente</strong>: API Socrata ANH (j7js-yk74)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>bigserial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tiempo_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_tiempo.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>campo_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_campos.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tipo_produccion</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Tipo (QB/P/B/I/QI).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tipo_hidrocarburo</code></td>
+<td style="text-align: left;"><code>char(1)</code></td>
+<td style="text-align: left;"><code>G</code>=Gas, <code>O</code>=Petróleo.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>precio_usd</code></td>
+<td style="text-align: left;"><code>numeric(12,4)</code></td>
+<td style="text-align: left;">Precio USD.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>porcentaje_regalia</code></td>
+<td style="text-align: left;"><code>numeric(5,2)</code></td>
+<td style="text-align: left;">% gravable.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>produccion_gravable</code></td>
+<td style="text-align: left;"><code>numeric(18,4)</code></td>
+<td style="text-align: left;">Volumen producción.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>volumen_regalia</code></td>
+<td style="text-align: left;"><code>numeric(18,4)</code></td>
+<td style="text-align: left;">Volumen regalías.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>valor_regalias_cop</code></td>
+<td style="text-align: left;"><code>numeric(18,2)</code></td>
+<td style="text-align: left;">Valor en COP.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fact_demanda_gas_natural"><code>fact_demanda_gas_natural</code><a class="headerlink" href="#fact_demanda_gas_natural" title="Permanent link">&para;</a></h3>
+<p><strong>Fuente</strong>: UPME - Proyección de Demanda Gas Natural</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>bigserial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tiempo_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_tiempo.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>periodicidad</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>mensual</code>, <code>anual</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>categoria</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>COMPRESORES</code>, <code>INDUSTRIAL</code>, <code>PETROLERO</code>, <code>PETROQUIMICO</code>, <code>RESIDENCIAL</code>, <code>TERCIARIO</code>, <code>TERMOELECTRICO</code>, <code>GNC_TRANSPORTE</code>, <code>GNL_TRANSPORTE</code>, <code>AGREGADO</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>region</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Región geográfica.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>nodo</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Nodo específico.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>escenario</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>ESC_BAJO</code>, <code>ESC_MEDIO</code>, <code>ESC_ALTO</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>valor</code></td>
+<td style="text-align: left;"><code>numeric(18,6)</code></td>
+<td style="text-align: left;">Valor en GBTUD.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>revision</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Etiqueta de revisión.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fact_energia_electrica"><code>fact_energia_electrica</code><a class="headerlink" href="#fact_energia_electrica" title="Permanent link">&para;</a></h3>
+<p><strong>Fuente</strong>: UPME - Proyección de Demanda Energía Eléctrica</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>bigserial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tiempo_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_tiempo.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>periodicidad</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>mensual</code>, <code>anual</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unidad</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>GWh-mes</code>, <code>GWh-año</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>area_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_areas_electricas.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>descriptor</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Descriptor adicional.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>escenario</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>ESC_BAJO</code>, <code>ESC_MEDIO</code>, <code>ESC_ALTO</code>, <code>IC_SUP_95</code>, <code>IC_INF_95</code>, <code>IC_SUP_68</code>, <code>IC_INF_68</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>revision</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Etiqueta de revisión.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>valor</code></td>
+<td style="text-align: left;"><code>numeric(18,6)</code></td>
+<td style="text-align: left;">Valor en GWh.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fact_potencia_maxima"><code>fact_potencia_maxima</code><a class="headerlink" href="#fact_potencia_maxima" title="Permanent link">&para;</a></h3>
+<p><strong>Fuente</strong>: UPME - Proyección de Potencia Máxima</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>bigserial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tiempo_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_tiempo.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>periodicidad</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>mensual</code>, <code>anual</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unidad</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>MW-mes</code>, <code>MW-año</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>area_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_areas_electricas.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>descriptor</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Descriptor adicional.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>escenario</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>ESC_BAJO</code>, <code>ESC_MEDIO</code>, <code>ESC_ALTO</code>, <code>IC_SUP_95</code>, <code>IC_INF_95</code>, <code>IC_SUP_68</code>, <code>IC_INF_68</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>revision</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Etiqueta de revisión.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>valor</code></td>
+<td style="text-align: left;"><code>numeric(18,6)</code></td>
+<td style="text-align: left;">Valor en MW.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fact_capacidad_instalada"><code>fact_capacidad_instalada</code><a class="headerlink" href="#fact_capacidad_instalada" title="Permanent link">&para;</a></h3>
+<p><strong>Fuente</strong>: UPME - Proyección de Capacidad Instalada GD</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>bigserial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tiempo_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_tiempo.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>periodicidad</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>anual</code> (solo anual).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unidad</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>MW-año</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>area_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_areas_electricas.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>descriptor</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Descriptor adicional.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>escenario</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>ESC_BAJO</code>, <code>ESC_MEDIO</code>, <code>ESC_ALTO</code>, <code>IC_SUP_95</code>, <code>IC_INF_95</code>, <code>IC_SUP_68</code>, <code>IC_INF_68</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>revision</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Etiqueta de revisión.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>valor</code></td>
+<td style="text-align: left;"><code>numeric(18,6)</code></td>
+<td style="text-align: left;">Valor en MW.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fact_oferta_gas"><code>fact_oferta_gas</code><a class="headerlink" href="#fact_oferta_gas" title="Permanent link">&para;</a></h3>
+<p><strong>Fuente</strong>: MinMinas - Declaración de Producción</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>bigserial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tiempo_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_tiempo.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>campo_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_campos.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>resolucion_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_resoluciones.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tipo_produccion</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>PTDV</code>, <code>PC_CONTRATOS</code>, <code>PC_EXPORTACIONES</code>, <code>PP</code>, <code>GAS_OPERACION</code>, <code>CIDV</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>operador</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Operador.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>es_operador_campo</code></td>
+<td style="text-align: left;"><code>boolean</code></td>
+<td style="text-align: left;">¿Es operador principal?</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>es_participacion_estado</code></td>
+<td style="text-align: left;"><code>boolean</code></td>
+<td style="text-align: left;">¿Es parte del Estado?</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>valor_gbtud</code></td>
+<td style="text-align: left;"><code>numeric(18,6)</code></td>
+<td style="text-align: left;">Valor normalizado.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>poder_calorifico_btu_pc</code></td>
+<td style="text-align: left;"><code>numeric(12,4)</code></td>
+<td style="text-align: left;">BTU/PC del campo.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fact_participacion_campo"><code>fact_participacion_campo</code><a class="headerlink" href="#fact_participacion_campo" title="Permanent link">&para;</a></h3>
+<p><strong>Fuente</strong>: MinMinas - Participación por resolución</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>id</code></td>
+<td style="text-align: left;"><code>bigserial</code></td>
+<td style="text-align: left;"><strong>PK</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>campo_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_campos.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>resolucion_id</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><strong>FK</strong> → <code>dim_resoluciones.id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>periodo_desde</code></td>
+<td style="text-align: left;"><code>date</code></td>
+<td style="text-align: left;">Inicio del periodo.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>periodo_hasta</code></td>
+<td style="text-align: left;"><code>date</code></td>
+<td style="text-align: left;">Fin del periodo.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>asociado</code></td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;">Empresa asociada.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>participacion_pct</code></td>
+<td style="text-align: left;"><code>numeric(5,2)</code></td>
+<td style="text-align: left;">% participación.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>estado_pct</code></td>
+<td style="text-align: left;"><code>numeric(5,2)</code></td>
+<td style="text-align: left;">% Estado.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tipos-enumerados">Tipos Enumerados<a class="headerlink" href="#tipos-enumerados" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong><code>source_update_method</code></strong>: <code>'api'</code>, <code>'scraping'</code>, <code>'html'</code>, <code>'archivo'</code>, <code>'complex_scraper'</code></li>
 <li><strong><code>source_check_status</code></strong>: <code>'no_change'</code>, <code>'changed'</code>, <code>'failed'</code></li>
 </ul>
-<h2 id="migracion-script">Migracion script<a class="headerlink" href="#migracion-script" title="Permanent link">&para;</a></h2>
-<p>El script .sql para crear la base de datos se encuentra en: <a href="https://github.com/Ashen-Software/Suria/blob/data/docs/database/init_db.sql">script migración</a>.</p>
+<hr />
+<h2 id="script-de-migracion">Script de Migración<a class="headerlink" href="#script-de-migracion" title="Permanent link">&para;</a></h2>
+<p>Ver: <a href="../init_db.sql">init_db.sql</a></p>
 
 
 

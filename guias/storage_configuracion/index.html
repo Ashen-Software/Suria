@@ -948,6 +948,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Estructura de Archivos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apis-sin-paginacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        APIs sin Paginación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apis-con-paginacion-datos-extensos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        APIs con Paginación (Datos Extensos)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -966,6 +994,17 @@
     <span class="md-ellipsis">
       
         Parámetros Disponibles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limpieza-de-datos-antiguos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limpieza de Datos Antiguos
       
     </span>
   </a>
@@ -1037,6 +1076,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transform_process/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proceso de transformación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1090,6 +1157,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Estructura de Archivos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apis-sin-paginacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        APIs sin Paginación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apis-con-paginacion-datos-extensos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        APIs con Paginación (Datos Extensos)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1108,6 +1203,17 @@
     <span class="md-ellipsis">
       
         Parámetros Disponibles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limpieza-de-datos-antiguos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limpieza de Datos Antiguos
       
     </span>
   </a>
@@ -1140,14 +1246,27 @@
 <li><strong>Acceso:</strong> Privado (recomendado) o Público.</li>
 </ul>
 <h2 id="estructura-de-archivos">Estructura de Archivos<a class="headerlink" href="#estructura-de-archivos" title="Permanent link">&para;</a></h2>
-<p>El sistema organiza automáticamente los archivos descargados para mantener un historial ordenado cronológicamente. La estructura de carpetas generada por defecto es:</p>
+<p>El sistema organiza automáticamente los archivos descargados para mantener un historial ordenado cronológicamente.</p>
+<h3 id="apis-sin-paginacion">APIs sin Paginación<a class="headerlink" href="#apis-sin-paginacion" title="Permanent link">&para;</a></h3>
+<p>Estructura simple con un archivo por descarga:</p>
 <div class="highlight"><pre><span></span><code>{tipo_fuente}/{id_fuente}/{YYYY-MM-DD_HHMMSS}.{ext}
 </code></pre></div>
 <p><strong>Ejemplos:</strong>
-*   <code>api/api_gas/2023-11-24_103000.json</code>
-*   <code>web/noticias_col/2023-11-24_154500.html</code>
-*   <code>complex/banco_central/2023-11-24_090000.bin</code></p>
-<p>Esta estructura plana facilita la gestión de historiales cortos (ej. últimos 2-3 meses).</p>
+*   <code>api/api_gas/2025-11-24_103000.json</code>
+*   <code>web/noticias_col/2025-11-24_154500.html</code>
+*   <code>complex/banco_central/2025-11-24_090000.bin</code></p>
+<h3 id="apis-con-paginacion-datos-extensos">APIs con Paginación (Datos Extensos)<a class="headerlink" href="#apis-con-paginacion-datos-extensos" title="Permanent link">&para;</a></h3>
+<p>Cuando la fuente retorna muchos registros (100K+), el sistema descarga en páginas individuales:</p>
+<div class="highlight"><pre><span></span><code>{tipo_fuente}/{id_fuente}/{YYYY-MM-DD_HHMMSS}/
+├── page_0001.json
+├── page_0002.json
+├── page_0003.json
+└── ...
+</code></pre></div>
+<p><strong>Ejemplo:</strong>
+*   <code>api/api_regalias/2025-11-24_183107/page_0001.json</code> (10K registros)
+*   <code>api/api_regalias/2025-11-24_183107/page_0002.json</code> (10K registros)
+*   <code>api/api_regalias/2025-11-24_183107/page_0003.json</code> (10K registros)</p>
 <h2 id="configuracion-basica">Configuración Básica<a class="headerlink" href="#configuracion-basica" title="Permanent link">&para;</a></h2>
 <p>Solo es necesario especificar el nombre del bucket. El sistema se encarga de generar la ruta y el nombre del archivo.</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -1181,6 +1300,12 @@
 </tbody>
 </table>
 <p><strong>Nota:</strong> Para historiales, es recomendable omitir <code>path</code> y dejar que el sistema genere la ruta con timestamp automáticamente.</p>
+<h2 id="limpieza-de-datos-antiguos">Limpieza de Datos Antiguos<a class="headerlink" href="#limpieza-de-datos-antiguos" title="Permanent link">&para;</a></h2>
+<p>El sistema está diseñado para retener historial de <strong>2-3 meses</strong>. Para mantener la capacidad bajo control:</p>
+<ol>
+<li><strong>Estrategia automática:</strong> Implementar un job de limpieza que elimine datos &gt; 90 días</li>
+<li><strong>Manual:</strong> Usar la consola de Supabase para eliminar carpetas antiguas</li>
+</ol>
 
 
 

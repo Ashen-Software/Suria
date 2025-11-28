@@ -1190,6 +1190,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guias/transform_process/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proceso de transformación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1550,7 +1578,18 @@
 </ol>
 <h3 id="4-almacenamiento-y-backend-supabase">4. Almacenamiento y Backend (Supabase)<a class="headerlink" href="#4-almacenamiento-y-backend-supabase" title="Permanent link">&para;</a></h3>
 <h4 id="esquema-de-base-de-datos">Esquema de Base de Datos<a class="headerlink" href="#esquema-de-base-de-datos" title="Permanent link">&para;</a></h4>
-<p>POR DEFINIR</p>
+<p>El sistema utiliza un modelo estrella (star schema) con:</p>
+<ul>
+<li><strong>Dimensiones compartidas</strong>: <code>dim_tiempo</code>, <code>dim_territorios</code>, <code>dim_campos</code>, <code>dim_areas_electricas</code>, <code>dim_resoluciones</code></li>
+<li><strong>Tablas de hechos</strong>: </li>
+<li><code>fact_regalias</code> (ANH)</li>
+<li><code>fact_demanda_gas_natural</code> (UPME)</li>
+<li><code>fact_energia_electrica</code> (UPME)</li>
+<li><code>fact_potencia_maxima</code> (UPME)</li>
+<li><code>fact_capacidad_instalada</code> (UPME)</li>
+<li><code>fact_oferta_gas</code> (MinMinas)</li>
+</ul>
+<p>Ver <a href="../../database/esquema/">esquema.md</a> para detalles completos.</p>
 <h4 id="optimizaciones-para-dashboard">Optimizaciones para Dashboard<a class="headerlink" href="#optimizaciones-para-dashboard" title="Permanent link">&para;</a></h4>
 <ul>
 <li>
