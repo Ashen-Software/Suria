@@ -91,7 +91,18 @@ Arquitectura Detallada
 
 #### Esquema de Base de Datos
 
-POR DEFINIR
+El sistema utiliza un modelo estrella (star schema) con:
+
+- **Dimensiones compartidas**: `dim_tiempo`, `dim_territorios`, `dim_campos`, `dim_areas_electricas`, `dim_resoluciones`
+- **Tablas de hechos**: 
+  - `fact_regalias` (ANH)
+  - `fact_demanda_gas_natural` (UPME)
+  - `fact_energia_electrica` (UPME)
+  - `fact_potencia_maxima` (UPME)
+  - `fact_capacidad_instalada` (UPME)
+  - `fact_oferta_gas` (MinMinas)
+
+Ver [esquema.md](../database/esquema.md) para detalles completos.
 
 #### Optimizaciones para Dashboard
 

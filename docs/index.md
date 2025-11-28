@@ -10,26 +10,30 @@ Bienvenido a la documentación técnica del proyecto. Aquí encontrarás orienta
 
 ## Fuentes de datos
 
-### Consolidación de liquidación de regalías por campo
+### Regalías por campo (ANH)
 
-Información de liquidación definitiva de regalías por campo de hidrocarburos desde el año 2010 hasta la fecha.
+Liquidación definitiva de regalías por campo de hidrocarburos desde 2010.
 
-- **Autor(es):** Agencia Nacional de Hidrocarburos
-- **Ficha (datos abiertos):** [Consolidación de liquidación de regalías por campo (Socrata)](https://www.datos.gov.co/Minas-y-Energ-a/Consolidaci-n-de-liquidaci-n-de-regal-as-por-campo/j7js-yk74/about_data)
-- **API (Socrata):** [Socrata API — j7js-yk74](https://dev.socrata.com/foundry/www.datos.gov.co/j7js-yk74)
+- **Autor:** Agencia Nacional de Hidrocarburos
+- **API:** [Socrata — j7js-yk74](https://dev.socrata.com/foundry/www.datos.gov.co/j7js-yk74)
 
-### Declaración de producción de gas
+### Declaración de producción (MinMinas)
 
-Publicación de la declaración de producción realizada por productores y comercializadores de gas natural.
+Producción declarada por productores y comercializadores de gas natural.
 
-- **Autor(es):** Ministerio de Minas y Energía
-- **Formato de datos:** Soportes magnéticos por periodo (mes-año), generalmente en XLSX
-- **Enlace:** [Gas natural — Ministerio de Minas y Energía](https://www.minenergia.gov.co/es/misional/hidrocarburos/funcionamiento-del-sector/gas-natural/)
+- **Autor:** Ministerio de Minas y Energía
+- **Formato:** XLSX por periodo
+- **Enlace:** [Gas natural — MinMinas](https://www.minenergia.gov.co/es/misional/hidrocarburos/funcionamiento-del-sector/gas-natural/)
 
-### Proyección de demanda del gas natural
+### Proyecciones UPME
 
-Metodología basada en relaciones con variables macroeconómicas y desagregación regional; incluye escenarios alto, medio y bajo.
+| Métrica | Unidad | Descripción |
+|---------|--------|-------------|
+| Demanda Gas Natural | GBTUD | Por categoría (Industrial, Residencial, etc.) |
+| Energía Eléctrica | GWh | Por área eléctrica |
+| Potencia Máxima | MW | Por área y escenario |
+| Capacidad Instalada | MW | Generación Distribuida |
 
-- **Autor(es):** UPME
-- **Formato de datos:** Anexos por proyecciones anuales (XLSX)
+- **Autor:** UPME
+- **Formato:** Anexos XLSX
 - **Enlace:** [Proyecciones de demanda — UPME](https://www.upme.gov.co/simec/planeacion-energetica/proyeccion_de_demanda/)

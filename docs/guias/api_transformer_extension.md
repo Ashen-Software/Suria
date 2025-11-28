@@ -52,14 +52,15 @@ OFERTA_CONFIG = TransformationConfig(
     ],
     
     fact_mapping=FactTableMapping(
-        fact_table="fact_oferta_gas",
+        fact_table="fact_demanda_gas_natural",
         column_mapping={
             "fecha": "fecha_derivada",
-            "yacimiento": "campo",
-            "tipo_recurso": "tipo_recurso",
-            "produccion_bpd": "produccion",
-            "reservas_mmb": "reservas",
-            "precio_usd": "precio",
+            "categoria": "categoria",
+            "region": "region",
+            "nodo": "nodo",
+            "escenario": "escenario",
+            "valor": "valor",
+            "revision": "revision",
         },
         dimension_mappings=[
             DimensionMapping(
@@ -68,12 +69,12 @@ OFERTA_CONFIG = TransformationConfig(
                     "fecha": "fecha_derivada",
                     "anio": "anio",
                     "mes": "mes",
-                    "es_proyeccion": False,
+                    "es_proyeccion": True,
                 }
             ),
             # Agregar más dimensiones según necesidad
         ],
-        description="Fact table de oferta de gas"
+        description="Fact table de demanda gas natural"
     ),
     
     custom_validator=_validate_oferta_coherencia,
