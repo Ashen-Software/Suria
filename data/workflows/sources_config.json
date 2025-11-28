@@ -62,6 +62,24 @@
       },
       "storage": { "bucket": "raw-data" },
       "force_change": true
+    },
+    {
+      "id": "gas_natural_declaracion",
+      "name": "Declaraciones de Producción de Gas Natural - MinEnergía",
+      "type": "complex_scraper",
+      "active": true,
+      "schedule": { "cron": "* * * * *", "note": "Daily at 6 AM" },
+      "config": {
+        "script_name": "gas_natural_declaracion",
+        "url": "https://www.minenergia.gov.co/es/misional/hidrocarburos/funcionamiento-del-sector/gas-natural/",
+        "analyze_excel": true,
+        "limit_files": null,
+        "limit_resolutions": null
+      },
+      "storage": { 
+        "bucket": "raw-data"
+      },
+      "force_change": true
     }
   ]
 }
