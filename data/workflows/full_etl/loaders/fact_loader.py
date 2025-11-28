@@ -36,14 +36,19 @@ class FactLoader(BaseLoader):
     UNIQUE_COLUMNS_BY_TABLE = {
         "fact_regalias": "tiempo_id,campo_id,tipo_hidrocarburo,regimen_regalias",
         "fact_demanda_gas": "tiempo_id,territorio_id,escenario",
-        # Agregar
+        "fact_oferta_gas": "tiempo_id,campo_id,resolucion_id,tipo_produccion,operador,es_participacion_estado",
+        "fact_participacion_campo": "campo_id,resolucion_id,periodo_desde,asociado",
     }
     
     # Columnas numericas que requieren conversion a float (en todas las tablas)
     NUMERIC_COLUMNS = {
         "precio_usd", "porcentaje_regalia", "produccion_gravable",
         "volumen_regalia", "valor_regalias_cop", "demanda_gbtud",
-        "latitud", "longitud"
+        "latitud", "longitud",
+        # Columnas de oferta gas
+        "valor_gbtud", "poder_calorifico_btu_pc",
+        # Columnas de participacion
+        "participacion_pct", "estado_pct"
     }
     
     def __init__(
@@ -178,17 +183,25 @@ class FactLoader(BaseLoader):
         
         Resuelve FKs y construye el registro final.
         
+        Soporta:
+        - fact_regalias: tiempo_id, campo_id
+        - fact_oferta_gas: tiempo_id, campo_id, resolucion_id
+        - fact_demanda_gas: tiempo_id, territorio_id
+        - fact_participacion_campo: campo_id, resolucion_id
+        
         Returns:
             Dict listo para UPSERT, o None si faltan FKs críticas
         """
-        # Resolver FKs desde dimensions
-        fks = self.resolver.resolve_all_for_record(record)
-        
         # Obtener fact_table del record (definido por transformer)
         fact_table = record.get("fact_table", "fact_regalias")
         
-        # Validar FKs críticas (tiempo es siempre requerido)
-        if fks["tiempo_id"] is None:
+        # Resolver FKs desde dimensions (necesita fact_table para saber qué resolver)
+        fks = self.resolver.resolve_all_for_record(record)
+        
+        # Validar FKs críticas según tabla
+        # tiempo_id es requerido para todas las tablas de hechos con tiempo
+        tables_requiring_tiempo = ["fact_regalias", "fact_oferta_gas", "fact_demanda_gas"]
+        if fact_table in tables_requiring_tiempo and fks["tiempo_id"] is None:
             self.stats["skipped_no_tiempo"] += 1
             data = record.get("data", {})
             logger.debug(
@@ -197,8 +210,9 @@ class FactLoader(BaseLoader):
             )
             return None
         
-        # campo_id es crítico para fact_regalias
-        if fact_table == "fact_regalias" and fks["campo_id"] is None:
+        # campo_id es crítico para tablas que lo requieren
+        tables_requiring_campo = ["fact_regalias", "fact_oferta_gas", "fact_participacion_campo"]
+        if fact_table in tables_requiring_campo and fks["campo_id"] is None:
             self.stats["skipped_no_campo"] += 1
             data = record.get("data", {})
             logger.debug(
@@ -209,25 +223,43 @@ class FactLoader(BaseLoader):
         
         # Construir registro base con FKs y metadata
         fact_record = {
-            "tiempo_id": fks["tiempo_id"],
             "source_id": source_id,
         }
+        
+        # Agregar tiempo_id si existe y es requerido
+        if fks.get("tiempo_id"):
+            fact_record["tiempo_id"] = fks["tiempo_id"]
         
         # Agregar campo_id si existe
         if fks.get("campo_id"):
             fact_record["campo_id"] = fks["campo_id"]
         
-        # fact_regalias usa campo_id -> dim_campos -> territorio_id (relación indirecta)
+        # Agregar resolucion_id para tablas que lo usan
+        tables_with_resolucion = ["fact_oferta_gas", "fact_participacion_campo"]
+        if fact_table in tables_with_resolucion and fks.get("resolucion_id"):
+            fact_record["resolucion_id"] = fks["resolucion_id"]
+        
+        # Agregar territorio_id para tablas que lo usan directamente
         tables_with_territorio = ["fact_demanda_gas"]
         if fact_table in tables_with_territorio and fks.get("territorio_id"):
             fact_record["territorio_id"] = fks["territorio_id"]
         
+        # Columnas a excluir del copiado (son para dimensiones o ya procesadas)
+        dimension_columns = {
+            "tiempo_fecha", "campo_nombre", "departamento", "municipio", 
+            "latitud", "longitud", "contrato", "resolucion_number",
+            "periodo_desde", "periodo_hasta"  # Estos van en dim_resoluciones
+        }
+        
         # Copiar TODOS los campos de data (ya vienen mapeados del transformer)
         data = record.get("data", {})
         for col, value in data.items():
-            # Saltar campos que ya procesamos o son para dimensiones
-            if col in ["tiempo_fecha", "campo_nombre", "departamento", "municipio", 
-                       "latitud", "longitud", "contrato"]:
+            # Saltar campos de dimensiones
+            if col in dimension_columns:
+                continue
+            
+            # Saltar source_id ya que lo agregamos arriba
+            if col == "source_id":
                 continue
             
             if value is not None:
