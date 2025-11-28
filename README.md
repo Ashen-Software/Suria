@@ -1,6 +1,6 @@
 # Suria
 
-**Suria** es un sistema ETL automatizado que extrae, transforma y centraliza datos energéticos de Colombia (ANH, UPME, MinMinas) en una base de datos PostgreSQL. Mediante schedulers programados, detecta cambios en las fuentes, procesa proyecciones de demanda de gas, electricidad y capacidad instalada, y alimenta dashboards interactivos para análisis del sector energético.
+**Suria** es un sistema ETL automatizado que extrae, transforma y centraliza datos sobre el gas natural de Colombia (ANH, UPME, MinMinas) en una base de datos PostgreSQL. Mediante schedulers programados, detecta cambios en las fuentes, procesa proyecciones de demanda de gas, electricidad y capacidad instalada, y alimenta dashboards interactivos para análisis del sector energético.
 
 ---
 
