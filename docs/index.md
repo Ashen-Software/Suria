@@ -1,6 +1,6 @@
-# Documentación del Proyecto
+# Suria
 
-Bienvenido a la documentación técnica del proyecto. Aquí encontrarás orientación sobre la arquitectura, la API y el esquema de la base de datos.
+Aquí encontrarás orientación sobre la arquitectura, la API y el esquema de la base de datos.
 
 ## Contenido
 
