@@ -12,12 +12,8 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 
 # Copiar el código fuente del frontend
+# Los datos de UPME ya están en frontend/public/data/ y se copiarán automáticamente por Vite
 COPY frontend/ .
-
-# Los datos procesados de UPME serán buscados por copy-upme-data.js durante el build
-# El script buscará en múltiples ubicaciones y continuará sin fallar si no los encuentra
-# Si los datos están disponibles en el contexto de build, se pueden copiar aquí:
-# COPY data/extraction/scrapers/proyeccion/processed ./data/extraction/scrapers/proyeccion/processed/
 
 # Instalar dependencias (usa npm si hay package-lock.json, pnpm si hay pnpm-lock.yaml)
 RUN if [ -f package-lock.json ]; then \
