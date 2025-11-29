@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 import {
   LineChart,
   Line,
@@ -15,44 +14,15 @@ import {
   Pie,
   Cell,
 } from 'recharts'
-import { loadOfertaGasPage, loadRegaliasPage } from '@/services/declaracionRegaliasData.service'
+import { useOfertaGasPaged, useRegaliasPaged } from '@/hooks/usePagedFacts'
 import type { OfertaGasRecord, RegaliasRecord } from '@/types/declaracion_regalias.types'
 
 export function DeclaracionGasPage() {
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(0)
   const pageSize = 20
-  const apiPageSize = 5000
 
-  const {
-    data,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery<OfertaGasRecord[]>({
-    queryKey: ['oferta-gas-paged'],
-    queryFn: async ({ pageParam }) =>
-      loadOfertaGasPage((pageParam as number) ?? 0, apiPageSize),
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === apiPageSize ? allPages.length : undefined,
-    initialPageParam: 0,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  })
-
-  // Ir trayendo páginas adicionales automáticamente para que el dashboard se complete solo
-  useEffect(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage()
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
-
-  const flatData: OfertaGasRecord[] = useMemo(
-    () => ((data?.pages as OfertaGasRecord[][]) ?? []).flat(),
-    [data]
-  )
+  const { flatData, isLoading, error } = useOfertaGasPaged()
 
   // Serie anual de volumen declarado
   const yearlySeries = useMemo(() => {
@@ -86,7 +56,7 @@ export function DeclaracionGasPage() {
       .map(([operador, total]) => ({ operador, total }))
       .sort((a, b) => b.total - a.total)
       .slice(0, 10)
-  }, [data])
+  }, [flatData])
 
   const filtered = useMemo(() => {
     if (!flatData.length) return []
@@ -357,36 +327,8 @@ export function RegaliasPage() {
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(0)
   const pageSize = 20
-  const apiPageSize = 5000
 
-  const {
-    data,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery<RegaliasRecord[]>({
-    queryKey: ['regalias-paged'],
-    queryFn: async ({ pageParam }) =>
-      loadRegaliasPage((pageParam as number) ?? 0, apiPageSize),
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === apiPageSize ? allPages.length : undefined,
-    initialPageParam: 0,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  })
-
-  useEffect(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage()
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
-
-  const flatData: RegaliasRecord[] = useMemo(
-    () => ((data?.pages as RegaliasRecord[][]) ?? []).flat(),
-    [data]
-  )
+  const { flatData, isLoading, error } = useRegaliasPaged()
 
   // Serie anual de valor de regalías
   const yearlySeries = useMemo(() => {
@@ -403,7 +345,7 @@ export function RegaliasPage() {
     return Array.from(byYear.entries())
       .map(([year, total]) => ({ year, total }))
       .sort((a, b) => Number(a.year) - Number(b.year))
-  }, [data])
+  }, [flatData])
 
   // Distribución por tipo de hidrocarburo
   const byHidrocarburo = useMemo(() => {

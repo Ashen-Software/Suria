@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { loadGasNaturalPage } from '@/services/upmeData.service';
+import { useMemo, useState } from 'react';
+import { useGasNaturalPaged } from '@/hooks/usePagedFacts';
 import type { GasNaturalRecord } from '@/types/upme.types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
@@ -11,36 +10,8 @@ export function GasNaturalCharts() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const pageSize = 20;
-  const apiPageSize = 5000;
 
-  const {
-    data,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery<GasNaturalRecord[]>({
-    queryKey: ['gas-natural-paged'],
-    queryFn: async ({ pageParam }) =>
-      loadGasNaturalPage((pageParam as number) ?? 0, apiPageSize),
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === apiPageSize ? allPages.length : undefined,
-    initialPageParam: 0,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  });
-
-  useEffect(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  const flatData: GasNaturalRecord[] = useMemo(
-    () => ((data?.pages as GasNaturalRecord[][]) ?? []).flat(),
-    [data]
-  );
+  const { flatData, isLoading, error } = useGasNaturalPaged();
 
   // Obtener todas las categorías disponibles
   const categorias = useMemo(() => {
@@ -81,7 +52,7 @@ export function GasNaturalCharts() {
         ESC_MEDIO: entry.ESC_MEDIO || 0,
         ESC_ALTO: entry.ESC_ALTO || 0,
       }));
-  }, [data, selectedCategoria]);
+  }, [flatData, selectedCategoria]);
 
   // Distribución por categoría (último año, escenario medio)
   const categoriaDistribution = useMemo(() => {
@@ -103,7 +74,7 @@ export function GasNaturalCharts() {
     return Array.from(grouped.entries())
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value);
-  }, [data]);
+  }, [flatData]);
 
   // Datos mensuales para la categoría seleccionada
   const monthlyData = useMemo(() => {

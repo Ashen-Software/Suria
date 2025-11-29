@@ -1,45 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { loadEnergiaElectricaPage } from '@/services/upmeData.service';
-import type { EnergiaElectricaRecord } from '@/types/upme.types';
+import { useMemo, useState } from 'react';
+import { useEnergiaElectricaPaged } from '@/hooks/usePagedFacts';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 export function EnergiaElectricaCharts() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const pageSize = 20;
-  const apiPageSize = 5000;
 
-  const {
-    data,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery<EnergiaElectricaRecord[]>({
-    queryKey: ['energia-electrica-paged'],
-    queryFn: async ({ pageParam }) => 
-      loadEnergiaElectricaPage((pageParam as number) ?? 0, apiPageSize),
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === apiPageSize ? allPages.length : undefined,
-    initialPageParam: 0,
-    // Evitar refetch constante y reutilizar resultados
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  });
-
-  // Cargar páginas adicionales automáticamente para que el dashboard se vaya completando solo
-  useEffect(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  const flatData: EnergiaElectricaRecord[] = useMemo(
-    () => ((data?.pages as EnergiaElectricaRecord[][]) ?? []).flat(),
-    [data]
-  );
+  const { flatData, isLoading, error } = useEnergiaElectricaPaged();
 
   // Procesar datos para gráficos
   const chartData = useMemo(() => {

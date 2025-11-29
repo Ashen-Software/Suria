@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useInfiniteQuery } from '@tanstack/react-query'
 import {
   LineChart,
   Line,
@@ -14,12 +13,14 @@ import {
 } from 'recharts'
 import type { OfertaGasRecord, RegaliasRecord } from '@/types/declaracion_regalias.types'
 import type { EnergiaElectricaRecord, GasNaturalRecord } from '@/types/upme.types'
-import { loadOfertaGasPage, loadRegaliasPage } from '@/services/declaracionRegaliasData.service'
-import { loadEnergiaElectricaPage, loadGasNaturalPage } from '@/services/upmeData.service'
+import {
+  useGasNaturalPaged,
+  useEnergiaElectricaPaged,
+  useOfertaGasPaged,
+  useRegaliasPaged,
+} from '@/hooks/usePagedFacts'
 import { createLLMService } from '@/services/llm.service'
 import type { ChatContext, Message } from '@/types/chatbot.types'
-
-const API_PAGE_SIZE = 5000
 
 interface BalancePoint {
   year: string
@@ -41,110 +42,28 @@ export function IntegradoPage() {
   const [remainingSeconds, setRemainingSeconds] = useState(60)
   const llmServiceRef = useRef(createLLMService({ temperature: 0.3, maxTokens: 900 }))
 
-  // Demanda gas (UPME)
-  const demandaGasQuery = useInfiniteQuery<GasNaturalRecord[]>({
-    queryKey: ['integrado-demanda-gas'],
-    queryFn: async ({ pageParam }) =>
-      loadGasNaturalPage((pageParam as number) ?? 0, API_PAGE_SIZE),
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === API_PAGE_SIZE ? allPages.length : undefined,
-    initialPageParam: 0,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  })
+  // Datos paginados compartidos (UPME + Declaración + Regalías)
+  const demandaGasPaged = useGasNaturalPaged()
+  const energiaPaged = useEnergiaElectricaPaged()
+  const ofertaPaged = useOfertaGasPaged()
+  const regaliasPaged = useRegaliasPaged()
 
-  // Demanda eléctrica (UPME)
-  const energiaQuery = useInfiniteQuery<EnergiaElectricaRecord[]>({
-    queryKey: ['integrado-energia-electrica'],
-    queryFn: async ({ pageParam }) =>
-      loadEnergiaElectricaPage((pageParam as number) ?? 0, API_PAGE_SIZE),
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === API_PAGE_SIZE ? allPages.length : undefined,
-    initialPageParam: 0,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  })
-
-  // Oferta gas (Declaración)
-  const ofertaQuery = useInfiniteQuery<OfertaGasRecord[]>({
-    queryKey: ['integrado-oferta-gas'],
-    queryFn: async ({ pageParam }) =>
-      loadOfertaGasPage((pageParam as number) ?? 0, API_PAGE_SIZE),
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === API_PAGE_SIZE ? allPages.length : undefined,
-    initialPageParam: 0,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  })
-
-  // Regalías (ANH)
-  const regaliasQuery = useInfiniteQuery<RegaliasRecord[]>({
-    queryKey: ['integrado-regalias'],
-    queryFn: async ({ pageParam }) =>
-      loadRegaliasPage((pageParam as number) ?? 0, API_PAGE_SIZE),
-    getNextPageParam: (lastPage, allPages) =>
-      lastPage.length === API_PAGE_SIZE ? allPages.length : undefined,
-    initialPageParam: 0,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-  })
-
-  // Carga automática de todas las páginas para cada fuente
-  useEffect(() => {
-    if (demandaGasQuery.hasNextPage && !demandaGasQuery.isFetchingNextPage) {
-      demandaGasQuery.fetchNextPage()
-    }
-  }, [demandaGasQuery.hasNextPage, demandaGasQuery.isFetchingNextPage, demandaGasQuery.fetchNextPage])
-
-  useEffect(() => {
-    if (energiaQuery.hasNextPage && !energiaQuery.isFetchingNextPage) {
-      energiaQuery.fetchNextPage()
-    }
-  }, [energiaQuery.hasNextPage, energiaQuery.isFetchingNextPage, energiaQuery.fetchNextPage])
-
-  useEffect(() => {
-    if (ofertaQuery.hasNextPage && !ofertaQuery.isFetchingNextPage) {
-      ofertaQuery.fetchNextPage()
-    }
-  }, [ofertaQuery.hasNextPage, ofertaQuery.isFetchingNextPage, ofertaQuery.fetchNextPage])
-
-  useEffect(() => {
-    if (regaliasQuery.hasNextPage && !regaliasQuery.isFetchingNextPage) {
-      regaliasQuery.fetchNextPage()
-    }
-  }, [regaliasQuery.hasNextPage, regaliasQuery.isFetchingNextPage, regaliasQuery.fetchNextPage])
-
-  const flatDemandaGas: GasNaturalRecord[] = useMemo(
-    () => ((demandaGasQuery.data?.pages as GasNaturalRecord[][]) ?? []).flat(),
-    [demandaGasQuery.data],
-  )
-
-  const flatEnergia: EnergiaElectricaRecord[] = useMemo(
-    () => ((energiaQuery.data?.pages as EnergiaElectricaRecord[][]) ?? []).flat(),
-    [energiaQuery.data],
-  )
-
-  const flatOferta: OfertaGasRecord[] = useMemo(
-    () => ((ofertaQuery.data?.pages as OfertaGasRecord[][]) ?? []).flat(),
-    [ofertaQuery.data],
-  )
-
-  const flatRegalias: RegaliasRecord[] = useMemo(
-    () => ((regaliasQuery.data?.pages as RegaliasRecord[][]) ?? []).flat(),
-    [regaliasQuery.data],
-  )
+  const flatDemandaGas: GasNaturalRecord[] = demandaGasPaged.flatData
+  const flatEnergia: EnergiaElectricaRecord[] = energiaPaged.flatData
+  const flatOferta: OfertaGasRecord[] = ofertaPaged.flatData
+  const flatRegalias: RegaliasRecord[] = regaliasPaged.flatData
 
   const isLoadingAll =
-    demandaGasQuery.isLoading ||
-    energiaQuery.isLoading ||
-    ofertaQuery.isLoading ||
-    regaliasQuery.isLoading
+    demandaGasPaged.isLoading ||
+    energiaPaged.isLoading ||
+    ofertaPaged.isLoading ||
+    regaliasPaged.isLoading
 
   const hasAnyError =
-    demandaGasQuery.error ||
-    energiaQuery.error ||
-    ofertaQuery.error ||
-    regaliasQuery.error
+    demandaGasPaged.error ||
+    energiaPaged.error ||
+    ofertaPaged.error ||
+    regaliasPaged.error
 
   // KPIs integrados
   const {
@@ -327,10 +246,10 @@ export function IntegradoPage() {
   }, [allowEarlyAnalysis])
 
   const allPagesLoaded =
-    demandaGasQuery.hasNextPage === false &&
-    energiaQuery.hasNextPage === false &&
-    ofertaQuery.hasNextPage === false &&
-    regaliasQuery.hasNextPage === false
+    demandaGasPaged.allPagesLoaded &&
+    energiaPaged.allPagesLoaded &&
+    ofertaPaged.allPagesLoaded &&
+    regaliasPaged.allPagesLoaded
 
   const isButtonDisabled =
     isAnalyzing ||
@@ -389,6 +308,7 @@ Con base en estos datos numéricos:
 - Usa los campos year, demanda_gas, oferta_gas y brecha de balanceOfertaDemanda para mencionar años concretos donde la oferta supera a la demanda y años donde la brecha es muy negativa.
 - Usa los campos year y total de regaliasPorAnio para señalar años de máximo y de caída de regalías.
 - Puedes apoyarte también en resumenTabla (por ejemplo, años con mayor demandaEléctrica o mayores regalias).
+- Ignora para el análisis cualquier año o punto donde alguno de los valores clave sea exactamente 0 (oferta_gas = 0, demanda_gas = 0, total de regalías = 0), ya que probablemente representan ausencia de datos y no un valor real.
 - Explica en español, de forma ejecutiva, cómo se relacionan la demanda de gas (UPME, ESC_MEDIO), la oferta de gas (declaración) y las regalías, incluyendo posibles implicaciones.
 - Añade un bloque claramente marcado como "Análisis predictivo" donde, apoyándote en las tendencias históricas de las series, describas cómo podría verse el sistema en los próximos años (por ejemplo, si la brecha oferta-demanda tendería a ampliarse o reducirse, y qué impacto tendría en las regalías), dejando claro que es un ejercicio de proyección cualitativa, no un pronóstico exacto.
 - Usa 3 a 5 párrafos cortos, sin viñetas, y evita lenguaje demasiado técnico.`,
