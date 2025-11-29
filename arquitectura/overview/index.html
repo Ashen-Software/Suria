@@ -685,6 +685,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#6-frontend-paginas-y-vistas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Frontend: Páginas y Vistas Clave
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1445,6 +1456,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#6-frontend-paginas-y-vistas-clave" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Frontend: Páginas y Vistas Clave
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1606,30 +1628,62 @@
 <h4 id="stack-tecnologico">Stack Tecnológico<a class="headerlink" href="#stack-tecnologico" title="Permanent link">&para;</a></h4>
 <ul>
 <li>
-<p><strong>Angular 16+</strong>: Framework principal</p>
+<p><strong>React 19 + Vite + TypeScript</strong>: Aplicación SPA principal</p>
 </li>
 <li>
-<p><strong>Tailwind CSS</strong>: Estilización y responsive design</p>
+<p><strong>Tailwind CSS + DaisyUI</strong>: Estilización, layout y componentes UI</p>
 </li>
 <li>
-<p><strong>Supabase JS Client</strong>: Conexión directa a datos</p>
+<p><strong>Supabase JS Client</strong>: Conexión directa a la base de datos (lectura desde el frontend)</p>
 </li>
 <li>
-<p><strong>Chart.js/NGX-Charts</strong>: Visualizaciones de datos</p>
+<p><strong>TanStack React Query</strong>: Capa de data fetching, caché y paginación incremental (<code>useInfiniteQuery</code>)</p>
+</li>
+<li>
+<p><strong>TanStack React Table</strong>: Tablas interactivas con búsqueda y paginación en el navegador</p>
+</li>
+<li>
+<p><strong>Recharts</strong>: Visualizaciones (líneas, áreas, barras, pies) para dashboards energéticos</p>
+</li>
+<li>
+<p><strong>OpenAI Chat Completions API</strong>: Servicio de IA para el chatbot y análisis automáticos del dashboard integrado</p>
 </li>
 </ul>
 <h4 id="estrategia-de-despliegue">Estrategia de Despliegue<a class="headerlink" href="#estrategia-de-despliegue" title="Permanent link">&para;</a></h4>
 <ul>
 <li>
-<p><strong>Vercel/Netlify</strong>: Despliegue continuo desde main branch</p>
+<p><strong>Vite dev server</strong> en local (<code>npm run dev</code>), con build estático listo para CD (Vercel/Netlify/DigitalOcean)</p>
 </li>
 <li>
-<p><strong>Variables de Entorno</strong>: Configuración segura de endpoints</p>
+<p><strong>Variables de Entorno</strong>: <code>VITE_SUPABASE_URL</code>, <code>VITE_SUPABASE_ANON_KEY</code>, <code>VITE_OPENAI_API_KEY</code>, <code>VITE_OPENAI_MODEL</code>, etc.</p>
 </li>
 <li>
-<p><strong>CDN Global</strong>: Distribución optimizada de assets</p>
+<p><strong>CDN Global</strong> (según plataforma de despliegue): Distribución optimizada de assets</p>
 </li>
 </ul>
+<h3 id="6-frontend-paginas-y-vistas-clave">6. Frontend: Páginas y Vistas Clave<a class="headerlink" href="#6-frontend-paginas-y-vistas-clave" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Home (<code>/</code>)</strong>: Portada y explicación general de Suria.</li>
+<li><strong>Integrado (<code>/integrado</code>)</strong>: Dashboard que cruza UPME (demanda gas y eléctrica), Declaración MinMinas (<code>fact_oferta_gas</code>) y regalías ANH (<code>fact_regalias</code>), con:<ul>
+<li>KPIs integrados (demanda total gas, demanda eléctrica, oferta gas, regalías acumuladas).</li>
+<li>Reconciliación oferta vs demanda de gas (series anuales agregadas).</li>
+<li>Serie de regalías anuales.</li>
+<li>Tabla integrada por año con demanda gas, oferta gas, brecha, demanda eléctrica y regalías.</li>
+<li>Botón <strong>“Generar análisis con IA”</strong> que llama al servicio de LLM y genera un resumen ejecutivo basado en los datos cargados.</li>
+</ul>
+</li>
+<li><strong>Declaración de Gas (<code>/declaracion-gas</code>)</strong> y <strong>Regalías (<code>/regalias</code>)</strong>: Dashboards detallados por fuente, con visualizaciones, estadísticas y tabla granular.</li>
+<li><strong>UPME (<code>/upme</code>)</strong>: Página de entrada a los módulos de demanda de gas natural, energía eléctrica, potencia máxima y capacidad instalada.</li>
+<li><strong>Dimensiones (<code>/dimensiones</code>)</strong>: Catálogo maestro de <code>dim_tiempo</code>, <code>dim_territorios</code> y áreas eléctricas.</li>
+</ul>
+<p>Todas las vistas que consumen tablas de hechos grandes (<code>fact_oferta_gas</code>, <code>fact_regalias</code>, <code>fact_demanda_gas_natural</code>, <code>fact_energia_electrica</code>, <code>fact_potencia_maxima</code>, <code>fact_capacidad_instalada</code>) siguen un mismo patrón:</p>
+<ol>
+<li><strong>Servicios Supabase paginados</strong> (<code>getPage(from, to)</code> con <code>.range</code>) para evitar <code>statement timeout</code> en consultas muy grandes.</li>
+<li><strong>Capa de helpers</strong> (<code>loadXPage(page, pageSize)</code>) que reciben un índice de página y tamaño de página API (por defecto 5000 filas).</li>
+<li><strong><code>useInfiniteQuery</code> en el frontend</strong> para traer páginas sucesivas y construir un <code>flatData</code> acumulado sobre el que se calculan gráficos, KPIs y tablas.</li>
+<li><strong>Carga progresiva y skeletons</strong>: el usuario empieza a ver estructura y primeros datos mientras siguen llegando páginas adicionales en background.</li>
+</ol>
+<p>Este patrón está aplicado tanto en los módulos de Declaración/Regalías como en todos los módulos UPME.</p>
 <p><a href="../../assets/diagrams/arquitectura.svg"><img alt="Diagrama de arquitectura" src="../../assets/diagrams/arquitectura.svg" /></a></p>
 
 
