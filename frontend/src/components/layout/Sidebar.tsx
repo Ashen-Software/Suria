@@ -19,23 +19,47 @@ const navItems: NavItem[] = [
     ),
   },
   {
-    path: '/tiempo',
-    label: 'Dimensión Tiempo',
-    helper: 'Calendario maestro',
+    path: '/integrado',
+    label: 'Integrado',
+    helper: 'Visión cruzada gas, electricidad y regalías',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4 6h7v7H4V6zm9 0h7v7h-7V6zM4 16h7v2H4v-2zm9 0h7v2h-7v-2z"
+        />
       </svg>
     ),
   },
   {
-    path: '/territorios',
-    label: 'Dimensión Territorios',
-    helper: 'Mapa administrativo',
+    path: '/regalias',
+    label: 'Regalías',
+    helper: 'Liquidación de regalías',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-10v2m0 8v2m-7-2a9 9 0 1114 0 9 9 0 01-14 0z"
+        />
+      </svg>
+    ),
+  },
+  {
+    path: '/declaracion-gas',
+    label: 'Declaración de Gas',
+    helper: 'Oferta de gas natural',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M11 3v2m0 14v2m7-9h2M3 12H1m15.364-6.364l1.414 1.414M5.222 18.778l-1.414-1.414M18.778 18.778l-1.414-1.414M5.222 5.222L3.808 3.808M12 8c-2.21 0-4 1.343-4 3s1.79 3 4 3 4 1.343 4 3-1.79 3-4 3"
+        />
       </svg>
     ),
   },
@@ -49,11 +73,26 @@ const navItems: NavItem[] = [
       </svg>
     ),
   },
+  {
+    path: '/dimensiones',
+    label: 'Dimensiones',
+    helper: 'Tiempo y territorios',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4 6h16M4 12h16M4 18h7"
+        />
+      </svg>
+    ),
+  },
 ]
 
 export function Sidebar() {
   return (
-    <aside className="glass-panel w-full flex-shrink-0 space-y-6 p-6 lg:w-72">
+    <aside className="glass-panel w-full shrink-0 space-y-6 p-6 lg:w-72">
       <div className="space-y-1">
         <p className="text-sm uppercase tracking-[0.2em] text-base-content/50">Navegación</p>
         <h2 className="text-2xl font-semibold">Explora el flujo</h2>

@@ -1,33 +1,60 @@
-import { useQuery } from '@tanstack/react-query';
-import { loadGasNaturalData } from '@/services/upmeData.service';
+import { useEffect, useMemo, useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { loadGasNaturalPage } from '@/services/upmeData.service';
+import type { GasNaturalRecord } from '@/types/upme.types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { useMemo, useState } from 'react';
 
 const COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#6366f1'];
 
 export function GasNaturalCharts() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['gas-natural'],
-    queryFn: loadGasNaturalData,
+  const [selectedCategoria, setSelectedCategoria] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(0);
+  const pageSize = 20;
+  const apiPageSize = 5000;
+
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<GasNaturalRecord[]>({
+    queryKey: ['gas-natural-paged'],
+    queryFn: async ({ pageParam }) =>
+      loadGasNaturalPage((pageParam as number) ?? 0, apiPageSize),
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.length === apiPageSize ? allPages.length : undefined,
+    initialPageParam: 0,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 
-  const [selectedCategoria, setSelectedCategoria] = useState<string | null>(null);
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const flatData: GasNaturalRecord[] = useMemo(
+    () => ((data?.pages as GasNaturalRecord[][]) ?? []).flat(),
+    [data]
+  );
 
   // Obtener todas las categorías disponibles
   const categorias = useMemo(() => {
-    if (!data) return [];
-    return Array.from(new Set(data.map(d => d.categoria))).sort();
-  }, [data]);
+    if (!flatData.length) return [];
+    return Array.from(new Set(flatData.map(d => d.categoria))).sort();
+  }, [flatData]);
 
   // Datos por categoría y escenario
   const categoriaData = useMemo(() => {
-    if (!data) return [];
+    if (!flatData.length) return [];
 
     const filtered = selectedCategoria 
-      ? data.filter(d => d.categoria === selectedCategoria)
-      : data;
+      ? flatData.filter(d => d.categoria === selectedCategoria)
+      : flatData;
 
     const grouped = new Map<string, { year: string; ESC_BAJO?: number; ESC_MEDIO?: number; ESC_ALTO?: number }>();
 
@@ -58,10 +85,10 @@ export function GasNaturalCharts() {
 
   // Distribución por categoría (último año, escenario medio)
   const categoriaDistribution = useMemo(() => {
-    if (!data) return [];
+    if (!flatData.length) return [];
 
-    const lastYear = Math.max(...data.map(d => parseInt(d.period_key.split('-')[0])));
-    const filtered = data.filter(
+    const lastYear = Math.max(...flatData.map(d => parseInt(d.period_key.split('-')[0])));
+    const filtered = flatData.filter(
       d => d.period_key.startsWith(`${lastYear}-`) && 
            d.escenario === 'ESC_MEDIO' && 
            d.periodicidad === 'mensual'
@@ -80,9 +107,9 @@ export function GasNaturalCharts() {
 
   // Datos mensuales para la categoría seleccionada
   const monthlyData = useMemo(() => {
-    if (!data || !selectedCategoria) return [];
+    if (!flatData.length || !selectedCategoria) return [];
 
-    return data
+    return flatData
       .filter(r => r.categoria === selectedCategoria && r.escenario === 'ESC_MEDIO' && r.periodicidad === 'mensual')
       .map(r => ({
         date: r.period_key,
@@ -91,19 +118,15 @@ export function GasNaturalCharts() {
       }))
       .sort((a, b) => a.date.localeCompare(b.date))
       .slice(-24); // Últimos 24 meses
-  }, [data, selectedCategoria]);
+  }, [flatData, selectedCategoria]);
 
   // Tabla: búsqueda y paginación sobre todos los registros de demanda de gas
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(0);
-  const pageSize = 20;
-
   const filteredData = useMemo(() => {
-    if (!data) return [];
+    if (!flatData.length) return [];
     const term = search.toLowerCase().trim();
-    if (!term) return data;
+    if (!term) return flatData;
 
-    return data.filter((row) => {
+    return flatData.filter((row) => {
       return (
         row.period_key.toLowerCase().includes(term) ||
         row.categoria.toLowerCase().includes(term) ||
@@ -113,7 +136,7 @@ export function GasNaturalCharts() {
         (row.revision?.toLowerCase().includes(term) ?? false)
       );
     });
-  }, [data, search]);
+  }, [flatData, search]);
 
   const totalPages = Math.max(1, Math.ceil(filteredData.length / pageSize));
 
@@ -124,8 +147,15 @@ export function GasNaturalCharts() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <span className="loading loading-spinner loading-lg"></span>
+      <div className="space-y-6">
+        <div className="glass-panel p-6 space-y-4 animate-pulse">
+          <div className="h-6 w-56 rounded-xl bg-base-300" />
+          <div className="h-72 rounded-3xl bg-base-300" />
+        </div>
+        <div className="glass-panel p-6 space-y-4 animate-pulse">
+          <div className="h-6 w-64 rounded-xl bg-base-300" />
+          <div className="h-72 rounded-3xl bg-base-300" />
+        </div>
       </div>
     );
   }
@@ -138,7 +168,7 @@ export function GasNaturalCharts() {
     );
   }
 
-  if (!data || data.length === 0) {
+  if (!flatData.length) {
     return (
       <div className="alert alert-warning">
         <span>No hay datos disponibles</span>
@@ -232,7 +262,7 @@ export function GasNaturalCharts() {
         <div className="stats stats-vertical shadow">
           <div className="stat">
             <div className="stat-title">Total Registros</div>
-            <div className="stat-value text-primary">{data.length.toLocaleString()}</div>
+            <div className="stat-value text-primary">{flatData.length.toLocaleString()}</div>
           </div>
           <div className="stat">
             <div className="stat-title">Categorías</div>
@@ -241,7 +271,14 @@ export function GasNaturalCharts() {
           <div className="stat">
             <div className="stat-title">Demanda Total Promedio</div>
             <div className="stat-value text-accent">
-              {Math.round(data.reduce((sum, d) => sum + d.valor, 0) / data.length).toLocaleString()} GBTUD
+              {flatData.length > 0
+                ? `${Math.round(
+                    flatData.reduce(
+                      (sum: number, d: GasNaturalRecord) => sum + d.valor,
+                      0
+                    ) / flatData.length
+                  ).toLocaleString()} GBTUD`
+                : '0 GBTUD'}
             </div>
           </div>
         </div>

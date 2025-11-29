@@ -6,7 +6,8 @@
  */
 
 import { useLocation } from 'react-router'
-import { ChatContext, ROUTE_NAMES, ROUTE_DATA_AVAILABILITY } from '@/types/chatbot.types'
+import type { ChatContext } from '@/types/chatbot.types'
+import { ROUTE_NAMES, ROUTE_DATA_AVAILABILITY } from '@/types/chatbot.types'
 
 /**
  * Builds a ChatContext object from the current route

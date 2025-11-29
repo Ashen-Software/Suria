@@ -1,25 +1,53 @@
-import { useQuery } from '@tanstack/react-query';
-import { loadCapacidadInstaladaData } from '@/services/upmeData.service';
+import { useEffect, useMemo, useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { loadCapacidadInstaladaPage } from '@/services/upmeData.service';
+import type { CapacidadInstaladaRecord } from '@/types/upme.types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { useMemo, useState } from 'react';
 
 export function CapacidadInstaladaCharts() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['capacidad-instalada'],
-    queryFn: loadCapacidadInstaladaData,
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(0);
+  const pageSize = 20;
+  const apiPageSize = 5000;
+
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<CapacidadInstaladaRecord[]>({
+    queryKey: ['capacidad-instalada-paged'],
+    queryFn: async ({ pageParam }) =>
+      loadCapacidadInstaladaPage((pageParam as number) ?? 0, apiPageSize),
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.length === apiPageSize ? allPages.length : undefined,
+    initialPageParam: 0,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const flatData: CapacidadInstaladaRecord[] = useMemo(
+    () => ((data?.pages as CapacidadInstaladaRecord[][]) ?? []).flat(),
+    [data]
+  );
+
   const chartData = useMemo(() => {
-    if (!data) return [];
+    if (!flatData.length) return [];
 
     // Verificar qué escenarios realmente existen en los datos
-    const availableScenarios = new Set(data.map(r => r.escenario));
+    const availableScenarios = new Set(flatData.map(r => r.escenario));
     
     const grouped = new Map<string, { year: string; ESC_BAJO?: number; ESC_MEDIO?: number; ESC_ALTO?: number }>();
 
-    data.forEach(record => {
+    flatData.forEach(record => {
       const year = record.period_key.split('-')[0];
       const key = year;
       
@@ -50,7 +78,7 @@ export function CapacidadInstaladaCharts() {
         }
         return result;
       });
-  }, [data]);
+  }, [flatData]);
 
   // Determinar qué escenarios tienen datos para renderizar
   const hasEscenarioBajo = useMemo(() => {
@@ -83,16 +111,12 @@ export function CapacidadInstaladaCharts() {
   }, [chartData]);
 
   // Tabla: búsqueda y paginación sobre todos los registros
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(0);
-  const pageSize = 20;
-
   const filteredData = useMemo(() => {
-    if (!data) return [];
+    if (!flatData.length) return [];
     const term = search.toLowerCase().trim();
-    if (!term) return data;
+    if (!term) return flatData;
 
-    return data.filter((row) => {
+    return flatData.filter((row) => {
       return (
         row.period_key.toLowerCase().includes(term) ||
         row.escenario.toLowerCase().includes(term) ||
@@ -101,7 +125,7 @@ export function CapacidadInstaladaCharts() {
         (row.revision?.toLowerCase().includes(term) ?? false)
       );
     });
-  }, [data, search]);
+  }, [flatData, search]);
 
   const totalPages = Math.max(1, Math.ceil(filteredData.length / pageSize));
 
@@ -112,8 +136,15 @@ export function CapacidadInstaladaCharts() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <span className="loading loading-spinner loading-lg"></span>
+      <div className="space-y-6">
+        <div className="glass-panel p-6 space-y-4 animate-pulse">
+          <div className="h-6 w-56 rounded-xl bg-base-300" />
+          <div className="h-72 rounded-3xl bg-base-300" />
+        </div>
+        <div className="glass-panel p-6 space-y-4 animate-pulse">
+          <div className="h-6 w-72 rounded-xl bg-base-300" />
+          <div className="h-72 rounded-3xl bg-base-300" />
+        </div>
       </div>
     );
   }
@@ -126,7 +157,7 @@ export function CapacidadInstaladaCharts() {
     );
   }
 
-  if (!data || data.length === 0) {
+  if (!flatData.length) {
     return (
       <div className="alert alert-warning">
         <span>No hay datos disponibles</span>
@@ -186,18 +217,18 @@ export function CapacidadInstaladaCharts() {
         <div className="stats stats-vertical shadow">
           <div className="stat">
             <div className="stat-title">Total Registros</div>
-            <div className="stat-value text-primary">{data.length.toLocaleString()}</div>
+            <div className="stat-value text-primary">{flatData.length.toLocaleString()}</div>
           </div>
           <div className="stat">
             <div className="stat-title">Capacidad Máxima</div>
             <div className="stat-value text-secondary">
-              {Math.round(Math.max(...data.map(d => d.valor))).toLocaleString()} MW
+              {Math.round(Math.max(...flatData.map(d => d.valor))).toLocaleString()} MW
             </div>
           </div>
           <div className="stat">
             <div className="stat-title">Capacidad Promedio</div>
             <div className="stat-value text-accent">
-              {Math.round(data.reduce((sum, d) => sum + d.valor, 0) / data.length).toLocaleString()} MW
+              {Math.round(flatData.reduce((sum, d) => sum + d.valor, 0) / flatData.length).toLocaleString()} MW
             </div>
           </div>
         </div>

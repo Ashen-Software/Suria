@@ -1,28 +1,57 @@
-import { useQuery } from '@tanstack/react-query';
-import { loadEnergiaElectricaData } from '@/services/upmeData.service';
+import { useEffect, useMemo, useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { loadEnergiaElectricaPage } from '@/services/upmeData.service';
+import type { EnergiaElectricaRecord } from '@/types/upme.types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { useMemo, useState } from 'react';
 
 export function EnergiaElectricaCharts() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['energia-electrica'],
-    queryFn: loadEnergiaElectricaData,
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(0);
+  const pageSize = 20;
+  const apiPageSize = 5000;
+
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<EnergiaElectricaRecord[]>({
+    queryKey: ['energia-electrica-paged'],
+    queryFn: async ({ pageParam }) => 
+      loadEnergiaElectricaPage((pageParam as number) ?? 0, apiPageSize),
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.length === apiPageSize ? allPages.length : undefined,
+    initialPageParam: 0,
     // Evitar refetch constante y reutilizar resultados
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 
+  // Cargar páginas adicionales automáticamente para que el dashboard se vaya completando solo
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const flatData: EnergiaElectricaRecord[] = useMemo(
+    () => ((data?.pages as EnergiaElectricaRecord[][]) ?? []).flat(),
+    [data]
+  );
+
   // Procesar datos para gráficos
   const chartData = useMemo(() => {
-    if (!data) return [];
+    if (!flatData.length) return [];
 
     // Verificar qué escenarios realmente existen en los datos
-    const availableScenarios = new Set(data.map(r => r.escenario));
+    const availableScenarios = new Set(flatData.map(r => r.escenario));
     
     // Agrupar por año y escenario, sumando valores anuales
     const grouped = new Map<string, { year: string; ESC_BAJO?: number; ESC_MEDIO?: number; ESC_ALTO?: number }>();
 
-    data.forEach(record => {
+    flatData.forEach(record => {
       if (record.periodicidad === 'anual') {
         const year = record.period_key.split('-')[0];
         const key = year;
@@ -52,7 +81,7 @@ export function EnergiaElectricaCharts() {
         }
         return result;
       });
-  }, [data]);
+  }, [flatData]);
 
   // Determinar qué escenarios tienen datos para renderizar
   const hasEscenarioBajo = useMemo(() => {
@@ -69,9 +98,9 @@ export function EnergiaElectricaCharts() {
 
   // Datos mensuales para el último año disponible
   const monthlyData = useMemo(() => {
-    if (!data) return [];
+    if (!flatData.length) return [];
 
-    const monthly = data
+    const monthly = flatData
       .filter(r => r.periodicidad === 'mensual' && r.escenario === 'ESC_MEDIO')
       .map(r => ({
         date: r.period_key,
@@ -82,19 +111,15 @@ export function EnergiaElectricaCharts() {
       .slice(-24); // Últimos 24 meses
 
     return monthly;
-  }, [data]);
+  }, [flatData]);
 
   // Tabla: búsqueda y paginación sobre todos los registros
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(0);
-  const pageSize = 20;
-
   const filteredData = useMemo(() => {
-    if (!data) return [];
+    if (!flatData.length) return [];
     const term = search.toLowerCase().trim();
-    if (!term) return data;
+    if (!term) return flatData;
 
-    return data.filter((row) => {
+    return flatData.filter((row) => {
       return (
         row.period_key.toLowerCase().includes(term) ||
         row.periodicidad.toLowerCase().includes(term) ||
@@ -104,7 +129,7 @@ export function EnergiaElectricaCharts() {
         (row.revision?.toLowerCase().includes(term) ?? false)
       );
     });
-  }, [data, search]);
+  }, [flatData, search]);
 
   const totalPages = Math.max(1, Math.ceil(filteredData.length / pageSize));
 
@@ -115,8 +140,15 @@ export function EnergiaElectricaCharts() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <span className="loading loading-spinner loading-lg"></span>
+      <div className="space-y-6">
+        <div className="glass-panel p-6 space-y-4 animate-pulse">
+          <div className="h-6 w-56 rounded-xl bg-base-300" />
+          <div className="h-72 rounded-3xl bg-base-300" />
+        </div>
+        <div className="glass-panel p-6 space-y-4 animate-pulse">
+          <div className="h-6 w-64 rounded-xl bg-base-300" />
+          <div className="h-72 rounded-3xl bg-base-300" />
+        </div>
       </div>
     );
   }
@@ -129,7 +161,7 @@ export function EnergiaElectricaCharts() {
     );
   }
 
-  if (!data || data.length === 0) {
+  if (!flatData.length) {
     return (
       <div className="alert alert-warning">
         <span>No hay datos disponibles</span>
@@ -198,20 +230,20 @@ export function EnergiaElectricaCharts() {
       <div className="stats stats-vertical lg:stats-horizontal shadow w-full">
         <div className="stat">
           <div className="stat-title">Total Registros</div>
-          <div className="stat-value text-primary">{data.length.toLocaleString()}</div>
+          <div className="stat-value text-primary">{flatData.length.toLocaleString()}</div>
           <div className="stat-desc">Datos cargados</div>
         </div>
         <div className="stat">
           <div className="stat-title">Años Cubiertos</div>
           <div className="stat-value text-secondary">
-            {new Set(data.map(d => d.period_key.split('-')[0])).size}
+            {new Set(flatData.map(d => d.period_key.split('-')[0])).size}
           </div>
           <div className="stat-desc">Período de proyección</div>
         </div>
         <div className="stat">
           <div className="stat-title">Última Revisión</div>
           <div className="stat-value text-accent">
-            {new Set(data.map(d => d.revision)).size}
+            {new Set(flatData.map(d => d.revision)).size}
           </div>
           <div className="stat-desc">Revisiones disponibles</div>
         </div>

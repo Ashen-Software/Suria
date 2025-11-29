@@ -8,6 +8,19 @@ Aquí encontrarás orientación sobre la arquitectura, la API y el esquema de la
 - **API**: [Documentación de endpoints](./api/endpoints.md)
 - **Base de datos**: [Esquemas y modelos](./database/esquema.md)
 
+## Frontend y Dashboards
+
+- **Aplicación React + Vite** con TypeScript, Tailwind y DaisyUI.
+- **Dashboards energéticos** para:
+  - Declaración de gas natural (MinMinas).
+  - Regalías por campo (ANH).
+  - Proyecciones UPME (gas natural, energía eléctrica, potencia máxima, capacidad instalada).
+- **Vista Integrada (`/integrado`)** que cruza:
+  - Demanda de gas y electricidad UPME (ESC\_MEDIO).
+  - Oferta de gas declarada (`fact_oferta_gas`).
+  - Regalías acumuladas (`fact_regalias`).
+  - Incluye un botón de **“Generar análisis con IA”** que usa el servicio LLM para producir un resumen ejecutivo basado en los datos cargados.
+
 ## Fuentes de datos
 
 ### Regalías por campo (ANH)

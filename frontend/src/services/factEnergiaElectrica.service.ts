@@ -74,6 +74,62 @@ export class FactEnergiaElectricaService {
       }
     }
   }
+
+  /**
+   * Obtiene una página de registros de energía eléctrica,
+   * pensada para carga incremental desde el frontend.
+   */
+  async getPage(from: number, to: number): Promise<{
+    data: EnergiaElectricaRecord[] | null
+    error: Error | null
+  }> {
+    try {
+      const { data, error } = await supabase
+        .from('fact_energia_electrica')
+        .select(`
+          *,
+          dim_tiempo (
+            fecha
+          )
+        `)
+        .or('periodicidad.eq.anual,and(periodicidad.eq.mensual,escenario.eq.ESC_MEDIO)')
+        .order('tiempo_id', { ascending: true })
+        .range(from, to)
+
+      if (error) {
+        console.error('Error fetching fact_energia_electrica page:', error)
+        return { data: null, error: new Error(error.message) }
+      }
+
+      const mappedData: EnergiaElectricaRecord[] = (data || []).map((record: any) => {
+        const fecha = record.dim_tiempo?.fecha || null
+        const periodKey = fecha ? new Date(fecha).toISOString().split('T')[0] : ''
+        
+        return {
+          period_key: periodKey,
+          periodicidad: record.periodicidad as 'mensual' | 'anual',
+          metric: 'energia' as const,
+          unidad: record.unidad || '',
+          ambito: record.ambito || '',
+          descriptor: record.descriptor || '',
+          escenario: record.escenario as 'ESC_BAJO' | 'ESC_MEDIO' | 'ESC_ALTO',
+          valor: parseFloat(record.valor) || 0,
+          revision: record.revision || '',
+          year_span: record.year_span || '',
+          sheet_name: record.sheet_name || '',
+          source_file: record.source_file || '',
+        }
+      })
+
+      return { data: mappedData, error: null }
+    } catch (error) {
+      console.error('Unexpected error (page):', error)
+      return { 
+        data: null, 
+        error: error instanceof Error ? error : new Error('Unknown error occurred')
+      }
+    }
+  }
 }
 
 export const factEnergiaElectricaService = FactEnergiaElectricaService.getInstance()

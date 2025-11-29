@@ -1,7 +1,5 @@
-import { DimTerritoriosViewer } from "@/components/DimTerritoriosViewer"
+import { DimTerritoriosViewer } from '@/components/DimTerritoriosViewer'
 
 export function DimTerritoriosPage() {
-  return (
-    <DimTerritoriosViewer />
-  )
+  return <DimTerritoriosViewer />
 }

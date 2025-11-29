@@ -117,21 +117,50 @@ Ver [esquema.md](../database/esquema.md) para detalles completos.
 
 #### Stack Tecnológico
 
-*   **Angular 16+**: Framework principal
+*   **React 19 + Vite + TypeScript**: Aplicación SPA principal
     
-*   **Tailwind CSS**: Estilización y responsive design
+*   **Tailwind CSS + DaisyUI**: Estilización, layout y componentes UI
     
-*   **Supabase JS Client**: Conexión directa a datos
+*   **Supabase JS Client**: Conexión directa a la base de datos (lectura desde el frontend)
     
-*   **Chart.js/NGX-Charts**: Visualizaciones de datos
+*   **TanStack React Query**: Capa de data fetching, caché y paginación incremental (`useInfiniteQuery`)
+    
+*   **TanStack React Table**: Tablas interactivas con búsqueda y paginación en el navegador
+    
+*   **Recharts**: Visualizaciones (líneas, áreas, barras, pies) para dashboards energéticos
+    
+*   **OpenAI Chat Completions API**: Servicio de IA para el chatbot y análisis automáticos del dashboard integrado
     
 
 #### Estrategia de Despliegue
 
-*   **Vercel/Netlify**: Despliegue continuo desde main branch
+*   **Vite dev server** en local (`npm run dev`), con build estático listo para CD (Vercel/Netlify/DigitalOcean)
     
-*   **Variables de Entorno**: Configuración segura de endpoints
+*   **Variables de Entorno**: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_OPENAI_API_KEY`, `VITE_OPENAI_MODEL`, etc.
     
-*   **CDN Global**: Distribución optimizada de assets
+*   **CDN Global** (según plataforma de despliegue): Distribución optimizada de assets
+    
+
+### 6\. Frontend: Páginas y Vistas Clave
+
+*   **Home (`/`)**: Portada y explicación general de Suria.
+*   **Integrado (`/integrado`)**: Dashboard que cruza UPME (demanda gas y eléctrica), Declaración MinMinas (`fact_oferta_gas`) y regalías ANH (`fact_regalias`), con:
+    * KPIs integrados (demanda total gas, demanda eléctrica, oferta gas, regalías acumuladas).
+    * Reconciliación oferta vs demanda de gas (series anuales agregadas).
+    * Serie de regalías anuales.
+    * Tabla integrada por año con demanda gas, oferta gas, brecha, demanda eléctrica y regalías.
+    * Botón **“Generar análisis con IA”** que llama al servicio de LLM y genera un resumen ejecutivo basado en los datos cargados.
+*   **Declaración de Gas (`/declaracion-gas`)** y **Regalías (`/regalias`)**: Dashboards detallados por fuente, con visualizaciones, estadísticas y tabla granular.
+*   **UPME (`/upme`)**: Página de entrada a los módulos de demanda de gas natural, energía eléctrica, potencia máxima y capacidad instalada.
+*   **Dimensiones (`/dimensiones`)**: Catálogo maestro de `dim_tiempo`, `dim_territorios` y áreas eléctricas.
+
+Todas las vistas que consumen tablas de hechos grandes (`fact_oferta_gas`, `fact_regalias`, `fact_demanda_gas_natural`, `fact_energia_electrica`, `fact_potencia_maxima`, `fact_capacidad_instalada`) siguen un mismo patrón:
+
+1. **Servicios Supabase paginados** (`getPage(from, to)` con `.range`) para evitar `statement timeout` en consultas muy grandes.
+2. **Capa de helpers** (`loadXPage(page, pageSize)`) que reciben un índice de página y tamaño de página API (por defecto 5000 filas).
+3. **`useInfiniteQuery` en el frontend** para traer páginas sucesivas y construir un `flatData` acumulado sobre el que se calculan gráficos, KPIs y tablas.
+4. **Carga progresiva y skeletons**: el usuario empieza a ver estructura y primeros datos mientras siguen llegando páginas adicionales en background.
+
+Este patrón está aplicado tanto en los módulos de Declaración/Regalías como en todos los módulos UPME.
 
 [![Diagrama de arquitectura](../assets/diagrams/arquitectura.svg)](../assets/diagrams/arquitectura.svg)
