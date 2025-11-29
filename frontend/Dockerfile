@@ -10,6 +10,7 @@ ARG VITE_SUPABASE_ANON_KEY
 # Establecer como variables de entorno para el build
 ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
+ENV VITE_OPENAI_API_KEY=$VITE_OPENAI_API_KEY
 
 # Copiar el código fuente del frontend
 # Los datos de UPME ya están en frontend/public/data/ y se copiarán automáticamente por Vite
