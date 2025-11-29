@@ -3,10 +3,12 @@ import { EnergiaElectricaCharts } from '@/components/upme/EnergiaElectricaCharts
 import { PotenciaMaximaCharts } from '@/components/upme/PotenciaMaximaCharts';
 import { CapacidadInstaladaCharts } from '@/components/upme/CapacidadInstaladaCharts';
 import { GasNaturalCharts } from '@/components/upme/GasNaturalCharts';
+import { UPMELanding } from '@/components/upme/UPMELanding';
 
-type TabType = 'energia' | 'potencia' | 'capacidad' | 'gas' | 'looker';
+type TabType = 'info' | 'energia' | 'potencia' | 'capacidad' | 'gas' | 'looker';
 
 const tabs: { id: TabType; label: string; icon: string }[] = [
+  { id: 'info', label: 'Información', icon: '📋' },
   { id: 'gas', label: 'Gas Natural', icon: '🔥' },
   { id: 'energia', label: 'Energía Eléctrica', icon: '⚡' },
   { id: 'potencia', label: 'Potencia Máxima', icon: '📊' },
@@ -15,7 +17,7 @@ const tabs: { id: TabType; label: string; icon: string }[] = [
 ];
 
 export function UPMEPage() {
-  const [activeTab, setActiveTab] = useState<TabType>('gas');
+  const [activeTab, setActiveTab] = useState<TabType>('info');
 
   return (
     <div className="space-y-6">
@@ -47,6 +49,7 @@ export function UPMEPage() {
 
       {/* Contenido de tabs */}
       <div className="space-y-6">
+        {activeTab === 'info' && <UPMELanding />}
         {activeTab === 'energia' && <EnergiaElectricaCharts />}
         {activeTab === 'potencia' && <PotenciaMaximaCharts />}
         {activeTab === 'capacidad' && <CapacidadInstaladaCharts />}
