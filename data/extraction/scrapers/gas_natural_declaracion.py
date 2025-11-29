@@ -1,14 +1,13 @@
 """
 Scraper para Declaraciones de Producción de Gas Natural del Ministerio de Minas y Energía.
 
-Este scraper:
+Este scraper (EXTRACTION):
 - Accede a la página de gas natural usando requests + BeautifulSoup
 - Extrae declaraciones, resoluciones, cronogramas, anexos y plantillas
-- Descarga archivos Excel (.xlsm) con progreso (opcional, activado con --excel)
-- Asocia cada Excel con su resolución PDF correspondiente
-- Extrae datos estructurados de los Excel (opcional)
+- Descarga archivos Excel (.xlsm/.xlsx) crudos al bucket
+- NO parsea los Excel (eso se hace en TRANSFORMATION)
 """
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from datetime import datetime
 import json
 
@@ -17,8 +16,6 @@ from common.hash_utils import calculate_hash_sha256
 
 from extraction.scrapers.declaracion.web_scraper import extract_declaration_links
 from extraction.scrapers.declaracion.file_downloader import download_excel_file
-from extraction.scrapers.declaracion.excel_parser import extract_excel_data
-from extraction.scrapers.declaracion.file_manager import save_json_to_processed
 
 
 def check(source_config: Dict[str, Any]) -> str:
@@ -57,7 +54,7 @@ def check(source_config: Dict[str, Any]) -> str:
         raise
 
 
-def extract(source_config: Dict[str, Any]) -> bytes:
+def extract(source_config: Dict[str, Any]) -> Dict[str, Any]:
     """
     Extrae archivos Excel de declaraciones de gas natural.
     
@@ -65,7 +62,19 @@ def extract(source_config: Dict[str, Any]) -> bytes:
         source_config: Configuración de la fuente
         
     Returns:
-        Bytes del contenido JSON con metadata de archivos descargados
+        Dict con estructura:
+        {
+            "metadata": bytes (JSON con metadata),
+            "excel_files": [
+                {"filename": str, "content": bytes, "parsed_data": dict|None},
+                ...
+            ]
+        }
+        
+        Esta estructura permite al extractor guardar:
+        - metadata.json con enlaces y estructura
+        - excel/*.xlsx archivos originales
+        - parsed/*.json datos parseados de cada Excel
     """
     config = source_config.get("config", {})
     url = config.get(
@@ -111,10 +120,11 @@ def extract(source_config: Dict[str, Any]) -> bytes:
         if analyze_excel:
             logger.info("[gas_natural_declaracion] Modo activado: Descarga y análisis de Excel")
         else:
-            logger.info("[gas_natural_declaracion] Modo desactivado: Solo extracción de enlaces (usar --excel para descargar)")
+            logger.info("[gas_natural_declaracion] Modo desactivado: Solo extracción de enlaces")
         
         processed_declarations = []
         processed_plantillas = []
+        excel_files = []
         
         for idx, declaration in enumerate(declarations, 1):
             declaration_type = declaration.get("type")
@@ -137,7 +147,8 @@ def extract(source_config: Dict[str, Any]) -> bytes:
             processed_declaration = _process_declaration(
                 declaration, 
                 limit_resolutions if analyze_excel else None, 
-                analyze_excel
+                analyze_excel,
+                excel_files
             )
             
             if processed_declaration:
@@ -159,30 +170,48 @@ def extract(source_config: Dict[str, Any]) -> bytes:
         total_resolutions = sum(len(d.get("resolutions", [])) for d in processed_declarations)
         logger.info(
             f"[gas_natural_declaracion] Extracción completada: "
-            f"{len(processed_declarations)} declaraciones, {total_resolutions} resoluciones procesadas"
+            f"{len(processed_declarations)} declaraciones, {total_resolutions} resoluciones, "
+            f"{len(excel_files)} archivos Excel"
         )
         
-        save_json_to_processed(result)
+        # # Guardar copia local solo si esta habilitado (debug/desarrollo)
+        # save_local = config.get("save_local_copy", False)
+        # if save_local:
+        #     save_json_to_processed(result)
+        #     logger.info("[gas_natural_declaracion] Copia local guardada (save_local_copy=True)")
         
-        return result_json.encode('utf-8')
+        # Retornar estructura con metadata y archivos Excel
+        return {
+            "metadata": result_json.encode('utf-8'),
+            "excel_files": excel_files
+        }
         
     except Exception as e:
         logger.error(f"[gas_natural_declaracion] Error en extract: {e}")
         raise
 
 
-def _process_declaration(declaration: Dict[str, Any], limit_resolutions: Optional[int] = None, analyze_excel: bool = False) -> Optional[Dict[str, Any]]:
+def _process_declaration(
+    declaration: Dict[str, Any], 
+    limit_resolutions: Optional[int] = None, 
+    analyze_excel: bool = False,
+    excel_files: Optional[list] = None
+) -> Optional[Dict[str, Any]]:
     """
     Procesa una declaración completa con todas sus resoluciones.
     
     Args:
         declaration: Diccionario con la declaración y sus resoluciones
         limit_resolutions: Límite opcional de resoluciones a procesar
-        analyze_excel: Si es True, analiza el contenido del Excel. Si es False, solo descarga.
+        analyze_excel: Si es True, descarga y analiza el contenido del Excel
+        excel_files: Lista donde acumular archivos Excel descargados (mutada in-place)
         
     Returns:
         Diccionario con la declaración procesada o None si hay error
     """
+    if excel_files is None:
+        excel_files = []
+        
     declaration_title = declaration.get("declaration_title", "Unknown")
     resolutions = declaration.get("resolutions", [])
     cronograma = declaration.get("cronograma")
@@ -217,8 +246,7 @@ def _process_declaration(declaration: Dict[str, Any], limit_resolutions: Optiona
         soportes_list = soporte_magnetico if isinstance(soporte_magnetico, list) else [soporte_magnetico]
         
         processed_soportes = []
-        extracted_data = None
-        excel_file_processed = None
+        excel_file_processed = False
         
         for soporte in soportes_list:
             soporte_url = soporte.get("url")
@@ -250,22 +278,44 @@ def _process_declaration(declaration: Dict[str, Any], limit_resolutions: Optiona
                     "excel_title": soporte_title
                 }
                 
-                excel_bytes, saved_path = download_excel_file(soporte_url, soporte_title, excel_declaration)
+                # No guardar a disco local, solo descargar en memoria
+                excel_bytes, _ = download_excel_file(
+                    soporte_url, soporte_title, excel_declaration, save_to_disk=False
+                )
                 
                 if excel_bytes:
                     file_size_bytes = excel_bytes.getbuffer().nbytes
                     file_size_mb = file_size_bytes / (1024 * 1024)
                     
-                    processed_soporte["local_path"] = str(saved_path) if saved_path else None
+                    # Generar nombre de archivo para el bucket
+                    resolution_num = resolution.get("number", "unknown")
+                    # Determinar extensión del archivo original
+                    if ".xlsm" in soporte_url_lower:
+                        ext = "xlsm"
+                    elif ".xlsx" in soporte_url_lower:
+                        ext = "xlsx"
+                    else:
+                        ext = "xls"
+                    excel_filename = f"res_{resolution_num}.{ext}"
+                    
                     processed_soporte["file_size_bytes"] = file_size_bytes
                     processed_soporte["file_size_mb"] = file_size_mb
+                    processed_soporte["bucket_path"] = f"excel/{excel_filename}"
                     
-                    logger.info(f"[gas_natural_declaracion] Analizando contenido del Excel: {soporte_title}")
-                    try:
-                        extracted_data = extract_excel_data(excel_bytes, excel_declaration)
-                    except Exception as e:
-                        logger.error(f"[gas_natural_declaracion] Error analizando Excel: {e}")
-                        extracted_data = None
+                    # Solo guardar el Excel crudo, sin parsear
+                    # El parseo se hará en el paso de TRANSFORMATION
+                    excel_bytes.seek(0)
+                    excel_files.append({
+                        "filename": excel_filename,
+                        "content": excel_bytes.read(),
+                        "declaration_title": declaration_title,
+                        "resolution_number": resolution_num
+                    })
+                    
+                    logger.info(
+                        f"[gas_natural_declaracion] Excel descargado: {excel_filename} "
+                        f"({file_size_mb:.2f} MB)"
+                    )
                     
                     excel_file_processed = True
                 else:
@@ -280,8 +330,7 @@ def _process_declaration(declaration: Dict[str, Any], limit_resolutions: Optiona
             "date": resolution.get("date"),
             "url": resolution.get("url"),
             "title": resolution.get("title"),
-            "soporte_magnetico": processed_soportes if len(processed_soportes) > 0 else None,
-            "extracted_data": extracted_data
+            "soporte_magnetico": processed_soportes if len(processed_soportes) > 0 else None
         }
         
         processed_resolutions.append(processed_resolution)

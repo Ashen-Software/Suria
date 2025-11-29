@@ -3,8 +3,8 @@ from typing import List, Dict, Optional
 from .extractors import get_extractor
 from .transformers import get_transformer
 from .loaders import FactLoader
-from .storage import get_latest_raw_files
-from .pipeline import transform_multiple_files, success_percentage
+from .storage import get_latest_raw_files, get_latest_metadata_and_excel
+from .pipeline import transform_multiple_files, transform_excel_batch, success_percentage
 
 
 def full_etl_task(changed_sources: List[str], current_config: Dict, skip_load: bool = False):
@@ -48,22 +48,42 @@ def full_etl_task(changed_sources: List[str], current_config: Dict, skip_load: b
             
             # PASO 2: TRANSFORMACION
             logger.info(f"[full_etl] PASO 2/3: TRANSFORMACIÓN")
-            transformer = get_transformer(src_type)
-            if not transformer:
-                logger.warning(f"[full_etl] No hay transformer para tipo '{src_type}' en {src_id}")
-                continue
             
-            # Obtener archivos RAW mas recientes del storage,
-            # pueden ser multiples (lotes con paginacion)
-            raw_files = get_latest_raw_files(src_id, src)
-            if not raw_files:
-                logger.warning(f"[full_etl] No se encontraron archivos RAW para {src_id}")
-                continue
+            # Verificar si la fuente requiere procesamiento de Excel
+            analyze_excel = (
+                src.get("transform", {}).get("analyze_excel", False) or
+                src.get("config", {}).get("analyze_excel", False)
+            )
             
-            logger.info(f"[full_etl]   Archivos a procesar: {len(raw_files)}")
-            
-            # Transformar cada archivo y combinar resultados
-            transform_result = transform_multiple_files(raw_files, transformer, src)
+            if analyze_excel:
+                # Flujo Excel: metadata + archivos Excel
+                result = get_latest_metadata_and_excel(src_id, src)
+                if not result:
+                    logger.warning(f"[full_etl] No se encontraron archivos para {src_id}")
+                    continue
+                
+                metadata, excel_files = result
+                logger.info(f"[full_etl]   Archivos Excel a procesar: {len(excel_files)}")
+                
+                transform_result = transform_excel_batch(
+                    metadata=metadata,
+                    excel_files=excel_files,
+                    source_config=src
+                )
+            else:
+                # Flujo normal: JSON files
+                transformer = get_transformer(src_type)
+                if not transformer:
+                    logger.warning(f"[full_etl] No hay transformer para tipo '{src_type}' en {src_id}")
+                    continue
+                
+                raw_files = get_latest_raw_files(src_id, src)
+                if not raw_files:
+                    logger.warning(f"[full_etl] No se encontraron archivos RAW para {src_id}")
+                    continue
+                
+                logger.info(f"[full_etl]   Archivos a procesar: {len(raw_files)}")
+                transform_result = transform_multiple_files(raw_files, transformer, src)
             
             valid_count = len(transform_result.get("valid_records", []))
             error_count = len(transform_result.get("errors", []))

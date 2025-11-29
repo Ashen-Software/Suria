@@ -6,10 +6,10 @@ const THEMES = [
 ]
 
 export function Header() {
-  const [theme, setTheme] = useState<string>('corporate')
+  const [theme, setTheme] = useState<string>('dark')
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'corporate'
+    const savedTheme = localStorage.getItem('theme') || 'dark'
     setTheme(savedTheme)
     document.documentElement.setAttribute('data-theme', savedTheme)
   }, [])
@@ -23,8 +23,12 @@ export function Header() {
   return (
     <header className="glass-panel flex flex-wrap items-center justify-between gap-4 px-5 py-4">
       <div className="flex items-center gap-4">
-        <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary">
-          <span className="text-lg font-semibold">S</span>
+        <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl overflow-hidden">
+          <img 
+            src="/favicon.svg" 
+            alt="Suria Logo" 
+            className="w-full h-full object-contain"
+          />
           <span className="pointer-events-none absolute inset-0 rounded-2xl border border-primary/30 motion-safe:animate-ping" aria-hidden="true" />
         </div>
         <div>

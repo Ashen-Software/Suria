@@ -93,6 +93,82 @@ def transform_multiple_files(raw_files: List[Tuple[str, str]], transformer: Any,
     return combined_result
 
 
+def transform_excel_batch(
+    metadata: Dict[str, Any],
+    excel_files: Dict[str, bytes],
+    source_config: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    Orquesta la transformación de un lote de archivos Excel.
+    
+    Usa el registry de source_transformers para obtener el transformer
+    específico de la fuente, o usa ExcelTransformer genérico como fallback.
+    
+    Args:
+        metadata: Contenido parseado del metadata.json
+        excel_files: Dict {filename: bytes} de archivos Excel
+        source_config: Configuración de la fuente
+        
+    Returns:
+        Dict con valid_records, errors, stats (y resoluciones si aplica)
+    """
+    from workflows.full_etl.transformers import get_transformer_for_source
+    from workflows.full_etl.transformers.excel import ExcelTransformer
+    
+    start_time = time.time()
+    source_id = source_config.get("id")
+    
+    logger.info(
+        f"[pipeline] Iniciando transformación batch Excel: "
+        f"{len(excel_files)} archivos para {source_id}"
+    )
+    
+    # Obtener transformer apropiado (especifico o generico)
+    transformer = get_transformer_for_source(source_config)
+    
+    # Si tiene metodo transform_batch, usarlo
+    if hasattr(transformer, 'transform_batch'):
+        result = transformer.transform_batch(excel_files, metadata, source_config)
+    else:
+        # Fallback a ExcelTransformer generico
+        excel_transformer = ExcelTransformer()
+        result = excel_transformer.transform_batch(excel_files, metadata, source_config)
+    
+    # Agregar info de metadata a stats
+    result["stats"]["extraction_date"] = metadata.get("extraction_date")
+    result["stats"]["source_url"] = metadata.get("source_url")
+    result["stats"]["total_declarations"] = metadata.get("total_declarations", 0)
+    
+    processing_time = time.time() - start_time
+    result["stats"]["total_processing_time"] = processing_time
+    
+    logger.info(
+        f"[pipeline] Transformación batch completada: "
+        f"{result['stats']['valid']} registros válidos, "
+        f"{result['stats']['errors']} errores"
+    )
+    
+    return result
+
+
+# Alias para compatibilidad con codigo existente
+def transform_minminas_excel_batch(
+    metadata: Dict[str, Any],
+    excel_files: Dict[str, bytes],
+    source_config: Dict[str, Any]
+) -> Dict[str, Any]:
+    """
+    Alias para compatibilidad. Usa transform_excel_batch internamente.
+    
+    @deprecated: Usar transform_excel_batch() en su lugar.
+    """
+    logger.warning(
+        "[pipeline] transform_minminas_excel_batch está deprecado. "
+        "Usar transform_excel_batch() en su lugar."
+    )
+    return transform_excel_batch(metadata, excel_files, source_config)
+
+
 def success_percentage(valid: int, total: int) -> float:
     """Calcula porcentaje de exito."""
     if total == 0:

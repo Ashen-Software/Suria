@@ -165,30 +165,81 @@ class FactDemandaGasSchema(BaseModel):
     source_id: str
 
 
+class TipoProduccionOferta(str, Enum):
+    """Tipos de producción válidos para fact_oferta_gas."""
+    PTDV = "PTDV"  # Producción Total Disponible para Venta
+    PC_CONTRATOS = "PC_CONTRATOS"  # Producción Comprometida - Contratos consumo interno
+    PC_EXPORTACIONES = "PC_EXPORTACIONES"  # Producción Comprometida - Exportaciones
+    PC_REF_BARRANCA = "PC_REF_BARRANCA"  # Producción Comprometida - Refinería Barrancabermeja
+    PC_REF_CARTAGENA = "PC_REF_CARTAGENA"  # Producción Comprometida - Refinería Cartagena
+    PP = "PP"  # Potencial Producción (declarado por operador)
+    GAS_OPERACION = "GAS_OPERACION"  # Gas consumido en operaciones del campo
+    CIDV = "CIDV"  # Capacidad Instalada Disponible para Venta
+
+
+class DimResolucionSchema(BaseModel):
+    """
+    Schema para dim_resoluciones - metadatos de resoluciones MinMinas.
+    Cada resolución define un período de declaración de producción.
+    """
+    numero_resolucion: str
+    fecha_resolucion: Optional[date] = None
+    periodo_desde: date
+    periodo_hasta: date
+    titulo: Optional[str] = None
+    url_pdf: Optional[str] = None
+    url_soporte_magnetico: Optional[str] = None
+    source_id: str
+
+
 class FactOfertaGasSchema(BaseModel):
     """
     Schema para fact_oferta_gas - declaración de producción.
     Fuente: MinMinas - Declaración de Producción
+    
+    Actualizado para soportar:
+    - Tipo de producción con CHECK constraint
+    - Operador (puede diferir del operador principal si hay asociados)
+    - Participación del Estado
+    - Poder calorífico del campo
     """
-
     tiempo_fecha: date
     campo_nombre: str
     
-    # Hechos
-    potencial_produccion: Decimal = Field(ge=0, decimal_places=4)
-    unidad: str = "KPCD"  # KPCD o MPCD
-    potencial_gbtud: Optional[Decimal] = Field(None, ge=0, decimal_places=6)
+    # Tipo de producción/destino
+    tipo_produccion: TipoProduccionOferta
     
-    # Metadata
+    # Operador (puede ser distinto del operador del campo)
+    operador: str
+    es_operador_campo: bool = True
+    es_participacion_estado: bool = False
+    
+    # Valor de producción (en GBTUD, unidad normalizada)
+    valor_gbtud: Decimal = Field(ge=0, decimal_places=6)
+    
+    # Metadata del campo (snapshot del Excel)
+    poder_calorifico_btu_pc: Optional[Decimal] = Field(None, ge=0, decimal_places=4)
+    
+    # Referencia a resolución (número, no FK - se resuelve en loader)
+    resolucion_number: Optional[str] = None
+    
+    # Metadata ETL
     source_id: str
-    
-    @field_validator('unidad')
-    @classmethod
-    def validate_unidad(cls, v: str) -> str:
-        unidades_validas = ["KPCD", "MPCD", "GBTUD"]
-        if v not in unidades_validas:
-            raise ValueError(f"Unidad inválida. Debe ser una de: {', '.join(unidades_validas)}")
-        return v
+
+
+class FactParticipacionCampoSchema(BaseModel):
+    """
+    Schema para fact_participacion_campo - participación de asociados y estado.
+    Registra la participación de cada asociado por campo y período.
+    """
+    campo_nombre: str
+    resolucion_number: str
+    periodo_desde: date
+    periodo_hasta: date
+    asociado: str
+    participacion_pct: Decimal = Field(ge=0, le=100, decimal_places=2)
+    estado_pct: Optional[Decimal] = Field(None, ge=0, le=100, decimal_places=2)
+    source_id: str
 
 
 # Referencias

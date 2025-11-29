@@ -162,7 +162,10 @@ result = transformer.transform(json_data, {"id": "api_regalias"})
 Transforma archivos Excel (UPME, MinMinas).
 
 **Fuentes soportadas:**
-- `upme_demanda` → Proyección de Demanda → `fact_demanda_gas`
+- `upme_gas_natural` → Proyección Gas Natural → `fact_demanda_gas_natural`
+- `upme_energia_electrica` → Proyección Energía Eléctrica → `fact_energia_electrica`
+- `upme_potencia_maxima` → Proyección Potencia Máxima → `fact_potencia_maxima`
+- `upme_capacidad_instalada` → Capacidad Instalada GD → `fact_capacidad_instalada`
 - `minminas_oferta` → Declaración de Producción → `fact_oferta_gas`
 
 **Características:**
@@ -224,24 +227,53 @@ volumen_regalia: Decimal (ge=0, decimal_places=4)
 valor_regalias_cop: Decimal (ge=0, decimal_places=2)
 ```
 
-#### FactDemandaGasSchema
+#### FactDemandaGasNaturalSchema
 ```python
 tiempo_fecha: date
-escenario: EscenarioProyeccion  # MEDIO, ALTO, BAJO, IC_95, IC_68
-sector: SectorDemanda  # RESIDENCIAL, INDUSTRIAL, etc.
-region: RegionDemanda  # CENTRO, COSTA, etc.
-segmento: SegmentoDemanda  # TOTAL, PETROLERO, etc.
-nivel_agregacion: NivelAgregacion  # nacional, sectorial, regional
-valor_demanda_gbtud: Decimal (ge=0, decimal_places=6)
+periodicidad: str  # "mensual", "anual"
+categoria: str  # COMPRESORES, INDUSTRIAL, PETROLERO, PETROQUIMICO, RESIDENCIAL, TERCIARIO, TERMOELECTRICO, GNC_TRANSPORTE, GNL_TRANSPORTE, AGREGADO
+region: str  # Región geográfica
+nodo: str  # Nodo específico (opcional)
+escenario: str  # ESC_BAJO, ESC_MEDIO, ESC_ALTO
+valor: Decimal (ge=0, decimal_places=6)
+revision: str  # REV_JULIO_2025, REV_DIC_2023, etc.
+```
+
+#### FactEnergiaElectricaSchema
+```python
+tiempo_fecha: date
+periodicidad: str  # "mensual", "anual"
+unidad: str  # GWh-mes, GWh-año
+area_id: int
+descriptor: str
+escenario: str  # ESC_BAJO, ESC_MEDIO, ESC_ALTO, IC_SUP_95, IC_INF_95, IC_SUP_68, IC_INF_68
+revision: str
+valor: Decimal (ge=0, decimal_places=6)
+```
+
+#### FactPotenciaMaximaSchema
+```python
+tiempo_fecha: date
+periodicidad: str  # "mensual", "anual"
+unidad: str  # MW-mes, MW-año
+area_id: int
+descriptor: str
+escenario: str  # ESC_BAJO, ESC_MEDIO, ESC_ALTO, IC_SUP_*, IC_INF_*
+revision: str
+valor: Decimal (ge=0, decimal_places=6)
 ```
 
 #### FactOfertaGasSchema
 ```python
 tiempo_fecha: date
 campo_nombre: str
-potencial_produccion: Decimal (ge=0, decimal_places=4)
-unidad: str  # KPCD, MPCD, GBTUD
-potencial_gbtud: Decimal (ge=0, decimal_places=6)
+resolucion_id: int
+tipo_produccion: str  # PTDV, PC_CONTRATOS, PC_EXPORTACIONES, PP, GAS_OPERACION, CIDV
+operador: str
+es_operador_campo: bool
+es_participacion_estado: bool
+valor_gbtud: Decimal (ge=0, decimal_places=6)
+poder_calorifico_btu_pc: Decimal (optional)
 ```
 
 ### Dimensiones
@@ -273,6 +305,24 @@ asociados: List[str]
 participacion_estado: Decimal (ge=0, le=100, decimal_places=2)
 territorio_id: int
 activo: bool
+```
+
+#### DimAreasElectricasSchema
+```python
+codigo: str  # Código único del área
+nombre: str  # Nombre del área
+categoria: str  # nacional, area_sin, combinado, gd, proyecto
+descripcion: str
+```
+
+#### DimResolucionesSchema
+```python
+numero_resolucion: str
+fecha_resolucion: date
+periodo_desde: date
+periodo_hasta: date
+url_pdf: str (optional)
+url_soporte_magnetico: str (optional)
 ```
 
 ## Agregar Nuevo Transformer

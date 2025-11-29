@@ -20,11 +20,16 @@
 │   │   └── sources_config.json  ← Fuentes + metadatos
 │   │
 │   ├── extraction/
-│   │   ├── scrapers/            ← Playwright y scraping
+│   │   ├── scrapers/
+│   │   │   ├── declaracion/     ← Scrapers MinMinas
+│   │   │   └── proyeccion/      ← Scrapers UPME
+│   │   │       ├── config.py
+│   │   │       ├── normalizer.py
+│   │   │       └── schema/      ← Esquemas SQL por métrica
 │   │   ├── api_clients/         ← Cliente requests/API
 │   │   └── common/              ← Utils comunes (fechas, hash, etc.)
 │   │
-│   ├── logging/
+│   ├── logs_config/
 │   │   ├── logs/                ← Archivos persistentes
 │   │   └── logger.py            ← Config de logs
 │   │

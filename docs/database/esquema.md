@@ -1,219 +1,284 @@
 # Esquema de Base de Datos
 
-Este documento detalla la estructura de la base de datos en Supabase (PostgreSQL) utilizada para orquestar el ETL y almacenar los datos procesados de gas natural.
+Estructura de la base de datos en Supabase (PostgreSQL) para el sistema ETL de datos energéticos.
 
 ## Diagrama Relacional
 
 ```
                               ┌─────────────────┐
                               │   etl_sources   │
-                              │  (config ETL)   │
                               └────────┬────────┘
                                        │ 1:N
-          ┌────────────────────────────┼────────────────────────────┐
-          │                            │                            │
-          ▼                            ▼                            ▼
- ┌─────────────────┐        ┌──────────────────┐        ┌──────────────────┐
- │  fact_regalias  │        │ fact_demanda_gas │        │  fact_oferta_gas │
- │   (ANH API)     │        │     (UPME)       │        │   (MinMinas)     │
- └────────┬────────┘        └─────────┬────────┘        └────────┬─────────┘
-          │                           │                          │
-          ▼                           ▼                          ▼
-     ┌──────────┐               ┌──────────┐               ┌──────────┐
-     │dim_tiempo│◄──────────────│dim_tiempo│──────────────►│dim_tiempo│
-     └──────────┘               └──────────┘               └──────────┘
-          │
-          ▼
-     ┌──────────┐                                           ┌──────────┐
-     │dim_campos│◄──────────────────────────────────────────│dim_campos│
-     └────┬─────┘                                           └────┬─────┘
-          │ N:1                                                  │
-          ▼                                                      ▼
-   ┌───────────────┐                                      ┌───────────────┐
-   │dim_territorios│                                      │dim_territorios│
-   └───────────────┘                                      └───────────────┘
+    ┌──────────────┬───────────────────┼───────────────────┬──────────────────┐
+    │              │                   │                   │                  │
+    ▼              ▼                   ▼                   ▼                  ▼
+┌─────────┐  ┌───────────────┐  ┌─────────────┐  ┌────────────┐  ┌─────────────────┐
+│fact_    │  │fact_demanda_  │  │fact_energia_│  │fact_poten- │  │fact_capacidad_  │
+│regalias │  │ gas_natural   │  │  electrica  │  │cia_maxima  │  │   instalada     │
+│ (ANH)   │  │   (UPME)      │  │   (UPME)    │  │  (UPME)    │  │     (UPME)      │
+└────┬────┘  └───────┬───────┘  └──────┬──────┘  └─────┬──────┘  └────────┬────────┘
+     │               │                 │               │                  │
+     └───────────────┴────────┬────────┴───────────────┴──────────────────┘
+                              ▼
+                       ┌──────────────┐
+                       │  dim_tiempo  │
+                       └──────────────┘
 
-                              ┌──────────────┐
-                              │ ref_unidades │ (auxiliar)
-                              └──────────────┘
+┌──────────────────┐    ┌───────────────┐    ┌───────────────┐
+│dim_areas_electric│    │  dim_campos   │───►│dim_territorios│
+└──────────────────┘    └───────────────┘    └───────────────┘
+
+    ┌────────────────┐    ┌──────────────────────┐
+    │dim_resoluciones│    │fact_participacion_   │
+    └────────────────┘    │       campo          │
+                          └──────────────────────┘
 ```
 
 ---
 
 ## Tablas de Configuración ETL
 
-### 1. `etl_sources`
-Almacena la configuración maestra de cada fuente de datos. Es la fuente de verdad para el Scheduler.
+### `etl_sources`
+
+Configuración maestra de cada fuente de datos.
 
 | Columna | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `id` | `text` | **PK**. Identificador único (ej: `min_minas_gas`, `precios_bolsa`). |
-| `name` | `text` | Nombre legible para humanos. |
-| `active` | `boolean` | Interruptor general. Si es `false`, el scheduler ignora esta fuente. |
-| `type` | `text` | Define el checker a usar: `api`, `scrape`, `complex_scraper`. |
-| `schedule_cron` | `text` | Expresión CRON para la frecuencia de chequeo (ej: `0 8 * * *`). |
-| `config` | `jsonb` | Parámetros específicos del checker (URL, headers, selectores CSS). |
-| `storage_config` | `jsonb` | Configuración de dónde guardar los datos RAW (rutas, buckets). |
-| `created_at` | `timestamptz` | Fecha de creación. |
-| `updated_at` | `timestamptz` | Fecha de última modificación de la config. |
+|:--------|:-----|:------------|
+| `id` | `text` | **PK**. Identificador único. |
+| `name` | `text` | Nombre legible. |
+| `active` | `boolean` | Activar/desactivar fuente. |
+| `type` | `text` | Tipo: `api`, `scrape`, `complex_scraper`. |
+| `schedule_cron` | `text` | Expresión CRON. |
+| `config` | `jsonb` | Configuración del checker. |
+| `storage_config` | `jsonb` | Configuración de almacenamiento. |
 
-### 2. `source_check_history`
-Bitácora inmutable de cada ejecución del proceso `check-updates`. Permite auditar la salud de las fuentes y detectar cuándo hubo cambios reales.
+### `source_check_history`
+
+Bitácora de ejecuciones del proceso `check-updates`.
 
 | Columna | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `id` | `bigint` | **PK**. Autoincremental. |
-| `source_id` | `text` | **FK**. Referencia a `etl_sources.id`. |
-| `status` | `enum` | Estado del chequeo: `no_change`, `changed`, `failed`. |
-| `checksum` | `text` | Hash MD5 del contenido detectado (para comparar cambios). |
-| `metadata` | `jsonb` | Datos variables de la ejecución (URL consultada, notas de error, método usado). |
-| `created_at` | `timestamptz` | Fecha y hora exacta de la ejecución. |
+|:--------|:-----|:------------|
+| `id` | `bigint` | **PK**. |
+| `source_id` | `text` | **FK** → `etl_sources.id`. |
+| `status` | `enum` | `no_change`, `changed`, `failed`. |
+| `checksum` | `text` | Hash MD5 del contenido. |
+| `metadata` | `jsonb` | Datos de la ejecución. |
 
 ---
 
 ## Tablas de Dimensiones
 
-### 3. `dim_tiempo`
-Dimensión temporal compartida por todas las tablas de hechos. Granularidad mensual con campos derivados.
+### `dim_tiempo`
+
+Dimensión temporal compartida. Granularidad mensual.
 
 | Columna | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `id` | `serial` | **PK**. Identificador único. |
+|:--------|:-----|:------------|
+| `id` | `serial` | **PK**. |
 | `fecha` | `date` | Fecha del período (UNIQUE). |
-| `anio` | `smallint` | Año del registro. |
-| `mes` | `smallint` | Mes (1-12) con CHECK constraint. |
-| `trimestre` | `smallint` | **GENERATED**. Trimestre calculado automáticamente (1-4). |
-| `semestre` | `smallint` | **GENERATED**. Semestre calculado automáticamente (1-2). |
-| `nombre_mes` | `text` | Nombre del mes en español. |
-| `es_proyeccion` | `boolean` | Indica si es dato proyectado vs histórico. |
-| `created_at` | `timestamptz` | Fecha de creación del registro. |
+| `anio` | `smallint` | Año. |
+| `mes` | `smallint` | Mes (1-12). |
+| `trimestre` | `smallint` | **GENERATED**. (1-4). |
+| `semestre` | `smallint` | **GENERATED**. (1-2). |
+| `nombre_mes` | `text` | Nombre en español. |
+| `es_proyeccion` | `boolean` | Dato proyectado vs histórico. |
 
-### 4. `dim_territorios`
-Dimensión geográfica con departamentos y municipios de Colombia.
+### `dim_territorios`
+
+Dimensión geográfica con departamentos y municipios.
 
 | Columna | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `id` | `serial` | **PK**. Identificador único. |
+|:--------|:-----|:------------|
+| `id` | `serial` | **PK**. |
 | `departamento` | `text` | Nombre del departamento. |
 | `municipio` | `text` | Nombre del municipio. |
-| `latitud` | `numeric(10,7)` | Coordenada de latitud. |
-| `longitud` | `numeric(10,7)` | Coordenada de longitud. |
+| `latitud` | `numeric(10,7)` | Coordenada. |
+| `longitud` | `numeric(10,7)` | Coordenada. |
 | `divipola` | `text` | Código DANE DIVIPOLA. |
-| `created_at` | `timestamptz` | Fecha de creación. |
 
-**Constraint**: `UNIQUE(departamento, municipio)`
+### `dim_campos`
 
-### 5. `dim_campos`
-Dimensión de campos petroleros/gasíferos con información contractual.
+Dimensión de campos petroleros/gasíferos.
 
 | Columna | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `id` | `serial` | **PK**. Identificador único. |
+|:--------|:-----|:------------|
+| `id` | `serial` | **PK**. |
 | `nombre_campo` | `text` | Nombre del campo (UNIQUE). |
-| `contrato` | `text` | Nombre del contrato asociado. |
+| `contrato` | `text` | Contrato asociado. |
 | `operador` | `text` | Empresa operadora. |
-| `asociados` | `text[]` | Array de empresas asociadas. |
-| `participacion_estado` | `numeric(5,2)` | Porcentaje de participación estatal. |
+| `asociados` | `text[]` | Empresas asociadas. |
+| `participacion_estado` | `numeric(5,2)` | % participación estatal. |
 | `territorio_id` | `int` | **FK** → `dim_territorios.id`. |
 | `activo` | `boolean` | Estado del campo. |
-| `created_at` | `timestamptz` | Fecha de creación. |
-| `updated_at` | `timestamptz` | Fecha de última modificación. |
+
+### `dim_areas_electricas`
+
+Catálogo de ámbitos/áreas para proyecciones eléctricas.
+
+| Columna | Tipo | Descripción |
+|:--------|:-----|:------------|
+| `id` | `serial` | **PK**. |
+| `codigo` | `text` | Código único. |
+| `nombre` | `text` | Nombre del área. |
+| `categoria` | `text` | `nacional`, `area_sin`, `combinado`, `gd`, `proyecto`. |
+| `descripcion` | `text` | Descripción. |
+
+### `dim_resoluciones`
+
+Resoluciones MinMinas con periodos de vigencia.
+
+| Columna | Tipo | Descripción |
+|:--------|:-----|:------------|
+| `id` | `serial` | **PK**. |
+| `numero_resolucion` | `text` | Número de resolución (UNIQUE). |
+| `fecha_resolucion` | `date` | Fecha de emisión. |
+| `periodo_desde` | `date` | Inicio de vigencia. |
+| `periodo_hasta` | `date` | Fin de vigencia. |
+| `url_pdf` | `text` | Enlace al PDF. |
+| `url_soporte_magnetico` | `text` | Enlace a anexos. |
 
 ---
 
 ## Tablas de Referencia
 
-### 6. `ref_unidades`
-Tabla auxiliar con factores de conversión entre unidades de medida.
+### `ref_unidades`
 
-| Columna | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `id` | `serial` | **PK**. Identificador único. |
-| `codigo` | `text` | Código de la unidad (UNIQUE). |
-| `nombre` | `text` | Nombre completo de la unidad. |
-| `factor_a_gbtud` | `numeric(18,10)` | Factor de conversión a GBTUD (unidad base). |
-| `descripcion` | `text` | Descripción y notas de la unidad. |
+Factores de conversión entre unidades de medida.
 
-**Valores predefinidos**:
-| Código | Nombre | Factor | Descripción |
-| :--- | :--- | :--- | :--- |
-| `GBTUD` | Giga BTU por Día | 1.0 | Unidad base para demanda |
+| Código | Nombre | Factor a GBTUD | Descripción |
+|:-------|:-------|:---------------|:------------|
+| `GBTUD` | Giga BTU por Día | 1.0 | Unidad base demanda |
 | `KPCD` | Kilo Pies Cúbicos por Día | 0.001 | 1 KPCD ≈ 0.001 GBTUD |
 | `MPCD` | Millones Pies Cúbicos por Día | 1.0 | 1 MPCD ≈ 1 GBTUD |
 | `BLS` | Barriles | NULL | Unidad de líquidos |
-| `KPC` | Kilo Pies Cúbicos | 0.001 | Unidad de volumen gas |
+| `KPC` | Kilo Pies Cúbicos | 0.001 | Volumen gas |
 
 ---
 
 ## Tablas de Hechos
 
-### 7. `fact_regalias`
-**Fuente**: API Socrata ANH (j7js-yk74)  
-Almacena la liquidación de regalías por campo de hidrocarburos.
+### `fact_regalias`
+
+**Fuente**: API Socrata ANH (j7js-yk74)
 
 | Columna | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `id` | `bigserial` | **PK**. Identificador único. |
+|:--------|:-----|:------------|
+| `id` | `bigserial` | **PK**. |
 | `tiempo_id` | `int` | **FK** → `dim_tiempo.id`. |
 | `campo_id` | `int` | **FK** → `dim_campos.id`. |
-| `tipo_produccion` | `text` | Tipo de producción (QB/P/B/I/QI). |
-| `tipo_hidrocarburo` | `char(1)` | `G`=Gas, `O`=Petróleo. CHECK constraint. |
-| `precio_usd` | `numeric(12,4)` | Precio del hidrocarburo en USD. |
-| `porcentaje_regalia` | `numeric(5,2)` | % de producción gravable. |
-| `produccion_gravable` | `numeric(18,4)` | Volumen de producción gravable. |
-| `volumen_regalia` | `numeric(18,4)` | Volumen de regalías. |
-| `unidad` | `text` | Unidad de medida (default: Bls/Kpc). |
-| `valor_regalias_cop` | `numeric(18,2)` | Valor de regalías en COP. |
-| `source_id` | `text` | **FK** → `etl_sources.id`. Trazabilidad. |
-| `etl_timestamp` | `timestamptz` | Timestamp de carga ETL. |
+| `tipo_produccion` | `text` | Tipo (QB/P/B/I/QI). |
+| `tipo_hidrocarburo` | `char(1)` | `G`=Gas, `O`=Petróleo. |
+| `precio_usd` | `numeric(12,4)` | Precio USD. |
+| `porcentaje_regalia` | `numeric(5,2)` | % gravable. |
+| `produccion_gravable` | `numeric(18,4)` | Volumen producción. |
+| `volumen_regalia` | `numeric(18,4)` | Volumen regalías. |
+| `valor_regalias_cop` | `numeric(18,2)` | Valor en COP. |
 
-**Índices**: `tiempo_id`, `campo_id`, `tipo_hidrocarburo`, `source_id`
+### `fact_demanda_gas_natural`
 
-### 8. `fact_demanda_gas`
-**Fuente**: UPME - Anexo Proyección Demanda  
-Almacena proyecciones de demanda de gas natural con múltiples dimensiones categóricas.
+**Fuente**: UPME - Proyección de Demanda Gas Natural
 
 | Columna | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `id` | `bigserial` | **PK**. Identificador único. |
+|:--------|:-----|:------------|
+| `id` | `bigserial` | **PK**. |
 | `tiempo_id` | `int` | **FK** → `dim_tiempo.id`. |
-| `escenario` | `text` | Escenario de proyección. CHECK: `MEDIO`, `ALTO`, `BAJO`, `IC_95`, `IC_68`. |
-| `sector` | `text` | Sector de consumo. CHECK: `RESIDENCIAL`, `TERCIARIO`, `INDUSTRIAL`, `PETROQUIMICA`, `PETROLERO`, `GNV`, `TERMOELECTRICO`, `REFINERIA`. |
-| `region` | `text` | Región geográfica. CHECK: `CENTRO`, `COSTA`, `CQR`, `NOROESTE`, `OCCIDENTE`, `ORIENTE`, `SUR`, `TOLIMA_GRANDE`. |
-| `segmento` | `text` | Segmento de demanda. CHECK: `TOTAL`, `PETROLERO`, `TERMOELECTRICO`, `NO_TERMOELECTRICO`. |
-| `nivel_agregacion` | `text` | Nivel de agregación. CHECK: `nacional`, `sectorial`, `regional`. |
-| `valor_demanda_gbtud` | `numeric(18,6)` | Valor de demanda en GBTUD. |
-| `source_id` | `text` | **FK** → `etl_sources.id`. Trazabilidad. |
-| `etl_timestamp` | `timestamptz` | Timestamp de carga ETL. |
+| `periodicidad` | `text` | `mensual`, `anual`. |
+| `categoria` | `text` | `COMPRESORES`, `INDUSTRIAL`, `PETROLERO`, `PETROQUIMICO`, `RESIDENCIAL`, `TERCIARIO`, `TERMOELECTRICO`, `GNC_TRANSPORTE`, `GNL_TRANSPORTE`, `AGREGADO`. |
+| `region` | `text` | Región geográfica. |
+| `nodo` | `text` | Nodo específico. |
+| `escenario` | `text` | `ESC_BAJO`, `ESC_MEDIO`, `ESC_ALTO`. |
+| `valor` | `numeric(18,6)` | Valor en GBTUD. |
+| `revision` | `text` | Etiqueta de revisión. |
 
-**Índices**: `tiempo_id`, `escenario`, `sector`, `region`, `source_id`
+### `fact_energia_electrica`
 
-### 9. `fact_oferta_gas`
-**Fuente**: MinMinas - Declaración de Producción  
-Almacena la declaración de producción de gas por campo.
+**Fuente**: UPME - Proyección de Demanda Energía Eléctrica
 
 | Columna | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `id` | `bigserial` | **PK**. Identificador único. |
+|:--------|:-----|:------------|
+| `id` | `bigserial` | **PK**. |
+| `tiempo_id` | `int` | **FK** → `dim_tiempo.id`. |
+| `periodicidad` | `text` | `mensual`, `anual`. |
+| `unidad` | `text` | `GWh-mes`, `GWh-año`. |
+| `area_id` | `int` | **FK** → `dim_areas_electricas.id`. |
+| `descriptor` | `text` | Descriptor adicional. |
+| `escenario` | `text` | `ESC_BAJO`, `ESC_MEDIO`, `ESC_ALTO`, `IC_SUP_95`, `IC_INF_95`, `IC_SUP_68`, `IC_INF_68`. |
+| `revision` | `text` | Etiqueta de revisión. |
+| `valor` | `numeric(18,6)` | Valor en GWh. |
+
+### `fact_potencia_maxima`
+
+**Fuente**: UPME - Proyección de Potencia Máxima
+
+| Columna | Tipo | Descripción |
+|:--------|:-----|:------------|
+| `id` | `bigserial` | **PK**. |
+| `tiempo_id` | `int` | **FK** → `dim_tiempo.id`. |
+| `periodicidad` | `text` | `mensual`, `anual`. |
+| `unidad` | `text` | `MW-mes`, `MW-año`. |
+| `area_id` | `int` | **FK** → `dim_areas_electricas.id`. |
+| `descriptor` | `text` | Descriptor adicional. |
+| `escenario` | `text` | `ESC_BAJO`, `ESC_MEDIO`, `ESC_ALTO`, `IC_SUP_95`, `IC_INF_95`, `IC_SUP_68`, `IC_INF_68`. |
+| `revision` | `text` | Etiqueta de revisión. |
+| `valor` | `numeric(18,6)` | Valor en MW. |
+
+### `fact_capacidad_instalada`
+
+**Fuente**: UPME - Proyección de Capacidad Instalada GD
+
+| Columna | Tipo | Descripción |
+|:--------|:-----|:------------|
+| `id` | `bigserial` | **PK**. |
+| `tiempo_id` | `int` | **FK** → `dim_tiempo.id`. |
+| `periodicidad` | `text` | `anual` (solo anual). |
+| `unidad` | `text` | `MW-año`. |
+| `area_id` | `int` | **FK** → `dim_areas_electricas.id`. |
+| `descriptor` | `text` | Descriptor adicional. |
+| `escenario` | `text` | `ESC_BAJO`, `ESC_MEDIO`, `ESC_ALTO`, `IC_SUP_95`, `IC_INF_95`, `IC_SUP_68`, `IC_INF_68`. |
+| `revision` | `text` | Etiqueta de revisión. |
+| `valor` | `numeric(18,6)` | Valor en MW. |
+
+### `fact_oferta_gas`
+
+**Fuente**: MinMinas - Declaración de Producción
+
+| Columna | Tipo | Descripción |
+|:--------|:-----|:------------|
+| `id` | `bigserial` | **PK**. |
 | `tiempo_id` | `int` | **FK** → `dim_tiempo.id`. |
 | `campo_id` | `int` | **FK** → `dim_campos.id`. |
-| `potencial_produccion` | `numeric(18,4)` | Volumen declarado de producción. |
-| `unidad` | `text` | Unidad de medida (default: KPCD). |
-| `potencial_gbtud` | `numeric(18,6)` | Valor normalizado a GBTUD. |
-| `source_id` | `text` | **FK** → `etl_sources.id`. Trazabilidad. |
-| `etl_timestamp` | `timestamptz` | Timestamp de carga ETL. |
+| `resolucion_id` | `int` | **FK** → `dim_resoluciones.id`. |
+| `tipo_produccion` | `text` | `PTDV`, `PC_CONTRATOS`, `PC_EXPORTACIONES`, `PP`, `GAS_OPERACION`, `CIDV`. |
+| `operador` | `text` | Operador. |
+| `es_operador_campo` | `boolean` | ¿Es operador principal? |
+| `es_participacion_estado` | `boolean` | ¿Es parte del Estado? |
+| `valor_gbtud` | `numeric(18,6)` | Valor normalizado. |
+| `poder_calorifico_btu_pc` | `numeric(12,4)` | BTU/PC del campo. |
 
-**Índices**: `tiempo_id`, `campo_id`, `source_id`
+### `fact_participacion_campo`
+
+**Fuente**: MinMinas - Participación por resolución
+
+| Columna | Tipo | Descripción |
+|:--------|:-----|:------------|
+| `id` | `bigserial` | **PK**. |
+| `campo_id` | `int` | **FK** → `dim_campos.id`. |
+| `resolucion_id` | `int` | **FK** → `dim_resoluciones.id`. |
+| `periodo_desde` | `date` | Inicio del periodo. |
+| `periodo_hasta` | `date` | Fin del periodo. |
+| `asociado` | `text` | Empresa asociada. |
+| `participacion_pct` | `numeric(5,2)` | % participación. |
+| `estado_pct` | `numeric(5,2)` | % Estado. |
 
 ---
 
-## Tipos Enumerados (ENUMs)
+## Tipos Enumerados
 
-*   **`source_update_method`**: `'api'`, `'scraping'`, `'html'`, `'archivo'`, `'complex_scraper'`
-*   **`source_check_status`**: `'no_change'`, `'changed'`, `'failed'`
+- **`source_update_method`**: `'api'`, `'scraping'`, `'html'`, `'archivo'`, `'complex_scraper'`
+- **`source_check_status`**: `'no_change'`, `'changed'`, `'failed'`
 
 ---
 
 ## Script de Migración
 
-El script SQL completo para crear la base de datos se encuentra en: [init_db.sql](./init_db.sql)
+Ver: [init_db.sql](./init_db.sql)

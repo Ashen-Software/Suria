@@ -199,26 +199,117 @@ CREATE INDEX IF NOT EXISTS idx_demanda_source ON public.fact_demanda_gas(source_
 COMMENT ON TABLE public.fact_demanda_gas IS 'Hechos: Proyección de demanda de gas natural - Fuente UPME Anexo Proyección';
 
 -- ============================================
--- 10. Tabla de hechos: oferta/producción (fact_oferta_gas)
--- Fuente 3: MinMinas - Declaración de producción por campo
+-- 10. Dimension de resoluciones (dim_resoluciones)
+-- Metadata de resoluciones MinMinas con periodos de vigencia
+
+CREATE TABLE IF NOT EXISTS public.dim_resoluciones (
+  id SERIAL PRIMARY KEY,
+  numero_resolucion TEXT NOT NULL,
+  fecha_resolucion DATE,
+  periodo_desde DATE NOT NULL,
+  periodo_hasta DATE NOT NULL,
+  titulo TEXT,
+  url_pdf TEXT,
+  url_soporte_magnetico TEXT,
+  
+  -- Trazabilidad
+  source_id TEXT REFERENCES public.etl_sources(id),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  
+  CONSTRAINT dim_resoluciones_unique_numero UNIQUE (numero_resolucion)
+);
+
+CREATE INDEX IF NOT EXISTS idx_resoluciones_periodo ON public.dim_resoluciones(periodo_desde, periodo_hasta);
+
+COMMENT ON TABLE public.dim_resoluciones IS 'Dimensión de resoluciones MinMinas - cada resolución define un periodo de declaración de producción';
+
+-- ============================================
+-- 11. Tabla de hechos: oferta/producción (fact_oferta_gas)
+-- Fuente: MinMinas - Declaración de producción por campo, operador y tipo
 
 CREATE TABLE IF NOT EXISTS public.fact_oferta_gas (
   id BIGSERIAL PRIMARY KEY,
-  tiempo_id INT REFERENCES public.dim_tiempo(id),
-  campo_id INT REFERENCES public.dim_campos(id),
+  
+  -- Dimensiones FK
+  tiempo_id INT NOT NULL REFERENCES public.dim_tiempo(id),
+  campo_id INT NOT NULL REFERENCES public.dim_campos(id),
+  resolucion_id INT REFERENCES public.dim_resoluciones(id),
+  
+  -- Tipo de producción/destino (sin tabla dimensión)
+  tipo_produccion TEXT CHECK (tipo_produccion IN (
+    'PTDV',           -- Producción Total Disponible para Venta
+    'PC_CONTRATOS',   -- Producción Comprometida - Contratos consumo interno
+    'PC_EXPORTACIONES', -- Producción Comprometida - Exportaciones
+    'PC_REF_BARRANCA', -- Producción Comprometida - Refinería Barrancabermeja
+    'PC_REF_CARTAGENA', -- Producción Comprometida - Refinería Cartagena
+    'PP',             -- Potencial Producción (declarado por operador)
+    'GAS_OPERACION',  -- Gas consumido en operaciones del campo
+    'CIDV'            -- Capacidad Instalada Disponible para Venta
+  )),
+  
+  -- Operador (puede diferir del operador principal del campo si hay asociados)
+  operador TEXT NOT NULL,
+  es_operador_campo BOOLEAN DEFAULT TRUE, -- TRUE si es operador principal, FALSE si es asociado/estado
+  es_participacion_estado BOOLEAN DEFAULT FALSE, -- TRUE si es la parte correspondiente al Estado
   
   -- Valores de producción
-  potencial_produccion NUMERIC(18, 4),
-  unidad TEXT DEFAULT 'KPCD',
-  potencial_gbtud NUMERIC(18, 6), -- Valor normalizado
+  valor_gbtud NUMERIC(18, 6) NOT NULL, -- Valor en GBTUD (unidad normalizada)
+  
+  -- Metadata del campo (snapshot del Excel)
+  poder_calorifico_btu_pc NUMERIC(12, 4), -- BTU/PC del campo en esta resolución
   
   -- Trazabilidad ETL
   source_id TEXT REFERENCES public.etl_sources(id),
-  etl_timestamp TIMESTAMPTZ DEFAULT NOW()
+  etl_timestamp TIMESTAMPTZ DEFAULT NOW(),
+  
+  -- Constraint UNIQUE para evitar duplicados: un operador solo puede tener un valor
+  -- por campo, mes, tipo de producción y resolución
+  CONSTRAINT fact_oferta_gas_unique_key UNIQUE (
+    tiempo_id, campo_id, resolucion_id, tipo_produccion, operador, es_participacion_estado
+  )
 );
 
+-- Índices para consultas frecuentes
 CREATE INDEX IF NOT EXISTS idx_oferta_tiempo ON public.fact_oferta_gas(tiempo_id);
 CREATE INDEX IF NOT EXISTS idx_oferta_campo ON public.fact_oferta_gas(campo_id);
+CREATE INDEX IF NOT EXISTS idx_oferta_resolucion ON public.fact_oferta_gas(resolucion_id);
+CREATE INDEX IF NOT EXISTS idx_oferta_tipo ON public.fact_oferta_gas(tipo_produccion);
+CREATE INDEX IF NOT EXISTS idx_oferta_operador ON public.fact_oferta_gas(operador);
 CREATE INDEX IF NOT EXISTS idx_oferta_source ON public.fact_oferta_gas(source_id);
 
-COMMENT ON TABLE public.fact_oferta_gas IS 'Hechos: Declaración de producción de gas natural - Fuente MinMinas';
+COMMENT ON TABLE public.fact_oferta_gas IS 'Hechos: Declaración de producción de gas natural por operador - Fuente MinMinas';
+
+-- ============================================
+-- 13. Tabla de participación por resolución (fact_participacion_campo)
+-- Registra la participación de asociados/estado por campo y período
+
+CREATE TABLE IF NOT EXISTS public.fact_participacion_campo (
+  id BIGSERIAL PRIMARY KEY,
+  
+  -- Dimensiones FK
+  campo_id INT NOT NULL REFERENCES public.dim_campos(id),
+  resolucion_id INT NOT NULL REFERENCES public.dim_resoluciones(id),
+  
+  -- Período específico dentro de la resolución
+  periodo_desde DATE NOT NULL,
+  periodo_hasta DATE NOT NULL,
+  
+  -- Asociado y participación
+  asociado TEXT NOT NULL, -- Nombre de la empresa asociada
+  participacion_pct NUMERIC(5, 2) NOT NULL, -- Porcentaje de participación
+  estado_pct NUMERIC(5, 2), -- Porcentaje correspondiente al Estado
+  
+  -- Trazabilidad
+  source_id TEXT REFERENCES public.etl_sources(id),
+  etl_timestamp TIMESTAMPTZ DEFAULT NOW(),
+  
+  CONSTRAINT fact_participacion_unique_key UNIQUE (
+    campo_id, resolucion_id, periodo_desde, asociado
+  )
+);
+
+CREATE INDEX IF NOT EXISTS idx_participacion_campo ON public.fact_participacion_campo(campo_id);
+CREATE INDEX IF NOT EXISTS idx_participacion_resolucion ON public.fact_participacion_campo(resolucion_id);
+
+COMMENT ON TABLE public.fact_participacion_campo IS 'Participación de asociados y estado por campo según resoluciones MinMinas';

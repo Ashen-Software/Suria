@@ -166,4 +166,6 @@ El APScheduler ejecuta según el cron definido.
 
 - `data/workflows/sources_config.json` - Configuración de ejemplo
 - `data/extraction/scrapers/` - Ubicación de scripts personalizados
+  - `declaracion/` - Scrapers MinMinas
+  - `proyeccion/` - Scrapers UPME (con esquemas SQL por métrica)
 - `docs/database/esquema.md` - Esquema de base de datos

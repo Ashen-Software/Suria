@@ -85,11 +85,11 @@ class TransformationConfig:
     # Mapeo a tabla de hechos y dimensiones
     fact_mapping: Optional[FactTableMapping] = None
     
-    # Validador custom opcional (si la lógica es muy compleja para reglas)
+    # Validador custom opcional
     custom_validator: Optional[Callable[[Dict[str, Any]], Optional[str]]] = None
     # Retorna None si válido, o string con error si inválido
     
-    # Transformer custom opcional (si necesita lógica especial post-validación)
+    # Transformer custom opcional
     custom_transformer: Optional[Callable[[Dict[str, Any], str], Dict[str, Any]]] = None
     # Retorna dict con {"fact_table": ..., "data": ..., "dimensions": ...}
 
@@ -161,6 +161,7 @@ REGALIAS_CONFIG = TransformationConfig(
             "contrato": "contrato",
             "tipo_produccion": "tipoprod",
             "tipo_hidrocarburo": "tipohidrocarburo",
+            "regimen_regalias": "regimenreg",
             "precio_usd": "preciohidrocarburousd",
             "porcentaje_regalia": "porcregalia",
             "produccion_gravable": "prodgravableblskpc",

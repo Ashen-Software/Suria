@@ -12,7 +12,10 @@ Plan de Implementación por Hitos
 
 ### Hito 2: Detección de Cambios
 
-*   Scrapers livianos para las 3 fuentes
+*   Scrapers livianos para las fuentes:
+    - ANH (API Socrata)
+    - UPME (Proyecciones: Gas, Electricidad, Potencia, Capacidad)
+    - MinMinas (Declaración de Producción)
     
 *   Lógica de comparación y trigger
     
@@ -26,6 +29,8 @@ Plan de Implementación por Hitos
 *   Pipelines de transformación por fuente
     
 *   Mecanismos de carga y UPSERT
+    
+*   Esquemas SQL modulares por métrica
     
 
 ### Hito 4: Dashboard

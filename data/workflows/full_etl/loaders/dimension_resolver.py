@@ -10,7 +10,6 @@ Incluye cache en memoria para evitar queries repetidas.
 """
 from typing import Dict, Any, Optional, Tuple
 from datetime import date
-from functools import lru_cache
 import unicodedata
 
 import sys
@@ -39,6 +38,12 @@ class DimensionResolver:
     Resuelve FKs de dimensiones para inserción en fact tables.
     
     Usa cache en memoria para minimizar queries a la DB.
+    
+    Dimensiones soportadas:
+    - dim_tiempo: Lookup por fecha
+    - dim_territorios: Lookup por departamento+municipio
+    - dim_campos: Upsert por nombre_campo
+    - dim_resoluciones: Upsert por numero_resolucion (MinMinas)
     """
     
     def __init__(self, client: Optional[BackendClient] = None):
@@ -54,9 +59,11 @@ class DimensionResolver:
         self._tiempo_cache: Dict[date, int] = {}
         self._territorio_cache: Dict[Tuple[str, str], int] = {}  # Cache normalizado (sin tildes)
         self._campo_cache: Dict[str, int] = {}
+        self._resolucion_cache: Dict[str, int] = {}  # numero_resolucion -> id
         
         # Tracking de campos creados (para resumen)
         self._campos_created_ids: list = []
+        self._resoluciones_created_ids: list = []
         
         # Tracking de territorios no encontrados (para resumen)
         self._territorios_not_found: set = set()
@@ -70,6 +77,9 @@ class DimensionResolver:
             "campo_lookups": 0,
             "campo_cache_hits": 0,
             "campo_inserts": 0,
+            "resolucion_lookups": 0,
+            "resolucion_cache_hits": 0,
+            "resolucion_inserts": 0,
         }
     
     def resolve_tiempo_id(self, fecha: date) -> Optional[int]:
@@ -190,17 +200,20 @@ class DimensionResolver:
         self,
         nombre_campo: str,
         contrato: Optional[str] = None,
-        territorio_id: Optional[int] = None
+        territorio_id: Optional[int] = None,
+        operador: Optional[str] = None
     ) -> Optional[int]:
         """
         Obtiene o crea el ID de dim_campos para un campo.
         
         Si el campo no existe, lo crea con los datos proporcionados.
+        territorio_id es opcional: si no se resuelve (ej: "NN"), se omite.
         
         Args:
             nombre_campo: Nombre del campo (clave única)
             contrato: Código del contrato (opcional)
             territorio_id: FK a dim_territorios (opcional)
+            operador: Nombre del operador del campo (opcional)
             
         Returns:
             ID de la dimensión
@@ -224,7 +237,7 @@ class DimensionResolver:
             return None
         
         try:
-            # Construir datos del campo
+            # Construir datos del campo (solo campos con valor)
             campo_data = {
                 "nombre_campo": nombre_campo,
                 "activo": True
@@ -233,7 +246,11 @@ class DimensionResolver:
             if contrato:
                 campo_data["contrato"] = contrato.strip()
             
-            if territorio_id:
+            if operador:
+                campo_data["operador"] = operador.strip()
+            
+            # Esto evita errores de FK cuando el territorio no existe (ej: "NN")
+            if territorio_id is not None:
                 campo_data["territorio_id"] = territorio_id
             
             # UPSERT: INSERT si no existe, UPDATE si ya existe
@@ -278,7 +295,12 @@ class DimensionResolver:
     
     def resolve_all_for_record(self, record: Dict[str, Any]) -> Dict[str, Optional[int]]:
         """
-        Resuelve todas las FKs necesarias para un registro de regalías.
+        Resuelve todas las FKs necesarias para un registro.
+        
+        Soporta:
+        - fact_regalias: tiempo, territorio, campo
+        - fact_oferta_gas: tiempo, campo, resolucion
+        - fact_demanda_gas: tiempo, territorio
         
         Args:
             record: Registro transformado (con structure {"data": {...}, "dimensions": {...}})
@@ -288,34 +310,184 @@ class DimensionResolver:
             {
                 "tiempo_id": int | None,
                 "campo_id": int | None,
-                "territorio_id": int | None  # Para referencia, no se usa en fact
+                "territorio_id": int | None,
+                "resolucion_id": int | None
             }
         """
         data = record.get("data", {})
         dimensions = record.get("dimensions", {})
+        fact_table = record.get("fact_table", "")
         
-        # 1. Resolver tiempo
+        # 1. Resolver tiempo (siempre requerido)
         tiempo_data = dimensions.get("tiempo", {})
         fecha = tiempo_data.get("fecha") or data.get("tiempo_fecha")
         tiempo_id = self.resolve_tiempo_id(fecha) if fecha else None
         
-        # 2. Resolver territorio (para campo)
-        territorio_data = dimensions.get("territorio", {})
-        departamento = territorio_data.get("departamento") or data.get("departamento")
-        municipio = territorio_data.get("municipio") or data.get("municipio")
-        territorio_id = self.resolve_territorio_id(departamento, municipio) if departamento and municipio else None
+        # 2. Resolver territorio (para regalias y demanda)
+        territorio_id = None
+        if fact_table in ["fact_regalias", "fact_demanda_gas"]:
+            territorio_data = dimensions.get("territorio", {})
+            departamento = territorio_data.get("departamento") or data.get("departamento")
+            municipio = territorio_data.get("municipio") or data.get("municipio")
+            territorio_id = self.resolve_territorio_id(departamento, municipio) if departamento and municipio else None
         
-        # 3. Resolver o crear campo
-        campo_data = dimensions.get("campo", {})
-        nombre_campo = campo_data.get("nombre_campo") or data.get("campo_nombre")
-        contrato = campo_data.get("contrato") or data.get("contrato")
-        campo_id = self.resolve_or_create_campo_id(nombre_campo, contrato, territorio_id) if nombre_campo else None
+        # 3. Resolver o crear campo (para regalias y oferta)
+        campo_id = None
+        if fact_table in ["fact_regalias", "fact_oferta_gas"]:
+            campo_data = dimensions.get("campo", {})
+            nombre_campo = campo_data.get("nombre_campo") or data.get("campo_nombre")
+            contrato = campo_data.get("contrato") or data.get("contrato")
+            operador = campo_data.get("operador") or data.get("operador")
+            campo_id = self.resolve_or_create_campo_id(
+                nombre_campo, contrato, territorio_id, operador
+            ) if nombre_campo else None
+        
+        # 4. Resolver o crear resolución (para oferta)
+        resolucion_id = None
+        if fact_table == "fact_oferta_gas":
+            resolucion_data = dimensions.get("resolucion", {})
+            numero_resolucion = resolucion_data.get("numero_resolucion") or data.get("resolucion_number")
+            if numero_resolucion:
+                # Extraer metadata de resolución si está disponible
+                periodo_desde = resolucion_data.get("periodo_desde")
+                periodo_hasta = resolucion_data.get("periodo_hasta")
+                url_pdf = resolucion_data.get("url_pdf")
+                
+                resolucion_id = self.resolve_or_create_resolucion_id(
+                    numero_resolucion=numero_resolucion,
+                    periodo_desde=periodo_desde,
+                    periodo_hasta=periodo_hasta,
+                    url_pdf=url_pdf,
+                    source_id=data.get("source_id")
+                )
         
         return {
             "tiempo_id": tiempo_id,
             "campo_id": campo_id,
-            "territorio_id": territorio_id
+            "territorio_id": territorio_id,
+            "resolucion_id": resolucion_id
         }
+    
+    def resolve_or_create_resolucion_id(
+        self,
+        numero_resolucion: str,
+        periodo_desde: Optional[date] = None,
+        periodo_hasta: Optional[date] = None,
+        url_pdf: Optional[str] = None,
+        url_soporte_magnetico: Optional[str] = None,
+        titulo: Optional[str] = None,
+        source_id: Optional[str] = None
+    ) -> Optional[int]:
+        """
+        Obtiene o crea el ID de dim_resoluciones para una resolución.
+        
+        Las resoluciones de MinMinas definen períodos de declaración de producción.
+        Si la resolución no existe, la crea con los datos proporcionados.
+        
+        Args:
+            numero_resolucion: Número de resolución (clave única)
+            periodo_desde: Fecha inicio del período de la resolución
+            periodo_hasta: Fecha fin del período de la resolución
+            url_pdf: URL del PDF de la resolución
+            url_soporte_magnetico: URL del Excel de soporte
+            titulo: Título de la resolución
+            source_id: ID de la fuente ETL
+            
+        Returns:
+            ID de la dimensión, o None si falla
+        """
+        # Normalizar
+        numero_resolucion = (numero_resolucion or "").strip()
+        
+        if not numero_resolucion:
+            logger.warning("[DimensionResolver] numero_resolucion vacío")
+            return None
+        
+        # Verificar cache
+        if numero_resolucion in self._resolucion_cache:
+            self.stats["resolucion_cache_hits"] += 1
+            return self._resolucion_cache[numero_resolucion]
+        
+        self.stats["resolucion_lookups"] += 1
+        
+        if not self.client.client:
+            logger.warning("[DimensionResolver] Cliente no disponible para lookup/create resolución")
+            return None
+        
+        try:
+            # Construir datos de la resolución
+            resolucion_data = {
+                "numero_resolucion": numero_resolucion,
+            }
+            
+            # Agregar campos opcionales si tienen valor
+            if periodo_desde:
+                if isinstance(periodo_desde, str):
+                    resolucion_data["periodo_desde"] = periodo_desde
+                else:
+                    resolucion_data["periodo_desde"] = periodo_desde.isoformat()
+            else:
+                # Período por defecto si no se proporciona (requerido en BD)
+                resolucion_data["periodo_desde"] = "2020-01-01"
+            
+            if periodo_hasta:
+                if isinstance(periodo_hasta, str):
+                    resolucion_data["periodo_hasta"] = periodo_hasta
+                else:
+                    resolucion_data["periodo_hasta"] = periodo_hasta.isoformat()
+            else:
+                resolucion_data["periodo_hasta"] = "2030-12-31"
+            
+            if url_pdf:
+                resolucion_data["url_pdf"] = url_pdf
+            
+            if url_soporte_magnetico:
+                resolucion_data["url_soporte_magnetico"] = url_soporte_magnetico
+            
+            if titulo:
+                resolucion_data["titulo"] = titulo
+            
+            if source_id:
+                resolucion_data["source_id"] = source_id
+            
+            # UPSERT: INSERT si no existe, UPDATE si ya existe
+            upsert_response = self.client.client.table("dim_resoluciones")\
+                .upsert(resolucion_data, on_conflict="numero_resolucion")\
+                .execute()
+            
+            if upsert_response.data and len(upsert_response.data) > 0:
+                resolucion_id = upsert_response.data[0]["id"]
+                
+                # Si es nuevo (no estaba en cache), trackear
+                if numero_resolucion not in self._resolucion_cache:
+                    self.stats["resolucion_inserts"] += 1
+                    self._resoluciones_created_ids.append(resolucion_id)
+                
+                self._resolucion_cache[numero_resolucion] = resolucion_id
+                return resolucion_id
+            else:
+                logger.error(f"[DimensionResolver] No se pudo upsert resolución: {numero_resolucion}")
+                return None
+                
+        except Exception as e:
+            # Fallback: si falla el upsert, intentar lookup simple
+            if "duplicate" in str(e).lower() or "unique" in str(e).lower():
+                try:
+                    response = self.client.client.table("dim_resoluciones")\
+                        .select("id")\
+                        .eq("numero_resolucion", numero_resolucion)\
+                        .limit(1)\
+                        .execute()
+                    
+                    if response.data and len(response.data) > 0:
+                        resolucion_id = response.data[0]["id"]
+                        self._resolucion_cache[numero_resolucion] = resolucion_id
+                        return resolucion_id
+                except:
+                    pass
+            
+            logger.error(f"[DimensionResolver] Error creando resolución {numero_resolucion}: {e}")
+            return None
     
     def preload_tiempo_cache(self, start_year: int = 2010, end_year: int = 2036) -> int:
         """
@@ -422,8 +594,36 @@ class DimensionResolver:
         return {
             "tiempo": self.preload_tiempo_cache(),
             "territorios": self.preload_territorio_cache(),
-            "campos": self.preload_campo_cache()
+            "campos": self.preload_campo_cache(),
+            "resoluciones": self.preload_resolucion_cache()
         }
+    
+    def preload_resolucion_cache(self) -> int:
+        """
+        Pre-carga el cache de resoluciones existentes.
+        
+        Returns:
+            Número de registros cargados en cache
+        """
+        if not self.client.client:
+            return 0
+        
+        try:
+            response = self.client.client.table("dim_resoluciones")\
+                .select("id, numero_resolucion")\
+                .execute()
+            
+            if response.data:
+                for row in response.data:
+                    self._resolucion_cache[row["numero_resolucion"]] = row["id"]
+                
+                logger.info(f"[DimensionResolver] Pre-cargados {len(response.data)} registros de resolución en cache")
+                return len(response.data)
+                
+        except Exception as e:
+            logger.error(f"[DimensionResolver] Error pre-cargando cache de resoluciones: {e}")
+        
+        return 0
     
     def get_stats(self) -> Dict[str, Any]:
         """Retorna estadísticas de uso del resolver."""
@@ -432,9 +632,11 @@ class DimensionResolver:
             "cache_sizes": {
                 "tiempo": len(self._tiempo_cache),
                 "territorio": len(self._territorio_cache),
-                "campo": len(self._campo_cache)
+                "campo": len(self._campo_cache),
+                "resolucion": len(self._resolucion_cache)
             },
             "campos_created_range": self._get_campos_created_summary(),
+            "resoluciones_created_range": self._get_resoluciones_created_summary(),
             "territorios_not_found": len(self._territorios_not_found)
         }
     
@@ -448,12 +650,27 @@ class DimensionResolver:
             return f"ID {ids[0]}"
         return f"IDs {ids[0]} - {ids[-1]} ({len(ids)} campos)"
     
+    def _get_resoluciones_created_summary(self) -> str:
+        """Retorna resumen de IDs de resoluciones creadas."""
+        if not self._resoluciones_created_ids:
+            return "ninguno"
+        
+        ids = sorted(self._resoluciones_created_ids)
+        if len(ids) == 1:
+            return f"ID {ids[0]}"
+        return f"IDs {ids[0]} - {ids[-1]} ({len(ids)} resoluciones)"
+    
     def log_summary(self) -> None:
         """Loguea resumen de operaciones (llamar al final del proceso)."""
         # Campos creados
         if self._campos_created_ids:
             summary = self._get_campos_created_summary()
             logger.info(f"[DimensionResolver] Campos creados: {summary}")
+        
+        # Resoluciones creadas
+        if self._resoluciones_created_ids:
+            summary = self._get_resoluciones_created_summary()
+            logger.info(f"[DimensionResolver] Resoluciones creadas: {summary}")
         
         # Territorios no encontrados
         if self._territorios_not_found:
@@ -477,6 +694,8 @@ class DimensionResolver:
         self._tiempo_cache.clear()
         self._territorio_cache.clear()
         self._campo_cache.clear()
+        self._resolucion_cache.clear()
         self._campos_created_ids.clear()
+        self._resoluciones_created_ids.clear()
         self._territorios_not_found.clear()
         logger.debug("[DimensionResolver] Caches limpiados")
