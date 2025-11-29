@@ -6,6 +6,7 @@ WORKDIR /app
 # Declarar build arguments
 ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_ANON_KEY
+ARG VITE_OPENAI_API_KEY
 
 # Establecer como variables de entorno para el build
 ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
