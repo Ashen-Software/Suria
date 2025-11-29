@@ -11,7 +11,7 @@ export function AppRoutes() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/etl" element={<EtlSourcePage />} />
+        <Route path="/admin" element={<EtlSourcePage />} />
         <Route path="/tiempo" element={<DimTiempoPage />} />
         <Route path="/territorios" element={<DimTerritoriosPage />} />
         <Route path="/upme" element={<UPMEPage />} />
