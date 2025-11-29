@@ -378,7 +378,7 @@ function CollapsibleSection({ section }: { section: Section }) {
                 rel="noopener noreferrer"
                 className="btn btn-primary btn-sm rounded-xl"
               >
-                Descargar
+                Abrir
               </a>
             </div>
           ))}
@@ -441,7 +441,7 @@ function HistoricalYearSection({ yearData }: { yearData: HistoricalYear }) {
                 rel="noopener noreferrer"
                 className="btn btn-primary btn-sm rounded-xl"
               >
-                Descargar
+                Abrir
               </a>
             </div>
           ))}
@@ -500,36 +500,6 @@ export function UPMELanding() {
           ))}
         </div>
       </div>
-
-      {/* Recursos Interactivos */}
-      {upmeMetadata.interactive_resources.length > 0 && (
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <p className="text-sm uppercase tracking-[0.2em] text-base-content/50">Visualización</p>
-            <h3 className="text-xl font-semibold">Recursos Interactivos</h3>
-          </div>
-          <div className="glass-panel rounded-2xl p-6 space-y-4">
-            {upmeMetadata.interactive_resources.map((resource, idx) => (
-              <div key={idx} className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-semibold text-base-content">{resource.title}</h4>
-                    <p className="text-sm text-base-content/60">{resource.description}</p>
-                  </div>
-                  <a
-                    href={resource.url.replace('/embed/', '/reporting/')}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-primary btn-sm rounded-xl"
-                  >
-                    Abrir ↗
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Referencias */}
       <div className="glass-panel rounded-2xl p-6 space-y-2">
