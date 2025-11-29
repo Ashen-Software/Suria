@@ -47,6 +47,7 @@ jobs:
           build-args: |
             VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}
             VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}
+            VITE_OPENAI_API_KEY=${{ secrets.VITE_OPENAI_API_KEY }}
           tags: |
             juanqu/suria-frontend:latest
             juanqu/suria-frontend:v${{ github.run_number }}
