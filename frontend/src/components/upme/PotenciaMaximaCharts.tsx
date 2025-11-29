@@ -1,12 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { loadPotenciaMaximaData } from '@/services/upmeData.service';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 export function PotenciaMaximaCharts() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['potencia-maxima'],
     queryFn: loadPotenciaMaximaData,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const chartData = useMemo(() => {
@@ -76,6 +78,35 @@ export function PotenciaMaximaCharts() {
       .sort((a, b) => a.date.localeCompare(b.date))
       .slice(-36); // Últimos 36 meses
   }, [data]);
+
+  // Tabla: búsqueda y paginación sobre todos los registros
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(0);
+  const pageSize = 20;
+
+  const filteredData = useMemo(() => {
+    if (!data) return [];
+    const term = search.toLowerCase().trim();
+    if (!term) return data;
+
+    return data.filter((row) => {
+      return (
+        row.period_key.toLowerCase().includes(term) ||
+        row.periodicidad.toLowerCase().includes(term) ||
+        row.escenario.toLowerCase().includes(term) ||
+        row.unidad.toLowerCase().includes(term) ||
+        (row.descriptor?.toLowerCase().includes(term) ?? false) ||
+        (row.revision?.toLowerCase().includes(term) ?? false)
+      );
+    });
+  }, [data, search]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredData.length / pageSize));
+
+  const paginatedData = useMemo(() => {
+    const start = page * pageSize;
+    return filteredData.slice(start, start + pageSize);
+  }, [filteredData, page, pageSize]);
 
   if (isLoading) {
     return (
@@ -197,6 +228,83 @@ export function PotenciaMaximaCharts() {
             {new Set(data.map(d => d.year_span)).size}
           </div>
           <div className="stat-desc">Rangos de años</div>
+        </div>
+      </div>
+
+      {/* Tabla detallada de registros */}
+      <div className="glass-panel p-6 space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <h3 className="text-lg font-semibold">Registros detallados</h3>
+          <div className="form-control w-full md:w-64">
+            <input
+              type="text"
+              placeholder="Buscar por fecha, escenario, unidad, revisión..."
+              className="input input-bordered input-sm w-full"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(0);
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="table table-zebra table-sm w-full">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Periodicidad</th>
+                <th>Escenario</th>
+                <th>Unidad</th>
+                <th className="text-right">Valor</th>
+                <th>Revisión</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedData.map((row, idx) => (
+                <tr key={`${row.period_key}-${row.escenario}-${idx}`}>
+                  <td>{row.period_key}</td>
+                  <td className="capitalize">{row.periodicidad}</td>
+                  <td>{row.escenario}</td>
+                  <td>{row.unidad}</td>
+                  <td className="text-right">
+                    {row.valor.toLocaleString('es-ES', { maximumFractionDigits: 2 })}
+                  </td>
+                  <td>{row.revision}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex items-center justify-between text-sm mt-2">
+          <span>
+            Mostrando{' '}
+            {filteredData.length === 0
+              ? 0
+              : `${page * pageSize + 1}-${Math.min((page + 1) * pageSize, filteredData.length)}`}{' '}
+            de {filteredData.length.toLocaleString()} registros
+          </span>
+          <div className="join">
+            <button
+              className="btn btn-xs join-item"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+            >
+              «
+            </button>
+            <button className="btn btn-xs join-item" disabled>
+              Página {page + 1} de {totalPages}
+            </button>
+            <button
+              className="btn btn-xs join-item"
+              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              disabled={page >= totalPages - 1}
+            >
+              »
+            </button>
+          </div>
         </div>
       </div>
     </div>

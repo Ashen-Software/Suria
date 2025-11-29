@@ -9,6 +9,8 @@ export function GasNaturalCharts() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['gas-natural'],
     queryFn: loadGasNaturalData,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   const [selectedCategoria, setSelectedCategoria] = useState<string | null>(null);
@@ -90,6 +92,35 @@ export function GasNaturalCharts() {
       .sort((a, b) => a.date.localeCompare(b.date))
       .slice(-24); // Últimos 24 meses
   }, [data, selectedCategoria]);
+
+  // Tabla: búsqueda y paginación sobre todos los registros de demanda de gas
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(0);
+  const pageSize = 20;
+
+  const filteredData = useMemo(() => {
+    if (!data) return [];
+    const term = search.toLowerCase().trim();
+    if (!term) return data;
+
+    return data.filter((row) => {
+      return (
+        row.period_key.toLowerCase().includes(term) ||
+        row.categoria.toLowerCase().includes(term) ||
+        (row.region?.toLowerCase().includes(term) ?? false) ||
+        (row.nodo?.toLowerCase().includes(term) ?? false) ||
+        row.escenario.toLowerCase().includes(term) ||
+        (row.revision?.toLowerCase().includes(term) ?? false)
+      );
+    });
+  }, [data, search]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredData.length / pageSize));
+
+  const paginatedData = useMemo(() => {
+    const start = page * pageSize;
+    return filteredData.slice(start, start + pageSize);
+  }, [filteredData, page, pageSize]);
 
   if (isLoading) {
     return (
@@ -212,6 +243,83 @@ export function GasNaturalCharts() {
             <div className="stat-value text-accent">
               {Math.round(data.reduce((sum, d) => sum + d.valor, 0) / data.length).toLocaleString()} GBTUD
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabla detallada de registros */}
+      <div className="glass-panel p-6 space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <h3 className="text-lg font-semibold">Registros detallados</h3>
+          <div className="form-control w-full md:w-64">
+            <input
+              type="text"
+              placeholder="Buscar por fecha, categoría, región, nodo, escenario..."
+              className="input input-bordered input-sm w-full"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(0);
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="table table-zebra table-sm w-full">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Categoría</th>
+                <th>Región</th>
+                <th>Nodo</th>
+                <th>Escenario</th>
+                <th className="text-right">Valor (GBTUD)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedData.map((row, idx) => (
+                <tr key={`${row.period_key}-${row.categoria}-${row.escenario}-${idx}`}>
+                  <td>{row.period_key}</td>
+                  <td>{row.categoria}</td>
+                  <td>{row.region ?? '-'}</td>
+                  <td>{row.nodo ?? '-'}</td>
+                  <td>{row.escenario}</td>
+                  <td className="text-right">
+                    {row.valor.toLocaleString('es-ES', { maximumFractionDigits: 2 })}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex items-center justify-between text-sm mt-2">
+          <span>
+            Mostrando{' '}
+            {filteredData.length === 0
+              ? 0
+              : `${page * pageSize + 1}-${Math.min((page + 1) * pageSize, filteredData.length)}`}{' '}
+            de {filteredData.length.toLocaleString()} registros
+          </span>
+          <div className="join">
+            <button
+              className="btn btn-xs join-item"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+            >
+              «
+            </button>
+            <button className="btn btn-xs join-item" disabled>
+              Página {page + 1} de {totalPages}
+            </button>
+            <button
+              className="btn btn-xs join-item"
+              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              disabled={page >= totalPages - 1}
+            >
+              »
+            </button>
           </div>
         </div>
       </div>
